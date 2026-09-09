@@ -1,0 +1,147 @@
+{
+  "id": "grocery-deli",
+  "place_type": "grocery",
+  "kid": true,
+  "title": { "en": "Order at the deli counter", "es": "Pedir en el deli" },
+  "roles": {
+    "partner": { "en": "person behind the deli counter", "es": "persona que atiende el deli" },
+    "learner": { "en": "customer ordering for the family", "es": "cliente que pide para la familia" }
+  },
+  "goal": {
+    "en": "Ask for half a pound of ham, say if you want it sliced, and check the weight on the scale.",
+    "es": "Pedir media libra de jamón, decir si lo quieres rebanado y ver cuánto marca la báscula."
+  },
+  "must_use": [
+    { "en": "half a pound", "es": "media libra" },
+    { "en": "a little more, please", "es": "un poco más, por favor" },
+    { "en": "that's perfect", "es": "así está perfecto" }
+  ],
+  "success": {
+    "en": "You get half a pound of ham, the way you asked for it, and you say thank you.",
+    "es": "Te dan media libra de jamón, como lo pediste, y das las gracias."
+  },
+  "show_staff_line": {
+    "en": "I'm practicing my English. Thank you for your patience.",
+    "es": "Estoy practicando mi inglés. Gracias por su paciencia."
+  },
+  "offline_script": {
+    "start": "s1",
+    "nodes": {
+      "s1": {
+        "partner": { "en": "Hi! What can I get you today?", "es": "¡Hola! ¿Qué te doy hoy?" },
+        "choices": [
+          {
+            "text": { "en": "Half a pound of ham, please.", "es": "Media libra de jamón, por favor." },
+            "picture": "🍖",
+            "best": true,
+            "next": "s2"
+          },
+          {
+            "text": { "en": "Ham.", "es": "Jamón." },
+            "picture": "💬",
+            "tip": { "en": "Say how much you want, and add \"please\".", "es": "Di cuánto quieres y agrega \"please\"." },
+            "next": null
+          },
+          {
+            "text": { "en": "Half a pound of crayons, please.", "es": "Media libra de crayones, por favor." },
+            "picture": "🖍️",
+            "tip": { "en": "This counter has meat and cheese, not crayons.", "es": "En este mostrador hay carne y queso, no crayones." },
+            "next": null
+          }
+        ]
+      },
+      "s2": {
+        "partner": { "en": "Half a pound of ham. Do you want it sliced?", "es": "Media libra de jamón. ¿Lo quieres rebanado?" },
+        "choices": [
+          {
+            "text": { "en": "Yes, sliced thin, please.", "es": "Sí, rebanado delgadito, por favor." },
+            "picture": "🥓",
+            "best": true,
+            "next": "s3"
+          },
+          {
+            "text": { "en": "No, in one piece, please.", "es": "No, en un solo pedazo, por favor." },
+            "picture": "🥩",
+            "best": true,
+            "next": "s3"
+          },
+          {
+            "text": { "en": "I don't know.", "es": "No sé." },
+            "picture": "🤷",
+            "tip": { "en": "Tell them how you want it: sliced or in one piece.", "es": "Dile cómo lo quieres: rebanado o en un solo pedazo." },
+            "next": null
+          }
+        ]
+      },
+      "s3": {
+        "partner": { "en": "Okay. Look at the scale. This is a little under half a pound.", "es": "Bueno. Mira la báscula. Es un poquito menos de media libra." },
+        "choices": [
+          {
+            "text": { "en": "A little more, please.", "es": "Un poco más, por favor." },
+            "picture": "➕",
+            "best": true,
+            "next": "s4"
+          },
+          {
+            "text": { "en": "Yes.", "es": "Sí." },
+            "picture": "💬",
+            "tip": { "en": "You asked for half a pound. Ask for a little more.", "es": "Pediste media libra. Pide un poco más." },
+            "next": null
+          },
+          {
+            "text": { "en": "A little less, please.", "es": "Un poco menos, por favor." },
+            "picture": "➖",
+            "tip": { "en": "\"Less\" takes ham off the scale. You want more: say \"a little more\".", "es": "\"Less\" quita jamón de la báscula. Tú quieres más: di \"a little more\"." },
+            "next": null
+          }
+        ]
+      },
+      "s4": {
+        "partner": { "en": "How about now? This is half a pound.", "es": "¿Y ahora? Ya es media libra." },
+        "choices": [
+          {
+            "text": { "en": "That's perfect, thank you.", "es": "Así está perfecto, gracias." },
+            "picture": "👌",
+            "best": true,
+            "next": "s5"
+          },
+          {
+            "text": { "en": "More.", "es": "Más." },
+            "picture": "💬",
+            "tip": { "en": "That is the half pound you asked for. Say \"that's perfect\".", "es": "Esa es la media libra que pediste. Di \"that's perfect\"." },
+            "next": null
+          },
+          {
+            "text": { "en": "I don't like ham.", "es": "No me gusta el jamón." },
+            "picture": "😕",
+            "tip": { "en": "Your family asked for ham. Say \"that's perfect\".", "es": "Tu familia pidió jamón. Di \"that's perfect\"." },
+            "next": null
+          }
+        ]
+      },
+      "s5": {
+        "partner": { "en": "Great. Anything else?", "es": "Muy bien. ¿Algo más?" },
+        "choices": [
+          {
+            "text": { "en": "No, that's all. Thank you!", "es": "No, eso es todo. ¡Gracias!" },
+            "picture": "🙏",
+            "best": true,
+            "next": null
+          },
+          {
+            "text": { "en": "Yes.", "es": "Sí." },
+            "picture": "💬",
+            "tip": { "en": "Say what else you want, or answer \"No, that's all\".", "es": "Di qué más quieres o contesta \"No, that's all\"." },
+            "next": null
+          },
+          {
+            "text": { "en": "No. My house is the yellow one on the corner.", "es": "No. Mi casa es la amarilla de la esquina." },
+            "picture": "🏠",
+            "tip": { "en": "You never have to say where you live. Just say thank you.", "es": "Nunca tienes que decir dónde vives. Solo da las gracias." },
+            "next": null
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+# Judges may open the app any time between Oct 27 and Nov 23. Cloudflare's free
+# tier does not sleep, but this pings the API daily so a broken deploy or an
+# expired key shows up in the Actions tab instead of in front of a judge.
+# Set the repository variable CHARLA_API_URL (e.g. https://charla-api.<you>.workers.dev).
+name: keepalive
+on:
+  schedule:
+    - cron: '17 13 * * *'
+  workflow_dispatch:
+jobs:
+  ping:
+    if: ${{ vars.CHARLA_API_URL != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: curl --fail --silent --show-error "${{ vars.CHARLA_API_URL }}/api/health"

@@ -1,0 +1,440 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "id": "95th-street-library",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -88.201023,
+     41.709119
+    ]
+   },
+   "properties": {
+    "id": "95th-street-library",
+    "name": "95th Street Library (Naperville Public Library)",
+    "town": "Naperville",
+    "type": "library",
+    "scene_id": "library-card",
+    "address": "3015 Cedar Glade Dr, Naperville, IL 60564",
+    "lang_es": "unknown",
+    "lang_en": "yes",
+    "roles": "conversation group tutor",
+    "shifts": "Mondays 7:00-8:30 pm (verify)",
+    "status": "listed_public",
+    "source": "https://napervillepl.librarycalendar.com/event/english-conversation-group-16689",
+    "verified_on": "2026-09-07",
+    "club_schedule": "English Conversation Group (Literacy DuPage); listed Mondays 7-8:30 pm, may now be on Zoom; check the calendar",
+    "meet_ok": "yes",
+    "notes": "VERIFY current schedule before listing"
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "apld-west-branch",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -88.367219,
+     41.758648
+    ]
+   },
+   "properties": {
+    "id": "apld-west-branch",
+    "name": "West Branch (Aurora Public Library District)",
+    "town": "Aurora",
+    "type": "library",
+    "scene_id": "library-card",
+    "address": "233 S Constitution Dr, Aurora, IL 60506",
+    "lang_es": "unknown",
+    "lang_en": "yes",
+    "roles": "",
+    "shifts": "",
+    "status": "unknown",
+    "source": "https://www.aurorapubliclibrary.org/13458",
+    "verified_on": "2026-09-08",
+    "club_schedule": "",
+    "meet_ok": "yes",
+    "notes": "Shares a building with Washington Middle School; ask whether any English program runs here"
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "cermak-fresh-market",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -88.318567,
+     41.783542
+    ]
+   },
+   "properties": {
+    "id": "cermak-fresh-market",
+    "name": "Cermak Fresh Market",
+    "town": "Aurora",
+    "type": "grocery",
+    "scene_id": "grocery-deli",
+    "address": "1250 N Lake St, Aurora, IL 60506",
+    "lang_es": "unknown",
+    "lang_en": "unknown",
+    "roles": "deli counter",
+    "shifts": "",
+    "status": "unknown",
+    "source": "https://www.cermakfreshmarket.com/",
+    "verified_on": "2026-09-07",
+    "club_schedule": "",
+    "meet_ok": "no",
+    "notes": "Hispanic grocery chain; walk in and ask; get permission to list"
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "cod-naperville-center",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -88.184576,
+     41.750221
+    ]
+   },
+   "properties": {
+    "id": "cod-naperville-center",
+    "name": "College of DuPage Naperville Center",
+    "town": "Naperville",
+    "type": "college",
+    "scene_id": "",
+    "address": "1223 Rickert Dr, Naperville, IL 60540",
+    "lang_es": "unknown",
+    "lang_en": "yes",
+    "roles": "adult education office",
+    "shifts": "",
+    "status": "listed_public",
+    "source": "https://www.cod.edu/academics/continuing-education/adult-education/locations.html",
+    "verified_on": "2026-09-07",
+    "club_schedule": "Free English Language Acquisition classes (also evenings at Naperville North HS)",
+    "meet_ok": "yes",
+    "notes": ""
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "fountaindale-library",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -88.07924,
+     41.698289
+    ]
+   },
+   "properties": {
+    "id": "fountaindale-library",
+    "name": "Fountaindale Public Library",
+    "town": "Bolingbrook",
+    "type": "library",
+    "scene_id": "library-card",
+    "address": "300 W Briarcliff Rd, Bolingbrook, IL 60440",
+    "lang_es": "unknown",
+    "lang_en": "yes",
+    "roles": "conversation group tutor",
+    "shifts": "Wednesdays 10:00-11:00 am (virtual)",
+    "status": "listed_public",
+    "source": "https://www.literacydupage.org/conversation-groups",
+    "verified_on": "2026-09-07",
+    "club_schedule": "Literacy DuPage virtual English conversation group, Wednesdays 10-11 am",
+    "meet_ok": "yes",
+    "notes": ""
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "naper-blvd-library",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -88.117534,
+     41.73227
+    ]
+   },
+   "properties": {
+    "id": "naper-blvd-library",
+    "name": "Naper Blvd Library (Naperville Public Library)",
+    "town": "Naperville",
+    "type": "library",
+    "scene_id": "library-card",
+    "address": "2035 S Naper Blvd, Naperville, IL 60565",
+    "lang_es": "unknown",
+    "lang_en": "yes",
+    "roles": "",
+    "shifts": "",
+    "status": "unknown",
+    "source": "https://www.naperville-lib.org/",
+    "verified_on": "2026-09-07",
+    "club_schedule": "",
+    "meet_ok": "yes",
+    "notes": "Listed on the library site as an ESL group location; verify"
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "nichols-library",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -88.151312,
+     41.772969
+    ]
+   },
+   "properties": {
+    "id": "nichols-library",
+    "name": "Nichols Library (Naperville Public Library)",
+    "town": "Naperville",
+    "type": "library",
+    "scene_id": "library-card",
+    "address": "200 W Jefferson Ave, Naperville, IL 60540",
+    "lang_es": "unknown",
+    "lang_en": "yes",
+    "roles": "conversation group tutor",
+    "shifts": "Thursdays 6:30-8:00 pm",
+    "status": "listed_public",
+    "source": "https://www.literacydupage.org/conversation-groups",
+    "verified_on": "2026-09-07",
+    "club_schedule": "Literacy DuPage English Conversation Group, Thursdays 6:30-8:00 pm, intermediate+, free",
+    "meet_ok": "yes",
+    "notes": ""
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "santori-library",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -88.319398,
+     41.757166
+    ]
+   },
+   "properties": {
+    "id": "santori-library",
+    "name": "Santori Library (Aurora Public Library)",
+    "town": "Aurora",
+    "type": "library",
+    "scene_id": "library-card",
+    "address": "101 S River St, Aurora, IL 60506",
+    "lang_es": "yes",
+    "lang_en": "yes",
+    "roles": "conversation group tutor",
+    "shifts": "Saturdays 10:30-12:00",
+    "status": "listed_public",
+    "source": "https://aurora.libnet.info/event/15829646",
+    "verified_on": "2026-09-07",
+    "club_schedule": "English Conversation Group, Saturdays 10:30-12:00, Room 332, bilingual, in person or Zoom, no registration (4th Saturday is a reading group)",
+    "meet_ok": "yes",
+    "notes": ""
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "sos-aurora",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -88.30637,
+     41.78207
+    ]
+   },
+   "properties": {
+    "id": "sos-aurora",
+    "name": "Illinois Secretary of State Driver Services",
+    "town": "Aurora",
+    "type": "driver_services",
+    "scene_id": "driver-services-window",
+    "address": "339 E Indian Trail, Aurora, IL 60505",
+    "lang_es": "unknown",
+    "lang_en": "yes",
+    "roles": "counter",
+    "shifts": "Tue-Fri 8-5:30, Sat 7:30-noon",
+    "status": "unknown",
+    "source": "https://apps.ilsos.gov/facilityfinder/facilityfinder?command=getFacilityDetails&facilityId=253",
+    "verified_on": "2026-09-07",
+    "club_schedule": "",
+    "meet_ok": "no",
+    "notes": "Ask about Spanish at the counter"
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "sos-naperville",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -88.206355,
+     41.799111
+    ]
+   },
+   "properties": {
+    "id": "sos-naperville",
+    "name": "Illinois Secretary of State Driver Services",
+    "town": "Naperville",
+    "type": "driver_services",
+    "scene_id": "driver-services-window",
+    "address": "1771 W Diehl Rd Unit 110, Naperville, IL 60563",
+    "lang_es": "unknown",
+    "lang_en": "yes",
+    "roles": "counter",
+    "shifts": "",
+    "status": "unknown",
+    "source": "https://www.ilsos.gov/facilities/facilitylist.html",
+    "verified_on": "2026-09-07",
+    "club_schedule": "",
+    "meet_ok": "no",
+    "notes": "New facility opened Nov 2025 (the 75th St one closed); ask about Spanish at the counter"
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "vna-bolingbrook",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -88.082512,
+     41.681026
+    ]
+   },
+   "properties": {
+    "id": "vna-bolingbrook",
+    "name": "VNA Health Care",
+    "town": "Bolingbrook",
+    "type": "clinic",
+    "scene_id": "clinic-front-desk",
+    "address": "396 Remington Blvd Ste 230, Bolingbrook, IL 60440",
+    "lang_es": "unknown",
+    "lang_en": "yes",
+    "roles": "front desk",
+    "shifts": "",
+    "status": "unknown",
+    "source": "https://vnahealth.com/",
+    "verified_on": "2026-09-07",
+    "club_schedule": "",
+    "meet_ok": "no",
+    "notes": "Same network; confirm Spanish at the desk"
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "vna-highland",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -88.329174,
+     41.765208
+    ]
+   },
+   "properties": {
+    "id": "vna-highland",
+    "name": "VNA Health Care",
+    "town": "Aurora",
+    "type": "clinic",
+    "scene_id": "clinic-front-desk",
+    "address": "400 N Highland Ave, Aurora, IL 60506",
+    "lang_es": "yes",
+    "lang_en": "yes",
+    "roles": "front desk",
+    "shifts": "",
+    "status": "listed_public",
+    "source": "https://vnahealth.com/",
+    "verified_on": "2026-09-07",
+    "club_schedule": "",
+    "meet_ok": "no",
+    "notes": "Community health center; services in English and Spanish per VNA"
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "vna-weston",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -88.317903,
+     41.746734
+    ]
+   },
+   "properties": {
+    "id": "vna-weston",
+    "name": "VNA Health Center",
+    "town": "Aurora",
+    "type": "clinic",
+    "scene_id": "clinic-front-desk",
+    "address": "323 Weston Ave, Aurora, IL 60505",
+    "lang_es": "yes",
+    "lang_en": "yes",
+    "roles": "front desk",
+    "shifts": "",
+    "status": "listed_public",
+    "source": "https://vnahealth.com/",
+    "verified_on": "2026-09-07",
+    "club_schedule": "",
+    "meet_ok": "no",
+    "notes": "Primary care and urgent care; all services in English and Spanish per VNA"
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "waubonsee-downtown",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -88.317961,
+     41.758062
+    ]
+   },
+   "properties": {
+    "id": "waubonsee-downtown",
+    "name": "Waubonsee Community College Aurora Downtown Campus",
+    "town": "Aurora",
+    "type": "college",
+    "scene_id": "",
+    "address": "18 S River St, Aurora, IL 60506",
+    "lang_es": "unknown",
+    "lang_en": "yes",
+    "roles": "adult education office",
+    "shifts": "Mornings 9-12, evenings 6-9",
+    "status": "listed_public",
+    "source": "https://www.waubonsee.edu/community-offerings/adult-education/english-language-acquisition-ela",
+    "verified_on": "2026-09-07",
+    "club_schedule": "Free English Language Acquisition classes, mornings 9-12 and evenings 6-9",
+    "meet_ok": "yes",
+    "notes": "Ask the adult education office whether the front desk is bilingual"
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "woodridge-library",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -88.045414,
+     41.756962
+    ]
+   },
+   "properties": {
+    "id": "woodridge-library",
+    "name": "Woodridge Public Library",
+    "town": "Woodridge",
+    "type": "library",
+    "scene_id": "library-card",
+    "address": "3 Plaza Dr, Woodridge, IL 60517",
+    "lang_es": "unknown",
+    "lang_en": "yes",
+    "roles": "conversation group volunteer",
+    "shifts": "Tuesdays 10:00-11:00 am",
+    "status": "listed_public",
+    "source": "https://www.literacydupage.org/conversation-groups",
+    "verified_on": "2026-09-08",
+    "club_schedule": "Literacy DuPage ESL conversation group, Tuesdays 10-11 am, intermediate+, free (virtual)",
+    "meet_ok": "yes",
+    "notes": ""
+   }
+  }
+ ]
+}

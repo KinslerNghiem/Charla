@@ -1,0 +1,44 @@
+name = "charla-api"
+main = "src/index.ts"
+compatibility_date = "2026-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Without this the JSON lines the Worker logs (token counts, cache hits, stop
+# reasons) exist only inside a live `wrangler tail` and answer nothing later.
+[observability]
+enabled = true
+head_sampling_rate = 1
+
+[vars]
+# claude-opus-5 accepts mid-conversation system messages, which is where the
+# per-turn level reminder goes, and its prompt cache minimum is 512 tokens,
+# which our ~700-token system prompt clears.
+#
+# claude-sonnet-5 is the cost fallback, but read this before switching: Sonnet's
+# cache minimum is 1024 tokens, so the system prompt falls UNDER it and caching
+# silently stops (no error, cache_creation_input_tokens just stays 0). The real
+# saving is therefore smaller than the per-token price difference suggests.
+# Check res.usage.cache_read_input_tokens in the logs either way. Sonnet also
+# rejects mid-conversation system messages; tutor.ts handles that automatically.
+MODEL = "claude-opus-5"
+DAILY_TURN_CAP = "40"
+DAILY_IP_CAP = "400"
+# Set this to the deployed app origin before deploying, e.g.
+# "https://charla.pages.dev". It fails closed: an unset value blocks browsers.
+ALLOWED_ORIGIN = "http://localhost:5173"
+
+# Create these once, then paste the ids:
+#   wrangler d1 create charla
+#   wrangler kv namespace create CAPS
+[[d1_databases]]
+binding = "DB"
+database_name = "charla"
+database_id = "REPLACE_WITH_ID_FROM_wrangler_d1_create"
+
+[[kv_namespaces]]
+binding = "CAPS"
+id = "REPLACE_WITH_ID_FROM_wrangler_kv_namespace_create"
+
+# Secrets (never in this file):
+#   wrangler secret put ANTHROPIC_API_KEY --config worker/wrangler.toml
+# For local dev put ANTHROPIC_API_KEY=... in worker/.dev.vars (gitignored).

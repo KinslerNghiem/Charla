@@ -1,0 +1,35 @@
+{
+  "name": "charla",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Practice the conversation. Then go have it. Spanish-English conversation practice tied to real places in Naperville and Aurora, IL.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p worker/tsconfig.json",
+    "venues": "python scripts/build_venues.py",
+    "worker:dev": "wrangler dev --config worker/wrangler.toml",
+    "worker:deploy": "wrangler deploy --config worker/wrangler.toml",
+    "worker:db": "wrangler d1 execute charla --config worker/wrangler.toml --file worker/schema.sql"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.110.0",
+    "maplibre-gl": "^5.0.0",
+    "preact": "^10.25.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250101.0",
+    "@preact/preset-vite": "^2.9.0",
+    "@types/geojson": "^7946.0.14",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0",
+    "vite": "^7.0.0",
+    "vite-plugin-pwa": "^1.0.0",
+    "vitest": "^3.0.0",
+    "wrangler": "^4.0.0"
+  }
+}

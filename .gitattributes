@@ -1,0 +1,5 @@
+# Keep LF everywhere so the repo looks the same on Windows, macOS and CI.
+* text=auto eol=lf
+*.svg text eol=lf
+*.png binary
+*.jpg binary

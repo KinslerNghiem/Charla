@@ -1,0 +1,117 @@
+{
+  "id": "pharmacy-refill",
+  "place_type": "pharmacy",
+  "title": { "en": "Refill a prescription", "es": "Recoger una receta" },
+  "roles": {
+    "partner": { "en": "pharmacist", "es": "farmacéutico o farmacéutica" },
+    "learner": { "en": "customer picking up medicine for a family member", "es": "cliente que recoge medicina para un familiar" }
+  },
+  "goal": {
+    "en": "Pick up your mother's prescription and ask one question about the medicine.",
+    "es": "Recoger la receta de tu madre y hacer una pregunta sobre el medicamento."
+  },
+  "must_use": [
+    { "en": "pick up", "es": "recoger" },
+    { "en": "prescription", "es": "receta" },
+    { "en": "Does she take it with food?", "es": "¿Lo toma con comida?" }
+  ],
+  "success": {
+    "en": "The pharmacist finds the prescription, hands it to you, and answers your question.",
+    "es": "El farmacéutico encuentra la receta, te la entrega y responde tu pregunta."
+  },
+  "show_staff_line": {
+    "en": "I'm practicing my English. Thank you for your patience.",
+    "es": "Estoy practicando mi inglés. Gracias por su paciencia."
+  },
+  "offline_script": {
+    "start": "s1",
+    "nodes": {
+      "s1": {
+        "partner": { "en": "Hi, how can I help you today?", "es": "Hola, ¿en qué le puedo ayudar hoy?" },
+        "choices": [
+          {
+            "text": { "en": "I need to pick up a prescription for my mother.", "es": "Necesito recoger una receta para mi madre." },
+            "picture": "💊",
+            "best": true,
+            "next": "s2"
+          },
+          {
+            "text": { "en": "Medicine. Mother.", "es": "Medicina. Madre." },
+            "picture": "💬",
+            "tip": { "en": "Try a full sentence: \"I need to pick up…\"", "es": "Prueba una oración completa: \"I need to pick up…\"" },
+            "next": null
+          },
+          {
+            "text": { "en": "Where is the milk?", "es": "¿Dónde está la leche?" },
+            "picture": "🥛",
+            "tip": { "en": "This is the pharmacy counter. Ask about the prescription.", "es": "Este es el mostrador de la farmacia. Pregunta por la receta." },
+            "next": null
+          }
+        ]
+      },
+      "s2": {
+        "partner": { "en": "Sure. What's her last name and date of birth?", "es": "Claro. ¿Cuál es su apellido y su fecha de nacimiento?" },
+        "choices": [
+          {
+            "text": { "en": "Her last name is Garcia. She was born on May 3rd, 1960.", "es": "Su apellido es García. Nació el 3 de mayo de 1960." },
+            "picture": "🪪",
+            "best": true,
+            "next": "s3"
+          },
+          {
+            "text": { "en": "Garcia.", "es": "García." },
+            "picture": "💬",
+            "tip": { "en": "They asked two things. Add the date of birth.", "es": "Preguntaron dos cosas. Agrega la fecha de nacimiento." },
+            "next": null
+          },
+          {
+            "text": { "en": "I don't know.", "es": "No sé." },
+            "picture": "🤷",
+            "tip": { "en": "You know this one. Say the last name and the birthday.", "es": "Esta sí la sabes. Di el apellido y el cumpleaños." },
+            "next": null
+          }
+        ]
+      },
+      "s3": {
+        "partner": { "en": "I found it. It's ready. Do you have any questions about the medicine?", "es": "Ya la encontré. Está lista. ¿Tiene alguna pregunta sobre el medicamento?" },
+        "choices": [
+          {
+            "text": { "en": "Yes. Does she take it with food?", "es": "Sí. ¿Lo toma con comida?" },
+            "picture": "🍽️",
+            "best": true,
+            "next": "s4"
+          },
+          {
+            "text": { "en": "No.", "es": "No." },
+            "picture": "🙅",
+            "tip": { "en": "This is your chance to ask. Try \"Does she take it with food?\"", "es": "Es tu oportunidad de preguntar. Prueba \"Does she take it with food?\"" },
+            "next": null
+          },
+          {
+            "text": { "en": "Thank you, bye.", "es": "Gracias, adiós." },
+            "picture": "👋",
+            "tip": { "en": "Not yet. Ask your question first.", "es": "Todavía no. Primero haz tu pregunta." },
+            "next": null
+          }
+        ]
+      },
+      "s4": {
+        "partner": { "en": "Yes, with food, once a day in the morning. Anything else?", "es": "Sí, con comida, una vez al día por la mañana. ¿Algo más?" },
+        "choices": [
+          {
+            "text": { "en": "No, that's all. Thank you for your patience.", "es": "No, eso es todo. Gracias por su paciencia." },
+            "picture": "🙏",
+            "best": true,
+            "next": null
+          },
+          {
+            "text": { "en": "Yes.", "es": "Sí." },
+            "picture": "💬",
+            "tip": { "en": "If you have nothing else, say \"No, that's all\" and thank them.", "es": "Si no necesitas nada más, di \"No, that's all\" y da las gracias." },
+            "next": null
+          }
+        ]
+      }
+    }
+  }
+}

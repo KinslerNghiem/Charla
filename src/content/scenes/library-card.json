@@ -1,0 +1,95 @@
+{
+  "id": "library-card",
+  "place_type": "library",
+  "kid": true,
+  "title": { "en": "Get a library card", "es": "Sacar una tarjeta de la biblioteca" },
+  "roles": {
+    "partner": { "en": "librarian", "es": "bibliotecario o bibliotecaria" },
+    "learner": { "en": "kid getting their own library card", "es": "niño o niña que saca su propia tarjeta" }
+  },
+  "goal": {
+    "en": "Ask for your own library card and find the comic books.",
+    "es": "Pedir tu propia tarjeta de la biblioteca y encontrar los cómics."
+  },
+  "must_use": [
+    { "en": "library card", "es": "tarjeta de la biblioteca" },
+    { "en": "please", "es": "por favor" },
+    { "en": "Where are…?", "es": "¿Dónde están…?" }
+  ],
+  "success": {
+    "en": "The librarian gives you a card and points you to the comic books.",
+    "es": "La bibliotecaria te da una tarjeta y te muestra dónde están los cómics."
+  },
+  "show_staff_line": {
+    "en": "I'm practicing my English. Thank you for your patience.",
+    "es": "Estoy practicando mi inglés. Gracias por su paciencia."
+  },
+  "offline_script": {
+    "start": "s1",
+    "nodes": {
+      "s1": {
+        "partner": { "en": "Hello! How can I help you?", "es": "¡Hola! ¿En qué te puedo ayudar?" },
+        "choices": [
+          {
+            "text": { "en": "I would like a library card, please.", "es": "Quisiera una tarjeta de la biblioteca, por favor." },
+            "picture": "📚",
+            "best": true,
+            "next": "s2"
+          },
+          {
+            "text": { "en": "I want a pizza.", "es": "Quiero una pizza." },
+            "picture": "🍕",
+            "tip": { "en": "This is the library. Ask for a card.", "es": "Esta es la biblioteca. Pide una tarjeta." },
+            "next": null
+          },
+          {
+            "text": { "en": "Card.", "es": "Tarjeta." },
+            "picture": "💬",
+            "tip": { "en": "Try the whole sentence, with \"please\".", "es": "Prueba la oración completa, con \"please\"." },
+            "next": null
+          }
+        ]
+      },
+      "s2": {
+        "partner": { "en": "Great! What's your first name?", "es": "¡Qué bien! ¿Cómo te llamas?" },
+        "choices": [
+          {
+            "text": { "en": "My name is Ana.", "es": "Me llamo Ana." },
+            "picture": "🙂",
+            "best": true,
+            "next": "s3"
+          },
+          {
+            "text": { "en": "I live at 123 Main Street.", "es": "Vivo en la calle Main 123." },
+            "picture": "🏠",
+            "tip": { "en": "They only asked your name. You never have to say where you live.", "es": "Solo preguntaron tu nombre. Nunca tienes que decir dónde vives." },
+            "next": null
+          },
+          {
+            "text": { "en": "Yes.", "es": "Sí." },
+            "picture": "💬",
+            "tip": { "en": "Say your name: \"My name is…\"", "es": "Di tu nombre: \"My name is…\"" },
+            "next": null
+          }
+        ]
+      },
+      "s3": {
+        "partner": { "en": "Here is your card, Ana. You can borrow five books.", "es": "Aquí tienes tu tarjeta, Ana. Puedes llevarte cinco libros." },
+        "choices": [
+          {
+            "text": { "en": "Thank you! Where are the comic books?", "es": "¡Gracias! ¿Dónde están los cómics?" },
+            "picture": "📖",
+            "best": true,
+            "next": null
+          },
+          {
+            "text": { "en": "Bye.", "es": "Adiós." },
+            "picture": "👋",
+            "tip": { "en": "Say thank you first, then ask where the comics are.", "es": "Primero da las gracias, luego pregunta dónde están los cómics." },
+            "next": null
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "id": "taqueria-order",
+  "place_type": "restaurant",
+  "kid": true,
+  "title": { "en": "Order at the taquería", "es": "Pedir en la taquería" },
+  "roles": {
+    "partner": { "en": "person at the counter", "es": "persona del mostrador" },
+    "learner": { "en": "customer ordering food", "es": "cliente que pide comida" }
+  },
+  "goal": {
+    "en": "Order two tacos and a drink by yourself, and say whether it is for here or to go.",
+    "es": "Pedir dos tacos y una bebida tú solo, y decir si es para aquí o para llevar."
+  },
+  "must_use": [
+    { "en": "please", "es": "por favor" },
+    { "en": "for here or to go", "es": "para aquí o para llevar" },
+    { "en": "thank you", "es": "gracias" }
+  ],
+  "success": {
+    "en": "You get your food and your drink and say thank you.",
+    "es": "Recibes tu comida y tu bebida y das las gracias."
+  },
+  "show_staff_line": {
+    "en": "I'm practicing my English. Thank you for your patience.",
+    "es": "Estoy practicando mi inglés. Gracias por su paciencia."
+  },
+  "offline_script": {
+    "start": "s1",
+    "nodes": {
+      "s1": {
+        "partner": { "en": "Hi! What would you like?", "es": "¡Hola! ¿Qué le gustaría?" },
+        "choices": [
+          {
+            "text": { "en": "Two chicken tacos, please.", "es": "Dos tacos de pollo, por favor." },
+            "picture": "🌮",
+            "best": true,
+            "next": "s2"
+          },
+          {
+            "text": { "en": "Tacos.", "es": "Tacos." },
+            "picture": "💬",
+            "tip": { "en": "Say how many, and add \"please\".", "es": "Di cuántos, y agrega \"please\"." },
+            "next": null
+          },
+          {
+            "text": { "en": "A bicycle, please.", "es": "Una bicicleta, por favor." },
+            "picture": "🚲",
+            "tip": { "en": "They sell tacos, not bicycles!", "es": "¡Venden tacos, no bicicletas!" },
+            "next": null
+          }
+        ]
+      },
+      "s2": {
+        "partner": { "en": "Two chicken tacos. Anything to drink?", "es": "Dos tacos de pollo. ¿Algo de tomar?" },
+        "choices": [
+          {
+            "text": { "en": "A horchata, please.", "es": "Una horchata, por favor." },
+            "picture": "🥤",
+            "best": true,
+            "next": "s3"
+          },
+          {
+            "text": { "en": "Water, please.", "es": "Agua, por favor." },
+            "picture": "💧",
+            "best": true,
+            "next": "s3"
+          },
+          {
+            "text": { "en": "Two more bicycles.", "es": "Dos bicicletas más." },
+            "picture": "🚲",
+            "tip": { "en": "They asked about a drink.", "es": "Preguntaron por una bebida." },
+            "next": null
+          }
+        ]
+      },
+      "s3": {
+        "partner": { "en": "That's eight dollars. For here or to go?", "es": "Son ocho dólares. ¿Para aquí o para llevar?" },
+        "choices": [
+          {
+            "text": { "en": "For here, please.", "es": "Para aquí, por favor." },
+            "picture": "🪑",
+            "best": true,
+            "next": "s4"
+          },
+          {
+            "text": { "en": "To go, please.", "es": "Para llevar, por favor." },
+            "picture": "🛍️",
+            "best": true,
+            "next": "s4"
+          },
+          {
+            "text": { "en": "Yes.", "es": "Sí." },
+            "picture": "💬",
+            "tip": { "en": "Pick one: for here, or to go.", "es": "Elige una: para aquí, o para llevar." },
+            "next": null
+          }
+        ]
+      },
+      "s4": {
+        "partner": { "en": "Here you go. Enjoy!", "es": "Aquí tiene. ¡Buen provecho!" },
+        "choices": [
+          {
+            "text": { "en": "Thank you!", "es": "¡Gracias!" },
+            "picture": "🙏",
+            "best": true,
+            "next": null
+          },
+          {
+            "text": { "en": "Give me.", "es": "Dame." },
+            "picture": "😐",
+            "tip": { "en": "Say thank you.", "es": "Da las gracias." },
+            "next": null
+          }
+        ]
+      }
+    }
+  }
+}
