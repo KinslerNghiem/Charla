@@ -70,8 +70,9 @@ export function App() {
     ['/card', t('nav_card')],
     ['/table', t('nav_table')],
     ['/ninos', t('nav_kids')],
-    ['/privacy', t('nav_privacy')],
   ]
+  // Privacy is a footer link, not a sixth tab: six tabs overflow a 390px phone
+  // and the last one scrolls out of sight with nothing to say it is there.
   const current = route.path === '/' ? '/learn' : route.path
 
   let page
@@ -137,6 +138,11 @@ export function App() {
       <main id="main" tabIndex={-1}>
         {page}
       </main>
+      <footer class="foot">
+        <a href="#/privacy" aria-current={route.path === '/privacy' ? 'page' : undefined}>
+          {t('nav_privacy')}
+        </a>
+      </footer>
     </div>
   )
 }

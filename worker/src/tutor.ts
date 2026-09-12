@@ -42,7 +42,12 @@ function supportsSystemInMessages(model: string): boolean {
   return /^claude-(opus-5|opus-4-8|fable-|mythos-)/.test(model)
 }
 
-export async function runTurn(env: Env, input: TurnInput): Promise<Turn> {
+// Returns null when the model cannot be reached (no key, transport error,
+// unparseable output). The route turns that into a 503, and the app switches
+// to the scripted scene with a "try again" button. It used to return the
+// canned redirect line as a 200, which read as the partner ignoring the
+// learner, turn after turn, with no way to tell what had happened.
+export async function runTurn(env: Env, input: TurnInput): Promise<Turn | null> {
   const scene = sceneById(input.scene_id)
   if (!scene) throw new Error('unknown scene')
   const level: Level = ['A1', 'A2', 'B1'].includes(input.level) ? input.level : 'A2'
@@ -52,6 +57,7 @@ export async function runTurn(env: Env, input: TurnInput): Promise<Turn> {
   const userText = raw.slice(0, MAX_USER_CHARS).trim()
   if (!userText) throw new Error('empty turn')
   if (blocked(userText)) return canned(learning, true)
+  if (!env.ANTHROPIC_API_KEY) return null
 
   const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY })
   const system = buildSystem(scene, level, learning)
@@ -97,10 +103,8 @@ export async function runTurn(env: Env, input: TurnInput): Promise<Turn> {
   try {
     res = await call(messages)
   } catch (err) {
-    // A parse failure or a transport error degrades to the scripted line rather
-    // than a 500, which the app would read as "you are offline" for the session.
     console.log(JSON.stringify({ route: 'turn', model, level, error: err instanceof Error ? err.name : 'error' }))
-    return canned(learning, false)
+    return null
   }
 
   let retried = false

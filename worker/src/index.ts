@@ -70,7 +70,9 @@ async function route(req: Request, env: Env, path: string): Promise<Response> {
     if (!(await underCap(env, hash))) return json({ error: 'daily cap reached' }, 429)
     const place_name =
       typeof body.place_name === 'string' ? body.place_name.replace(/[^\p{L}\p{N} '&.,()-]/gu, '').slice(0, 60) : undefined
-    return json(await runTurn(env, { ...body, place_name }))
+    const turn = await runTurn(env, { ...body, place_name })
+    // 503, not a canned 200: the app shows the scripted scene and a retry button.
+    return turn ? json(turn) : json({ error: 'model unavailable' }, 503)
   }
 
   if (path === '/api/help' && req.method === 'POST') {

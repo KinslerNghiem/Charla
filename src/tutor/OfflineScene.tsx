@@ -53,7 +53,7 @@ export function OfflineScene({
       {!done && (
         <div class="choices">
           {node.choices.map((c) => (
-            <button type="button" class="choice" onClick={() => choose(c)}>
+            <button type="button" class={'choice' + (pictures && c.picture ? '' : ' nopic')} onClick={() => choose(c)}>
               {pictures && c.picture && <span class="pic" aria-hidden="true">{c.picture}</span>}
               <span class="txt">{c.text[learning]}</span>
               <span class="sub">{c.text[native]}</span>

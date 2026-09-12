@@ -22,7 +22,7 @@ const BREAK_AFTER_MS = 30 * 60 * 1000
 
 // app.tsx keys this component on the scene id, so picking a new scene remounts
 // it and no state survives from the previous conversation.
-export function Learn({ params, mode }: { params: URLSearchParams; mode: Mode }) {
+export function Learn({ params }: { params: URLSearchParams; mode: Mode }) {
   const placeName = params.get('place') ?? undefined
   const sceneId = params.get('scene')
   const scene = sceneById(sceneId)
@@ -152,7 +152,14 @@ export function Learn({ params, mode }: { params: URLSearchParams; mode: Mode })
 
       {offline || capped ? (
         <>
-          {offline && <p class="notice">{t('offline_mode')}</p>}
+          {offline && (
+            <p class="notice">
+              {t('offline_mode')}{' '}
+              <button type="button" class="small" onClick={() => setOffline(false)}>
+                {t('offline_retry')}
+              </button>
+            </p>
+          )}
           <OfflineScene
             scene={scene}
             learning={target}
@@ -212,6 +219,14 @@ export function Learn({ params, mode }: { params: URLSearchParams; mode: Mode })
                 value={input}
                 placeholder={msgs.length === 0 ? `${scene.roles.partner[target]}: …` : t('type_here')}
                 onInput={(e) => setInput((e.target as HTMLTextAreaElement).value)}
+                onKeyDown={(e) => {
+                  // Enter sends, like every chat box; Shift+Enter keeps the newline.
+                  if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
+                    e.preventDefault()
+                    const text = input.trim()
+                    if (text && !busy) send(text)
+                  }
+                }}
                 rows={2}
               />
               <div class="row">
@@ -254,7 +269,7 @@ export function Learn({ params, mode }: { params: URLSearchParams; mode: Mode })
               )}
               {msgs.length === 0 && (
                 <p class="note">
-                  {scene.roles.partner[target]} ↔ {scene.roles.learner[target]} · {mode}
+                  {scene.roles.partner[nat]} ↔ {scene.roles.learner[nat]}
                 </p>
               )}
             </form>

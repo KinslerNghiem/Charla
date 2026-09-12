@@ -154,7 +154,7 @@ export function Places({ params }: { params: URLSearchParams }) {
         ))}
       </div>
       <p class="streak">
-        <b>{streakThisWeek()}</b> {t('streak')}
+        <b>{streakThisWeek()}</b> {streakThisWeek() === 1 ? t('streak_one') : t('streak')}
       </p>
       {sel && (
         <article class="venue">

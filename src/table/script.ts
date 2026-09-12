@@ -29,12 +29,13 @@ export function buildTableScript(scene: Scene): Phase[] {
     { en: 'Ask your partner what they would say.', es: 'Pregúntale a tu compañero qué diría.' },
   ]
   return [
-    { id: 'ice-es', seconds: 120, lang: 'es', title: { en: 'Warm up, in Spanish', es: 'Calentamiento, en español' }, prompts: ICEBREAKERS },
+    // These sum to exactly 600 s so the Start button's "10 min" is the truth.
+    { id: 'ice-es', seconds: 110, lang: 'es', title: { en: 'Warm up, in Spanish', es: 'Calentamiento, en español' }, prompts: ICEBREAKERS },
     { id: 'topic-en', seconds: 180, lang: 'en', title: { en: `${scene.title.en}, in English`, es: `${scene.title.es}, en inglés` }, prompts: topic },
     { id: 'switch', seconds: 5, lang: 'es', title: { en: 'Switch: now in Spanish', es: 'Cambio: ahora en español' }, prompts: [] },
-    { id: 'ice-en', seconds: 120, lang: 'en', title: { en: 'Warm up, in English', es: 'Calentamiento, en inglés' }, prompts: ICEBREAKERS },
+    { id: 'ice-en', seconds: 110, lang: 'en', title: { en: 'Warm up, in English', es: 'Calentamiento, en inglés' }, prompts: ICEBREAKERS },
     { id: 'topic-es', seconds: 180, lang: 'es', title: { en: `${scene.title.en}, in Spanish`, es: `${scene.title.es}, en español` }, prompts: topic },
-    { id: 'wrap', seconds: 30, lang: 'en', title: { en: 'Wrap up', es: 'Cierre' }, prompts: [WRAP] },
+    { id: 'wrap', seconds: 15, lang: 'en', title: { en: 'Wrap up', es: 'Cierre' }, prompts: [WRAP] },
   ]
 }
 

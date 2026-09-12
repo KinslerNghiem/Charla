@@ -76,7 +76,7 @@ export function Ninos() {
           ))}
         </div>
         <p class="stickers">
-          {t('kids_stickers')}: {stickers.length ? stickers.map(() => '⭐').join(' ') : '—'}
+          {stickers.length ? `${t('kids_stickers')}: ${stickers.map(() => '⭐').join(' ')}` : t('kids_no_stickers')}
           {stickers.length >= kidScenes().length && ` · ${t('kids_ready')} 🎉`}
         </p>
         <button type="button" class="ghost small hold" onPointerDown={holdStart} onPointerUp={holdEnd} onPointerCancel={holdEnd} onPointerLeave={holdEnd}>

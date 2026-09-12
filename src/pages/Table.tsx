@@ -30,7 +30,9 @@ export function Table({ params }: { params: URLSearchParams }) {
     return () => clearInterval(id)
   }, [running])
 
-  const at = phaseAt(phases, elapsed)
+  // Before Start there is no phase: the card would otherwise sit under the
+  // button showing a frozen 2:00 and an End button for a session that has not begun.
+  const at = running ? phaseAt(phases, elapsed) : null
   const finished = running && at === null
   const phase = at ? phases[at.index] : null
 
@@ -83,7 +85,7 @@ export function Table({ params }: { params: URLSearchParams }) {
           </ul>
           {/* The second person at the table never went through the gate and
               never saw the Rehearse screen, so the AI notice belongs here too. */}
-          <p class="ai-banner">{t('ai_banner')}</p>
+          <p class="ai-banner">{t('table_help_ai')}</p>
           <form class="help" onSubmit={getHelp}>
             <input value={helpText} placeholder={t('table_help_placeholder')} onInput={(e) => setHelpText((e.target as HTMLInputElement).value)} />
             <button type="submit" class="ghost" disabled={busy}>
