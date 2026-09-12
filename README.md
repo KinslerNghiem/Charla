@@ -30,11 +30,13 @@ After the visit, one tap makes the map better for the next person.
 
 ## Status
 
-Week 1. Six scene cards (pharmacy refill, clinic front desk, driver-services
-window, taquería order, library card, grocery deli), the Worker with the drift
-guard, the venue pipeline with 15 geocoded seed places, tests, and CI. Still to
-build: the school-office scene, `/api/stt` for voice inside the installed iOS
-app, and everything in the plan's week 3 onward.
+Week 1 done. All five must-have scenes from the plan (pharmacy refill, clinic
+front desk, driver-services window, school office, taquería order) plus two
+extras (library card, grocery deli), three of them kid-enabled. The Worker with
+the drift guard, the venue pipeline with 15 geocoded seed places (one more awaiting
+coordinates), tests, and
+CI. Still to build: `/api/stt` for voice inside the installed iOS app, and
+everything in the plan's week 3 onward.
 
 Verified so far: `npm run typecheck` (app and Worker), `npm test` (36 tests),
 `npm run build`, `wrangler deploy --dry-run`, and a smoke test of every

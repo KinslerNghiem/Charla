@@ -22,6 +22,7 @@ kept from day one and pasted into the submission form.
 | 2026-09-07 | Initial scaffold: project layout, first scene cards, Worker routes, tests, venue pipeline | Claude Code |
 | 2026-09-08 | Three more scene cards (clinic, driver services, grocery deli) drafted and reviewed for Spanish and pedagogy | Claude Code |
 | 2026-09-08 | Code audit standing in for a compiler (Node not installed yet); 43 verified findings applied by hand: zod v4 import, history/token/cap fixes in the Worker, per-place report salting, dynamic-import split for kid mode | Claude Code |
+| 2026-09-11 | First compile and test run; fixes for what the compiler found; map lazy-load; Worker smoke test; school-office scene | Claude Code |
 
 Add a row whenever an AI tool writes or substantially rewrites code, content or
 copy. Reviewing, understanding, and being able to explain every file is on us.
