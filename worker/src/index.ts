@@ -9,17 +9,37 @@ const YEAR = 365 * 86400000
 const MONTH = 30 * 86400000
 const FLAG_RETENTION = 60 * 86400000
 const MAX_BODY = 32_000
+// A push-to-talk clip: ten seconds of AAC or Opus is well under this.
+const MAX_AUDIO = 1_500_000
 
 // Free text from a report is limited to a short list of counter roles. The map
 // is about places, so a role is a job, never a person.
 const ROLES = ['cashier', 'pharmacist', 'clerk', 'server', 'librarian', 'nurse', 'front_desk', 'other']
 const SHIFTS = ['morning', 'afternoon', 'evening', 'weekend']
 
+// Workers AI's Whisper turbo takes base64 audio and a language hint. Typed
+// loosely on purpose: the binding's generated model types change between
+// workers-types releases, and this is the one call we make.
+async function transcribe(ai: Ai, bytes: Uint8Array, lang: 'en' | 'es'): Promise<string | null> {
+  let b64 = ''
+  const CHUNK = 0x8000
+  for (let i = 0; i < bytes.length; i += CHUNK) b64 += String.fromCharCode(...bytes.subarray(i, i + CHUNK))
+  b64 = btoa(b64)
+  try {
+    const run = (ai as unknown as { run: (model: string, input: unknown) => Promise<{ text?: string }> }).run
+    const res = await run.call(ai, '@cf/openai/whisper-large-v3-turbo', { audio: b64, language: lang })
+    return typeof res?.text === 'string' ? res.text.trim().slice(0, 600) : ''
+  } catch (err) {
+    console.log(JSON.stringify({ route: 'stt', error: err instanceof Error ? err.name : 'error' }))
+    return null
+  }
+}
+
 function cors(res: Response, env: Env): Response {
   const h = new Headers(res.headers)
   h.set('access-control-allow-origin', env.ALLOWED_ORIGIN || 'null')
   h.set('access-control-allow-methods', 'GET, POST, OPTIONS')
-  h.set('access-control-allow-headers', 'content-type')
+  h.set('access-control-allow-headers', 'content-type, x-charla-device')
   h.set('access-control-max-age', '86400')
   h.set('vary', 'origin')
   return new Response(res.body, { status: res.status, headers: h })
@@ -167,9 +187,20 @@ async function route(req: Request, env: Env, path: string): Promise<Response> {
   }
 
   if (path === '/api/stt' && req.method === 'POST') {
-    // Should-have: forward the audio clip to a transcription API and discard it.
-    // Until then the app shows "type instead" on installed iOS.
-    return json({ error: 'not implemented yet' }, 501)
+    // The installed iOS app cannot use Safari's speech recognition, so it posts
+    // a short clip here. The clip is transcribed by Workers AI and discarded:
+    // nothing is written, and the transcript goes back only to the caller.
+    if (!env.AI) return json({ error: 'speech not enabled' }, 503)
+    const device = req.headers.get('x-charla-device') ?? ''
+    if (!device) return json({ error: 'bad request' }, 400)
+    if (Number(req.headers.get('content-length') ?? 0) > MAX_AUDIO) return json({ error: 'too long' }, 413)
+    if (!(await underIpCap(env, clientIp(req)))) return json({ error: 'slow down' }, 429)
+    if (!(await underCap(env, await sha256(device)))) return json({ error: 'daily cap reached' }, 429)
+    const bytes = new Uint8Array(await req.arrayBuffer())
+    if (bytes.byteLength === 0 || bytes.byteLength > MAX_AUDIO) return json({ error: 'too long' }, 413)
+    const lang = new URL(req.url).searchParams.get('lang') === 'es' ? 'es' : 'en'
+    const out = await transcribe(env.AI, bytes, lang)
+    return out === null ? json({ error: 'speech unavailable' }, 503) : json({ text: out })
   }
 
   return json({ error: 'not found' }, 404)

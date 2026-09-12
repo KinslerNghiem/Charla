@@ -6,6 +6,8 @@ export interface Env {
   ALLOWED_ORIGIN: string
   DB: D1Database
   CAPS: KVNamespace
+  /** Present only when the [ai] binding in wrangler.toml is uncommented. */
+  AI?: Ai
 }
 
 export function json(body: unknown, status = 200, extra: Record<string, string> = {}): Response {

@@ -39,6 +39,13 @@ database_id = "REPLACE_WITH_ID_FROM_wrangler_d1_create"
 binding = "CAPS"
 id = "REPLACE_WITH_ID_FROM_wrangler_kv_namespace_create"
 
+# Speech-to-text for the installed iOS app (/api/stt) runs on Workers AI's
+# Whisper model. Uncomment to turn it on; the route answers 503 until then and
+# the app tells the learner to type. Local `wrangler dev` proxies an AI binding
+# to the real service, so it needs `wrangler login` first.
+# [ai]
+# binding = "AI"
+
 # Secrets (never in this file):
 #   wrangler secret put ANTHROPIC_API_KEY --config worker/wrangler.toml
 # For local dev put ANTHROPIC_API_KEY=... in worker/.dev.vars (gitignored).

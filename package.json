@@ -11,6 +11,7 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p worker/tsconfig.json",
     "venues": "python scripts/build_venues.py",
+    "walk": "node scripts/walk.mjs",
     "worker:dev": "wrangler dev --config worker/wrangler.toml",
     "worker:deploy": "wrangler deploy --config worker/wrangler.toml",
     "worker:db": "wrangler d1 execute charla --config worker/wrangler.toml --file worker/schema.sql"
@@ -26,6 +27,7 @@
     "@preact/preset-vite": "^2.9.0",
     "@types/geojson": "^7946.0.14",
     "@types/node": "^22.0.0",
+    "playwright-core": "^1.55.0",
     "typescript": "^5.6.0",
     "vite": "^7.0.0",
     "vite-plugin-pwa": "^1.0.0",

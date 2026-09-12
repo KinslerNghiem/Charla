@@ -33,17 +33,20 @@ After the visit, one tap makes the map better for the next person.
 Week 1 done. All five must-have scenes from the plan (pharmacy refill, clinic
 front desk, driver-services window, school office, taquería order) plus two
 extras (library card, grocery deli), three of them kid-enabled. The Worker with
-the drift guard, the venue pipeline with 15 geocoded seed places (one more awaiting
-coordinates), tests, and
-CI. Still to build: `/api/stt` for voice inside the installed iOS app, and
-everything in the plan's week 3 onward.
+the drift guard, `/api/stt` behind an optional Workers AI binding, the venue
+pipeline with 15 geocoded seed places (one more awaiting coordinates), tests,
+CI, security headers for Pages, and drafts of the submission answers and the
+partner one-pager in `docs/`. Still to build: everything in the plan's week 3
+onward (partners, real-user testing, the video).
 
-Verified so far: `npm run typecheck` (app and Worker), `npm test` (36 tests),
-`npm run build`, `wrangler deploy --dry-run`, and a smoke test of every
-data route against `wrangler dev` with a local D1 (reports, dedup, per-place
-salting, the aggregate query, caps, size limits). Not yet exercised: a real
-call to the Claude API (needs a key), the app in a browser, and voice on a
-phone.
+Verified so far: `npm run typecheck` (app and Worker), `npm test` (40 tests),
+`npm run build`, `wrangler deploy --dry-run`, a smoke test of every data
+route against `wrangler dev` with a local D1 (reports, dedup, per-place
+salting, the aggregate query, caps, size limits), and `npm run walk`: every
+page screenshotted in Chrome at phone size, light and dark, with kid mode
+watched at the network level (it loads the shell and its own module, nothing
+else). Not yet exercised: a real call to the Claude API (needs a key), and
+voice on a phone.
 
 ## Stack
 
@@ -54,7 +57,8 @@ phone.
 | API | Cloudflare Worker + D1 + KV | Free tier, never sleeps, holds every secret |
 | AI | Claude `claude-opus-5` via `@anthropic-ai/sdk`, structured outputs | Level-adaptive partner; `claude-sonnet-5` is a one-line fallback |
 | Data | `data/venues.csv` → `scripts/build_venues.py` → `public/venues.geojson` | The spreadsheet is the source of truth |
-| Tests | Vitest, plus two Python validators that run without Node | Strings parity, scene validity, drift guard, badges, gate, kid-mode-offline |
+| Tests | Vitest, plus two Python validators that run without Node | Strings parity, scene validity, drift guard, badges, gate, table script, kid-mode-offline |
+| Screens | Playwright-core driving the installed Chrome | `npm run walk`: every page at phone size, kid-mode network watch |
 
 Third-party services the app talks to at runtime: OpenFreeMap (map tiles), our
 own Worker, and through it the Anthropic API. Nothing else. No analytics, no ad
@@ -71,7 +75,12 @@ python scripts/check_scenes.py      # validates every scene card
 npm test
 npm run typecheck
 npm run dev                          # app on http://localhost:5173
+npm run walk                         # in a second terminal: screenshots every page into .walk/
 ```
+
+`npm run walk` drives the Chrome or Edge already on the machine (no browser
+download) and fails if a page throws, a request fails, or kid mode touches the
+network. Look at the pictures; layout problems hide from tests.
 
 The app works without the API (it falls back to the scripted scene). To run the
 API locally:
@@ -88,7 +97,13 @@ echo "ANTHROPIC_API_KEY=sk-ant-..." > worker/.dev.vars
 npm run worker:dev                   # API on http://localhost:8787; vite proxies /api to it
 ```
 
-Deploy: `npm run build` and point Cloudflare Pages at `dist/`;
+To turn on speech inside the installed iOS app, uncomment the `[ai]` block in
+`worker/wrangler.toml` (Workers AI, Whisper). Until then `/api/stt` answers 503
+and the app offers typing.
+
+Deploy: `npm run build` and point Cloudflare Pages at `dist/` (`public/_headers`
+ships the content-security policy; add the Worker's origin to `connect-src` if
+it is not the same as the app's);
 `npm run worker:deploy` for the API, then `wrangler secret put ANTHROPIC_API_KEY
 --config worker/wrangler.toml`. If the app and the Worker are on different
 origins, set `VITE_API_BASE` at build time and `ALLOWED_ORIGIN` in
@@ -109,6 +124,8 @@ src/
   pages/               Learn, Places, Card, Table, Ninos, Privacy
 worker/src/            /api/turn, /api/help, /api/report, /api/places, /api/flag, /api/stt
 data/venues.csv        the place list; scripts/build_venues.py builds the GeoJSON
+docs/                  submission answer drafts, video storyboard, partner one-pager (en/es)
+scripts/walk.mjs       screenshot every page in the local Chrome
 tests/                 see Stack
 ```
 

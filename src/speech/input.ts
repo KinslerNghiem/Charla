@@ -1,4 +1,5 @@
 import type { Lang } from '../i18n/strings'
+import { transcribe } from '../tutor/client'
 
 // Push-to-talk, four tiers, chosen at runtime, in this order:
 //   native   a Capacitor speech plugin, if the app is ever wrapped (not in v1)
@@ -64,7 +65,7 @@ export function startBrowserListener(lang: Lang): Listener {
   return { result, stop: () => rec.stop() }
 }
 
-export function startRecorderListener(_lang: Lang): Listener {
+export function startRecorderListener(lang: Lang): Listener {
   let recorder: MediaRecorder | null = null
   const chunks: BlobPart[] = []
   let stopFn = () => {}
@@ -77,14 +78,7 @@ export function startRecorderListener(_lang: Lang): Listener {
         recorder.onstop = async () => {
           stream.getTracks().forEach((t) => t.stop())
           const blob = new Blob(chunks, { type: recorder?.mimeType || 'audio/mp4' })
-          try {
-            const res = await fetch('/api/stt', { method: 'POST', body: blob })
-            if (!res.ok) throw new Error(`stt ${res.status}`)
-            const json = (await res.json()) as { text: string }
-            resolve(json.text ?? '')
-          } catch (err) {
-            reject(err)
-          }
+          transcribe(blob, lang).then(resolve, reject)
         }
         recorder.start()
         stopFn = () => recorder?.state === 'recording' && recorder.stop()

@@ -71,6 +71,18 @@ export function flagReply(scene_id: string, reply: string, reason: string): Prom
   return post<{ ok: true }>('/api/flag', { scene_id, reply, reason })
 }
 
+/** Posts a push-to-talk clip and returns the transcript. The clip is not kept. */
+export async function transcribe(clip: Blob, lang: Lang): Promise<string> {
+  const res = await fetch(`${BASE}/api/stt?lang=${lang}`, {
+    method: 'POST',
+    headers: { 'content-type': clip.type || 'application/octet-stream', 'x-charla-device': deviceId() },
+    body: clip,
+  })
+  if (!res.ok) throw new ApiError(res.status, `/api/stt ${res.status}`)
+  const json = (await res.json()) as { text?: string }
+  return json.text ?? ''
+}
+
 export async function fetchReports(): Promise<Reports> {
   const res = await fetch(BASE + '/api/places')
   if (!res.ok) return {}
