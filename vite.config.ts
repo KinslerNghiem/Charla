@@ -28,6 +28,11 @@ export default defineConfig({
       },
     }),
   ],
+  build: {
+    // The one big chunk is MapLibre, split off on purpose and loaded only when
+    // the Places tab opens. Everything else is well under 100 KB.
+    chunkSizeWarningLimit: 1200,
+  },
   server: {
     // `npm run worker:dev` serves the API on 8787; the app proxies /api there in dev.
     proxy: { '/api': 'http://localhost:8787' },

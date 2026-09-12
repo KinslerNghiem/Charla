@@ -16,11 +16,19 @@ describe('drift guard', () => {
     expect(checkReply('Sure. What is her last name?', 'A1').ok).toBe(true)
   })
 
-  it('rejects a long reply at A1 and accepts it at B1', () => {
+  it('rejects a 14-word sentence at A1 and accepts it at B1', () => {
+    const mid = 'I found the prescription for your mother and it is ready to pick up.'
+    expect(countWords(mid)).toBe(14)
+    expect(checkReply(mid, 'A1').ok).toBe(false)
+    expect(checkReply(mid, 'A1').violations.join(' ')).toMatch(/words/)
+    expect(checkReply(mid, 'A2').ok).toBe(false)
+    expect(checkReply(mid, 'B1').ok).toBe(true)
+  })
+
+  it('rejects a 24-word sentence even at B1', () => {
     const long = 'I found the prescription for your mother and it is ready, but the pharmacist would like to talk to you about the dosage first.'
-    expect(checkReply(long, 'A1').ok).toBe(false)
-    expect(checkReply(long, 'A1').violations.join(' ')).toMatch(/words/)
-    expect(checkReply(long, 'B1').ok).toBe(true)
+    expect(countWords(long)).toBe(24)
+    expect(checkReply(long, 'B1').ok).toBe(false)
   })
 
   it('rejects too many sentences and too many questions', () => {

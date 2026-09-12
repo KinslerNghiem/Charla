@@ -30,7 +30,7 @@ export function detectTier(): Tier {
   if (typeof window === 'undefined') return 'typed'
   const standalone = isStandalone()
   if (speechRecognitionCtor() && !standalone) return 'browser'
-  if (standalone && navigator.mediaDevices?.getUserMedia && 'MediaRecorder' in window) return 'recorder'
+  if (standalone && typeof navigator.mediaDevices?.getUserMedia === 'function' && 'MediaRecorder' in window) return 'recorder'
   return 'typed'
 }
 

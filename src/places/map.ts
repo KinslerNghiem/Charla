@@ -5,19 +5,10 @@ import type { Status } from './badges'
 
 // MapLibre on OpenFreeMap tiles: no key, no quota, attribution added automatically.
 // The data is our own venues.geojson, built from data/venues.csv.
-
-export const AURORA_DOWNTOWN: [number, number] = [-88.3175, 41.7575]
-
-// Typed ZIP -> center. Anything else shows "Not mapped yet, here's Aurora".
-export const ZIP_CENTERS: Record<string, [number, number]> = {
-  '60505': [-88.3, 41.76],
-  '60506': [-88.33, 41.77],
-  '60540': [-88.15, 41.77],
-  '60563': [-88.19, 41.8],
-  '60564': [-88.2, 41.71],
-  '60565': [-88.12, 41.73],
-  '60440': [-88.08, 41.7],
-}
+//
+// This module is loaded with a dynamic import() from the Places page, so the
+// megabyte of MapLibre arrives only when someone opens the map. Centers live in
+// centers.ts so the page can use them before this module has loaded.
 
 export function createMap(container: HTMLElement, center: [number, number], zoom = 11.5): MapLibreMap {
   return new MapLibreMap({

@@ -36,11 +36,12 @@ guard, the venue pipeline with 15 geocoded seed places, tests, and CI. Still to
 build: the school-office scene, `/api/stt` for voice inside the installed iOS
 app, and everything in the plan's week 3 onward.
 
-Nothing here has been compiled or run yet: Node is not installed on the machine
-this was written on, so `npm install`, `npm test` and `npm run typecheck` have
-never executed. `scripts/check_scenes.py` and `scripts/build_venues.py` mirror
-the content tests and do pass. **Run `npm install` and `npm run typecheck`
-first, and commit the lockfile**, before trusting anything below.
+Verified so far: `npm run typecheck` (app and Worker), `npm test` (36 tests),
+`npm run build`, `wrangler deploy --dry-run`, and a smoke test of every
+data route against `wrangler dev` with a local D1 (reports, dedup, per-place
+salting, the aggregate query, caps, size limits). Not yet exercised: a real
+call to the Claude API (needs a key), the app in a browser, and voice on a
+phone.
 
 ## Stack
 

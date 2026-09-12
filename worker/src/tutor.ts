@@ -164,8 +164,9 @@ export async function runHelp(env: Env, text: string, from: Lang, to: Lang): Pro
       output_config: { effort: 'low', format: zodOutputFormat(HelpSchema) },
     })
     console.log(JSON.stringify({ route: 'help', in: res.usage.input_tokens, out: res.usage.output_tokens, stop: res.stop_reason }))
-    const bad = res.stop_reason === 'refusal' || res.stop_reason === 'max_tokens' || !res.parsed_output
-    return bad ? { phrase: '', literal: '', tip: '' } : res.parsed_output
+    const out = res.parsed_output
+    if (!out || res.stop_reason === 'refusal' || res.stop_reason === 'max_tokens') return { phrase: '', literal: '', tip: '' }
+    return out
   } catch (err) {
     console.log(JSON.stringify({ route: 'help', error: err instanceof Error ? err.name : 'error' }))
     return { phrase: '', literal: '', tip: '' }

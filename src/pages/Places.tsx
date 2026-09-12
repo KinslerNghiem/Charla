@@ -3,7 +3,7 @@ import type { Map as MapLibreMap } from 'maplibre-gl'
 import type { Feature, FeatureCollection, Point } from 'geojson'
 import { learning, t } from '../i18n/lang'
 import { computeStatus, supportLang, type Reports, type Status } from '../places/badges'
-import { AURORA_DOWNTOWN, ZIP_CENTERS, addVenues, createMap, updateVenues } from '../places/map'
+import { AURORA_DOWNTOWN, ZIP_CENTERS } from '../places/centers'
 import { fetchReports, sendReport } from '../tutor/client'
 import { addStreak, streakThisWeek } from '../storage'
 import { go } from '../router'
@@ -27,6 +27,9 @@ interface VenueProps {
 
 type Venue = Feature<Point, VenueProps>
 
+// MapLibre is a megabyte. It loads when this page mounts with data, not before.
+type MapModule = typeof import('../places/map')
+
 export function Places({ params }: { params: URLSearchParams }) {
   const [data, setData] = useState<FeatureCollection<Point, VenueProps> | null>(null)
   const [reports, setReports] = useState<Reports>({})
@@ -40,6 +43,7 @@ export function Places({ params }: { params: URLSearchParams }) {
   const [thanksId, setThanksId] = useState<string | null>(null)
   const mapEl = useRef<HTMLDivElement>(null)
   const map = useRef<MapLibreMap | null>(null)
+  const mapMod = useRef<MapModule | null>(null)
   const target = learning()
   const support = supportLang(target)
 
@@ -71,12 +75,22 @@ export function Places({ params }: { params: URLSearchParams }) {
 
   useEffect(() => {
     if (!data || !mapEl.current || map.current) return
-    map.current = createMap(mapEl.current, AURORA_DOWNTOWN)
-    addVenues(map.current, { type: 'FeatureCollection', features: shown }, (id) => setSelected(id))
+    let alive = true
+    import('../places/map').then((m: MapModule) => {
+      if (!alive || !mapEl.current || map.current) return
+      mapMod.current = m
+      map.current = m.createMap(mapEl.current, AURORA_DOWNTOWN)
+      m.addVenues(map.current, { type: 'FeatureCollection', features: shown }, (id) => setSelected(id))
+    })
+    return () => {
+      alive = false
+    }
   }, [data])
 
   useEffect(() => {
-    if (map.current) updateVenues(map.current, { type: 'FeatureCollection', features: shown })
+    if (map.current && mapMod.current) {
+      mapMod.current.updateVenues(map.current, { type: 'FeatureCollection', features: shown })
+    }
   }, [filter, reports, data, support])
 
   function centerOnZip(e: Event) {

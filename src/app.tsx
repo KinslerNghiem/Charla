@@ -2,7 +2,9 @@ import { useEffect, useState } from 'preact/hooks'
 import { useRoute } from './router'
 import { get, set } from './storage'
 import { lang, learning, setLang, setLearning, t, useLangTick } from './i18n/lang'
-import { Gate } from './gate/Gate'
+// BirthGate.tsx, not Gate.tsx: a file named Gate.tsx beside gate.ts collides on
+// a case-insensitive disk (Windows, macOS) and TypeScript resolves the wrong one.
+import { BirthGate } from './gate/BirthGate'
 import { lowerOnly, type Mode } from './gate/gate'
 import { Ninos } from './pages/Ninos'
 
@@ -18,7 +20,7 @@ function usePages(enabled: boolean): Pages | null {
   useEffect(() => {
     if (!enabled || cached) return
     let alive = true
-    import('./pages').then((m) => {
+    import('./pages').then((m: Pages) => {
       cached = m
       if (alive) setPages(m)
     })
@@ -37,7 +39,7 @@ export function App() {
 
   if (!mode) {
     return (
-      <Gate
+      <BirthGate
         onDone={(m) => {
           // A mode can be lowered (a parent handing the phone to a child) but
           // never raised without clearing site data.

@@ -6,7 +6,7 @@ import { modeFor, validBirth, type Mode } from './gate'
 // month and year only, no default value, no "13+" hint before the question,
 // nothing that encourages a child to lie.
 
-export function Gate({ onDone }: { onDone: (mode: Mode) => void }) {
+export function BirthGate({ onDone }: { onDone: (mode: Mode) => void }) {
   const [month, setMonth] = useState('')
   const [year, setYear] = useState('')
   const m = Number(month)
