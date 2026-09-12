@@ -120,6 +120,16 @@ export function Learn({ params }: { params: URLSearchParams; mode: Mode }) {
 
   const lastAssistant = [...msgs].reverse().find((m) => m.role === 'assistant')
 
+  // Shown in both branches: finishing the scripted scene earns the card too.
+  const doneBlock = (
+    <div class="done">
+      <p class="big">{t('goal_reached')}</p>
+      <a class="primary" href="#/card">
+        {t('see_card')}
+      </a>
+    </div>
+  )
+
   return (
     <section class="learn">
       <header class="scene-head">
@@ -169,6 +179,7 @@ export function Learn({ params }: { params: URLSearchParams; mode: Mode }) {
               setDone(true)
             }}
           />
+          {done && doneBlock}
         </>
       ) : (
         <>
@@ -200,12 +211,7 @@ export function Learn({ params }: { params: URLSearchParams; mode: Mode }) {
           </ol>
           {crisis && <p class="crisis">{t('crisis')}</p>}
           {done ? (
-            <div class="done">
-              <p class="big">{t('goal_reached')}</p>
-              <a class="primary" href="#/card">
-                {t('see_card')}
-              </a>
-            </div>
+            doneBlock
           ) : (
             <form
               class="composer"

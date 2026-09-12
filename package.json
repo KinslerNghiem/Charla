@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p worker/tsconfig.json",
     "venues": "python scripts/build_venues.py",
     "walk": "node scripts/walk.mjs",
+    "icons": "node scripts/icons.mjs",
     "worker:dev": "wrangler dev --config worker/wrangler.toml",
     "worker:deploy": "wrangler deploy --config worker/wrangler.toml",
     "worker:db": "wrangler d1 execute charla --config worker/wrangler.toml --file worker/schema.sql"

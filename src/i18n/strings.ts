@@ -117,6 +117,7 @@ export const STRINGS = {
     type_school: 'School office',
     type_grocery: 'Grocery',
     type_library: 'Library',
+    type_ice_cream: 'Ice cream shop',
     type_college: 'College',
   },
   es: {
@@ -232,6 +233,7 @@ export const STRINGS = {
     type_school: 'Oficina escolar',
     type_grocery: 'Supermercado',
     type_library: 'Biblioteca',
+    type_ice_cream: 'Heladería',
     type_college: 'Colegio comunitario',
   },
 } as const

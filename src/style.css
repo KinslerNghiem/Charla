@@ -11,6 +11,9 @@
   --es-soft: #f4e4be;
   --go: #38652f;
   --go-deep: #274a21;
+  --go-soft: #e4eddf;
+  --go-ink: #274a21;
+  --on-go: #fff;
   --stop: #a0392c;
   --stop-soft: #f3dbd6;
   --r: 5px;
@@ -28,6 +31,11 @@
     --es-soft: #3a2d12;
     --go: #9dc690;
     --go-deep: #6d9a62;
+    --go-soft: #1f3a1b;
+    --go-ink: #9dc690;
+    /* The go colour is light in the dark scheme, so its text must be dark:
+       white on it was 1.9:1 in the contrast walk. */
+    --on-go: #15171b;
     --stop: #e5978a;
     --stop-soft: #3b221e;
   }
@@ -60,7 +68,7 @@ button:disabled { opacity: 0.5; cursor: default; }
 button.primary, a.primary {
   display: inline-block;
   background: var(--go);
-  color: #fff;
+  color: var(--on-go);
   border-color: var(--go);
   border-bottom: 3px solid var(--go-deep);
   text-decoration: none;
@@ -148,7 +156,7 @@ h2 { font-size: 18px; margin: 20px 0 6px; }
 .venue { border: 1px solid var(--line); border-radius: var(--r); padding: 14px; margin: 12px 0; }
 .venue h2 { margin-top: 0; }
 .badge { display: inline-block; font-size: 13px; padding: 2px 8px; border-radius: 3px; background: var(--paper-2); }
-.badge.confirmed { background: #e4eddf; color: var(--go-deep); }
+.badge.confirmed { background: var(--go-soft); color: var(--go-ink); }
 .badge.reported { background: var(--es-soft); color: var(--es); }
 .badge.listed_by_business, .badge.listed_public { background: var(--en-soft); color: var(--en); }
 .badge::before { content: '● '; }

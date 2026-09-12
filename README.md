@@ -11,7 +11,7 @@ partner that stays at your level, get a Go Card with your three phrases, then
 open a map of real places nearby that said they would be patient with you.
 After the visit, one tap makes the map better for the next person.
 
-- **Rehearse**: five scenes, an AI partner, corrections inside the reply, a
+- **Rehearse**: eight scenes, an AI partner, corrections inside the reply, a
   Simpler button, typing always works.
 - **Go Card**: your phrases, the reply to expect, a line to show the staff.
   Opens in airplane mode.
@@ -31,8 +31,8 @@ After the visit, one tap makes the map better for the next person.
 ## Status
 
 Week 1 done. All five must-have scenes from the plan (pharmacy refill, clinic
-front desk, driver-services window, school office, taquería order) plus two
-extras (library card, grocery deli), three of them kid-enabled. The Worker with
+front desk, driver-services window, school office, taquería order) plus three
+extras (library card, grocery deli, ice cream shop), four of them kid-enabled. The Worker with
 the drift guard, `/api/stt` behind an optional Workers AI binding, the venue
 pipeline with 15 geocoded seed places (one more awaiting coordinates), tests,
 CI, security headers for Pages, and drafts of the submission answers and the
@@ -45,8 +45,11 @@ route against `wrangler dev` with a local D1 (reports, dedup, per-place
 salting, the aggregate query, caps, size limits), and `npm run walk`: every
 page screenshotted in Chrome at phone size, light and dark, with kid mode
 watched at the network level (it loads the shell and its own module, nothing
-else). Not yet exercised: a real call to the Claude API (needs a key), and
-voice on a phone.
+else). Against the production build with the network switched off: the Go
+Card renders identically, the scripted scenes and all places load, and kid mode
+earns a sticker. Every rendered text node was checked for WCAG contrast in
+both colour schemes. Not yet exercised: a real call to the Claude API (needs a
+key), and voice on a phone.
 
 ## Stack
 
@@ -138,6 +141,8 @@ tests/                 see Stack
   said yes (or it is a public program). Roles and shifts, never names. Paste
   coordinates from the address (one-time), run `npm run venues`.
 - **A string**: add it to both `en` and `es` in `src/i18n/strings.ts`.
+- **The icon**: edit `public/icons/icon.svg`, run `npm run icons` to regenerate
+  the PNGs (Safari ignores an SVG home-screen icon).
 
 ## Privacy, in one paragraph
 

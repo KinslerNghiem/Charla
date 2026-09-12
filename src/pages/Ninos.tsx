@@ -10,7 +10,7 @@ import { speak } from '../speech/output'
 // no requests to the Worker, no map tiles, no microphone, no location.
 // tests/ninos-offline.test.ts scans the source to make sure it stays that way.
 
-const STREET: Record<string, string> = { restaurant: '🌮', library: '📚', pharmacy: '💊', grocery: '🛒' }
+const STREET: Record<string, string> = { restaurant: '🌮', library: '📚', pharmacy: '💊', grocery: '🛒', ice_cream: '🍦' }
 
 export function Ninos() {
   const [scene, setScene] = useState<Scene | null>(null)
