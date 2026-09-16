@@ -21,6 +21,11 @@ head_sampling_rate = 1
 # Check res.usage.cache_read_input_tokens in the logs either way. Sonnet also
 # rejects mid-conversation system messages; tutor.ts handles that automatically.
 MODEL = "claude-opus-5"
+# Used only when ANTHROPIC_API_KEY is not set: the partner and the Table-mode
+# helper run on this Workers AI model instead (free tier). Same prompts, same
+# JSON schema, same drift guard. Add the key and Claude takes over on the
+# next request; nothing else changes.
+FALLBACK_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
 DAILY_TURN_CAP = "40"
 DAILY_IP_CAP = "400"
 # Set this to the deployed app origin before deploying, e.g.
@@ -39,12 +44,11 @@ database_id = "REPLACE_WITH_ID_FROM_wrangler_d1_create"
 binding = "CAPS"
 id = "REPLACE_WITH_ID_FROM_wrangler_kv_namespace_create"
 
-# Speech-to-text for the installed iOS app (/api/stt) runs on Workers AI's
-# Whisper model. Uncomment to turn it on; the route answers 503 until then and
-# the app tells the learner to type. Local `wrangler dev` proxies an AI binding
-# to the real service, so it needs `wrangler login` first.
-# [ai]
-# binding = "AI"
+# Workers AI: Whisper for /api/stt, and the FALLBACK_MODEL partner when there is
+# no Anthropic key. Local `wrangler dev` proxies this binding to the real
+# service, so it needs `wrangler login` first (and counts against the free tier).
+[ai]
+binding = "AI"
 
 # Secrets (never in this file):
 #   wrangler secret put ANTHROPIC_API_KEY --config worker/wrangler.toml

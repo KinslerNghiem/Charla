@@ -1,12 +1,14 @@
 export interface Env {
   ANTHROPIC_API_KEY: string
   MODEL: string
+  /** Workers AI model used when ANTHROPIC_API_KEY is not set. */
+  FALLBACK_MODEL?: string
   DAILY_TURN_CAP: string
   DAILY_IP_CAP: string
   ALLOWED_ORIGIN: string
   DB: D1Database
   CAPS: KVNamespace
-  /** Present only when the [ai] binding in wrangler.toml is uncommented. */
+  /** The Workers AI binding: speech-to-text, and the partner when there is no key. */
   AI?: Ai
 }
 
