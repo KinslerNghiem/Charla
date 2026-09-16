@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'preact/hooks'
 import { useRoute } from './router'
 import { get, set } from './storage'
-import { lang, learning, setLang, setLearning, t, useLangTick } from './i18n/lang'
+import { lang, learning, setLang, setLearning, t, tIn, useLangTick } from './i18n/lang'
 // BirthGate.tsx, not Gate.tsx: a file named Gate.tsx beside gate.ts collides on
 // a case-insensitive disk (Windows, macOS) and TypeScript resolves the wrong one.
 import { BirthGate } from './gate/BirthGate'
@@ -120,12 +120,26 @@ export function App() {
           {t('app_name')}
         </a>
         <div class="switches">
-          <button type="button" class="ghost" onClick={() => setLearning(learning() === 'en' ? 'es' : 'en')}>
-            {learning() === 'en' ? t('learning_en') : t('learning_es')}
+          {/* The direction button speaks the learner's own language: someone
+              learning English reads "Estoy aprendiendo inglés", whatever the
+              interface is set to. The interface switch shows both names, each
+              in its own language, with the current one marked. */}
+          <button
+            type="button"
+            class="ghost"
+            aria-label={t('switch_direction')}
+            onClick={() => setLearning(learning() === 'en' ? 'es' : 'en')}
+          >
+            {learning() === 'en' ? tIn('es', 'learning_en') : tIn('en', 'learning_es')}
           </button>
-          <button type="button" class="ghost" onClick={() => setLang(lang() === 'en' ? 'es' : 'en')} aria-label="Language">
-            {t('ui_lang')}
-          </button>
+          <div class="seg" role="group" aria-label={t('ui_lang_label')}>
+            <button type="button" class={lang() === 'es' ? 'on' : ''} aria-pressed={lang() === 'es'} onClick={() => setLang('es')}>
+              Español
+            </button>
+            <button type="button" class={lang() === 'en' ? 'on' : ''} aria-pressed={lang() === 'en'} onClick={() => setLang('en')}>
+              English
+            </button>
+          </div>
         </div>
       </header>
       <nav class="tabs" aria-label="Sections">

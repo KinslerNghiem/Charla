@@ -91,6 +91,10 @@ button.on, .filters button.on, .levels button.on { background: var(--en-soft); b
 .brand { font-weight: 700; font-size: 20px; text-decoration: none; color: var(--ink); }
 .switches { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
 .switches button { font-size: 14px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.seg button { border: 0; border-radius: 0; background: transparent; font-size: 14px; min-height: 40px; padding: 6px 10px; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button.on { background: var(--en-soft); color: var(--en); font-weight: 600; }
 .tabs { display: flex; gap: 2px; overflow-x: auto; border-bottom: 1px solid var(--line); margin-bottom: 16px; }
 .tabs a { padding: 10px 12px; text-decoration: none; color: var(--ink-2); white-space: nowrap; border-bottom: 2px solid transparent; min-height: 44px; display: flex; align-items: center; }
 .tabs a.on { color: var(--ink); border-bottom-color: var(--es); }
@@ -114,7 +118,8 @@ h2 { font-size: 18px; margin: 20px 0 6px; }
 .gate form { display: grid; gap: 8px; }
 
 /* learn */
-.levels { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
+.levels-label { margin: 12px 0 0; }
+.levels { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0 8px; }
 .ai-banner { font-size: 13px; color: var(--ink-2); border-left: 3px solid var(--es); padding-left: 10px; }
 .chat { list-style: none; padding: 0; margin: 12px 0; display: grid; gap: 10px; }
 .chat li { padding: 10px 12px; border-radius: var(--r); max-width: 90%; }
@@ -124,8 +129,13 @@ h2 { font-size: 18px; margin: 20px 0 6px; }
 .tip { color: var(--es); font-size: 14px; margin: 6px 0 0; }
 .alt { margin: 6px 0 0; padding-left: 18px; font-size: 14px; color: var(--ink-2); }
 .composer textarea { resize: vertical; }
-.talk { background: var(--paper); }
+.talk { background: var(--paper); touch-action: manipulation; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 .talk.on { background: var(--es-soft); color: var(--es); border-color: var(--es); }
+/* The level meter: the learner sees the phone hearing them. */
+.meter { height: 10px; border-radius: 5px; background: var(--paper-2); overflow: hidden; margin: 6px 0; }
+.meter i { display: block; height: 100%; width: 0; background: var(--es); transition: width 80ms linear; }
+.talk-status { font-size: 14px; color: var(--ink-2); margin: 4px 0 8px; }
+.talk-status.on { color: var(--es); }
 .scenes { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
 .scene-card { width: 100%; text-align: left; display: grid; padding: 14px; }
 .scene-card .type { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); }

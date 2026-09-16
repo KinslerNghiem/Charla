@@ -100,9 +100,11 @@ echo "ANTHROPIC_API_KEY=sk-ant-..." > worker/.dev.vars
 npm run worker:dev                   # API on http://localhost:8787; vite proxies /api to it
 ```
 
-To turn on speech inside the installed iOS app, uncomment the `[ai]` block in
-`worker/wrangler.toml` (Workers AI, Whisper). Until then `/api/stt` answers 503
-and the app offers typing.
+Speech: "Tap to talk" records a clip (never more than 20 seconds), shows a
+level meter while it listens, sends the clip to `/api/stt` (Workers AI Whisper,
+discarded after transcription), and puts the words in the text box for the
+learner to check before sending. Local `wrangler dev` proxies the AI binding to
+the real service, so speech works in dev too once you are logged in.
 
 Deploy, once, from PowerShell after `npx wrangler login`:
 

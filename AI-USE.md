@@ -14,7 +14,9 @@ kept from day one and pasted into the submission form.
 - **"Help me say this"** in Table mode (`worker/src/tutor.ts`): one Claude call
   that returns a phrase, a literal gloss and a tip.
 - **Speech to text** (`/api/stt`, optional): a push-to-talk clip from the
-  installed iOS app is transcribed by Workers AI's Whisper model and discarded.
+  "Tap to talk" button, in any browser, is transcribed by Workers AI's Whisper model
+  and discarded. The transcript goes into the text box for the learner to check
+  before sending.
   Off until the `[ai]` binding is enabled.
 - **When no Anthropic key is configured** (`worker/src/fallback.ts`), both of
   the above run instead on Cloudflare Workers AI's Llama 3.3 70B model, with

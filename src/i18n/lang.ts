@@ -27,6 +27,11 @@ export function t(key: StringKey): string {
   return STRINGS[current][key] ?? STRINGS.en[key]
 }
 
+/** A string in a specific language, regardless of the interface language. */
+export function tIn(l: Lang, key: StringKey): string {
+  return STRINGS[l][key] ?? STRINGS.en[key]
+}
+
 export function learning(): Lang {
   return get<Lang>('learning', 'en')
 }

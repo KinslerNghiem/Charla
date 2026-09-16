@@ -4,8 +4,8 @@ import type { Scene } from '../content/scene.schema'
 import { LEVELS, simplerThan, type Level } from '../tutor/levels'
 import { ApiError, askTutor, flagReply, type HistoryItem } from '../tutor/client'
 import { OfflineScene } from '../tutor/OfflineScene'
-import { learning, native, t } from '../i18n/lang'
-import { detectTier, startListener, type Listener } from '../speech/input'
+import { learning, native, t, tIn } from '../i18n/lang'
+import { classify, detectTier, startListener, type Listener, type TalkError } from '../speech/input'
 import { speak, unlock } from '../speech/output'
 import { set } from '../storage'
 import { go } from '../router'
@@ -36,6 +36,8 @@ export function Learn({ params }: { params: URLSearchParams; mode: Mode }) {
   const [crisis, setCrisis] = useState(false)
   const [breakDue, setBreakDue] = useState(false)
   const [listening, setListening] = useState(false)
+  const [talkState, setTalkState] = useState<'idle' | 'opening' | 'listening' | 'working' | 'check' | 'nothing' | TalkError>('idle')
+  const [level0, setLevel0] = useState(0)
   const listener = useRef<Listener | null>(null)
   const started = useRef(Date.now())
   const tier = detectTier()
@@ -95,27 +97,54 @@ export function Learn({ params }: { params: URLSearchParams; mode: Mode }) {
     }
   }
 
-  function pressTalk() {
-    if (tier === 'typed' || listening) return
+  // Tap to start, tap to stop. The transcript lands in the text box for the
+  // learner to check, not straight into the conversation: a mishearing they
+  // can see and fix beats one they discover from the partner's reply.
+  function toggleTalk() {
+    if (tier === 'typed') return
+    if (listening) {
+      listener.current?.stop()
+      return
+    }
+    unlock()
+    setTalkState('opening')
     try {
-      listener.current = startListener(tier, target)
+      listener.current = startListener(tier, target, {
+        onOpen: () => setTalkState('listening'),
+        onLevel: setLevel0,
+        onWorking: () => setTalkState('working'),
+      })
       setListening(true)
       listener.current?.result
         .then((text) => {
           setListening(false)
-          if (text) send(text)
+          if (text) {
+            setInput((prev) => (prev.trim() ? prev.trim() + ' ' + text : text))
+            setTalkState('check')
+          } else {
+            setTalkState('nothing')
+          }
         })
-        .catch(() => {
-          // Leave whatever the learner had typed alone; the mic never wrote it.
+        .catch((err) => {
           setListening(false)
+          setTalkState(classify(err))
         })
-    } catch {
+    } catch (err) {
       setListening(false)
+      setTalkState(classify(err))
     }
   }
 
-  function releaseTalk() {
-    listener.current?.stop()
+  const talkStatus: Record<typeof talkState, string> = {
+    idle: '',
+    opening: t('talk_listening'),
+    listening: t('talk_listening'),
+    working: t('talk_working'),
+    check: t('talk_check'),
+    nothing: t('talk_nothing'),
+    denied: t('talk_denied'),
+    unavailable: t('talk_unavailable'),
+    failed: t('talk_nothing'),
   }
 
   const lastAssistant = [...msgs].reverse().find((m) => m.role === 'assistant')
@@ -149,10 +178,16 @@ export function Learn({ params }: { params: URLSearchParams; mode: Mode }) {
             </span>
           ))}
         </p>
-        <div class="levels" role="radiogroup" aria-label={t('pick_level')}>
+        {/* Level names are in the learner's own language, like the direction
+            button: the person choosing "beginner" should not need the target
+            language to read the word. */}
+        <p class="levels-label" id="levels-label">
+          <b>{tIn(nat, 'pick_level')}:</b>
+        </p>
+        <div class="levels" role="radiogroup" aria-labelledby="levels-label">
           {LEVELS.map((l) => (
             <button type="button" role="radio" aria-checked={level === l} class={level === l ? 'on' : ''} onClick={() => setLevel(l)}>
-              {t(`level_${l}` as 'level_A1')}
+              {tIn(nat, `level_${l}` as 'level_A1')}
             </button>
           ))}
         </div>
@@ -240,21 +275,23 @@ export function Learn({ params }: { params: URLSearchParams; mode: Mode }) {
                   {t('send')}
                 </button>
                 {tier !== 'typed' ? (
-                  <button
-                    type="button"
-                    class={'talk' + (listening ? ' on' : '')}
-                    onPointerDown={pressTalk}
-                    onPointerUp={releaseTalk}
-                    onPointerCancel={releaseTalk}
-                    onPointerLeave={releaseTalk}
-                    disabled={busy}
-                  >
-                    🎤 {listening ? t('release') : t('hold_to_talk')}
+                  <button type="button" class={'talk' + (listening ? ' on' : '')} onClick={toggleTalk} disabled={busy} aria-pressed={listening}>
+                    {listening ? '⏹ ' + t('talk_stop') : '🎤 ' + t('talk_tap')}
                   </button>
                 ) : (
                   <span class="note">{t('talk_unavailable')}</span>
                 )}
               </div>
+              {listening && (
+                <div class="meter" aria-hidden="true">
+                  <i style={{ width: `${Math.round(level0 * 100)}%` }} />
+                </div>
+              )}
+              {talkState !== 'idle' && (
+                <p class={'talk-status' + (listening ? ' on' : '')} aria-live="polite">
+                  {talkStatus[talkState]}
+                </p>
+              )}
               {lastAssistant && (
                 <div class="row">
                   <button type="button" class="ghost" disabled={busy || level === 'A1'} onClick={() => send('', 'simpler')}>
