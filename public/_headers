@@ -1,4 +1,4 @@
-# Cloudflare Pages serves this file as response headers. Nothing here changes
+﻿# Cloudflare Pages serves this file as response headers. Nothing here changes
 # how the app works; it limits what a compromised script could do.
 #
 # connect-src lists every origin the app talks to. If the Worker is deployed on
@@ -7,7 +7,7 @@
 # MapLibre runs in a Web Worker created from a blob: URL, hence worker-src blob:.
 
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://tiles.openfreemap.org; connect-src 'self' https://tiles.openfreemap.org; worker-src 'self' blob:; child-src blob:; font-src 'self'; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://tiles.openfreemap.org; connect-src 'self' https://tiles.openfreemap.org https://charla-api.kinslertiennghiem.workers.dev; worker-src 'self' blob:; child-src blob:; font-src 'self'; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
   X-Content-Type-Options: nosniff
   Referrer-Policy: no-referrer
   Permissions-Policy: geolocation=(self), microphone=(self), camera=(), payment=(), usb=()
