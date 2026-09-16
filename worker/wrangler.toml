@@ -38,11 +38,11 @@ ALLOWED_ORIGIN = "http://localhost:5173"
 [[d1_databases]]
 binding = "DB"
 database_name = "charla"
-database_id = "REPLACE_WITH_ID_FROM_wrangler_d1_create"
+database_id = "65e4b78a-2185-4faa-81fa-8f2916784c95"
 
 [[kv_namespaces]]
 binding = "CAPS"
-id = "REPLACE_WITH_ID_FROM_wrangler_kv_namespace_create"
+id = "559dbe29f6484770b926dd9d80caf0b1"
 
 # Workers AI: Whisper for /api/stt, and the FALLBACK_MODEL partner when there is
 # no Anthropic key. Local `wrangler dev` proxies this binding to the real

@@ -30,7 +30,7 @@ kept from day one and pasted into the submission form.
 | 2026-09-08 | Three more scene cards (clinic, driver services, grocery deli) drafted and reviewed for Spanish and pedagogy | Claude Code |
 | 2026-09-08 | Code audit standing in for a compiler (Node not installed yet); 43 verified findings applied by hand: zod v4 import, history/token/cap fixes in the Worker, per-place report salting, dynamic-import split for kid mode | Claude Code |
 | 2026-09-11 | First compile and test run; fixes for what the compiler found; map lazy-load; Worker smoke test; school-office scene | Claude Code |
-| 2026-09-16 | Free-tier partner fallback on Workers AI (Llama 3.3) for when no Anthropic key is set | Claude Code |
+| 2026-09-16 | Free-tier partner fallback on Workers AI (Llama 3.3) for when no Anthropic key is set; tested live, then hardened with a reply-language check, a whose-line check and a filter for "ignore your rules" turns; deploy script | Claude Code |
 | 2026-09-11 | First browser pass (screenshot walk script) and the fixes it prompted: Enter-to-send, honest 503 fallback, table timing, tab overflow; `/api/stt` on Workers AI; Pages security headers; drafts of the submission answers and the bilingual partner one-pager | Claude Code |
 | 2026-09-12 | Ice cream shop kid scene; PNG icons for iOS/Android; offline check of the production build (Go Card, scenes, places, kid mode with the network off); contrast walk of every text node and the dark-mode fix it found; done-state fix for finished scripted scenes | Claude Code |
 

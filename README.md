@@ -58,7 +58,7 @@ key), and voice on a phone.
 | App | Vite + TypeScript + Preact, PWA via vite-plugin-pwa | One build; installed from Safari it is the iOS app |
 | Map | MapLibre GL JS + OpenFreeMap tiles | Free, no key, no quota |
 | API | Cloudflare Worker + D1 + KV | Free tier, never sleeps, holds every secret |
-| AI | Claude `claude-opus-5` via `@anthropic-ai/sdk`, structured outputs | Level-adaptive partner; `claude-sonnet-5` is a one-line fallback |
+| AI | Claude `claude-opus-5` via `@anthropic-ai/sdk`, structured outputs; without a key, Workers AI Llama 3.3 in JSON mode | Level-adaptive partner; the free path needs no card |
 | Data | `data/venues.csv` → `scripts/build_venues.py` → `public/venues.geojson` | The spreadsheet is the source of truth |
 | Tests | Vitest, plus two Python validators that run without Node | Strings parity, scene validity, drift guard, badges, gate, table script, kid-mode-offline |
 | Screens | Playwright-core driving the installed Chrome | `npm run walk`: every page at phone size, kid-mode network watch |
@@ -104,13 +104,29 @@ To turn on speech inside the installed iOS app, uncomment the `[ai]` block in
 `worker/wrangler.toml` (Workers AI, Whisper). Until then `/api/stt` answers 503
 and the app offers typing.
 
-Deploy: `npm run build` and point Cloudflare Pages at `dist/` (`public/_headers`
-ships the content-security policy; add the Worker's origin to `connect-src` if
-it is not the same as the app's);
-`npm run worker:deploy` for the API, then `wrangler secret put ANTHROPIC_API_KEY
---config worker/wrangler.toml`. If the app and the Worker are on different
-origins, set `VITE_API_BASE` at build time and `ALLOWED_ORIGIN` in
-`wrangler.toml`. Set a spend limit in the Anthropic console ($100 is plenty).
+Deploy, once, from PowerShell after `npx wrangler login`:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\deploy.ps1
+```
+
+It creates the remote tables and the Pages project, deploys the Worker, builds
+the app pointed at the Worker's URL (and allows that URL in `public/_headers`),
+uploads it, and prints both links. Re-running it is safe. Cloudflare Pages
+serves the app; the Worker holds every secret.
+
+**The partner without an API key.** With no `ANTHROPIC_API_KEY`, the Worker
+runs the partner and the Table-mode helper on Workers AI's Llama 3.3 70B
+(`worker/src/fallback.ts`), which is on Cloudflare's free tier. Same prompts,
+same JSON schema, same drift guard, plus two checks the free model needed that
+Claude did not: the reply must be in the target language, and it must not be
+the learner's own line. To switch to Claude at any time:
+
+```bash
+wrangler secret put ANTHROPIC_API_KEY --config worker/wrangler.toml
+```
+
+Set a spend limit in the Anthropic console first ($20 is plenty).
 
 ## Layout
 

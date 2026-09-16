@@ -2,10 +2,11 @@ import Anthropic from '@anthropic-ai/sdk'
 import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod'
 import { TurnSchema, HelpSchema, type Turn, type Help } from '../../src/tutor/turn'
 import { checkReply, LEVEL_REMINDER, type Level } from '../../src/tutor/levels'
+import { looksLike } from '../../src/tutor/langcheck'
 import { sceneById } from '../../src/content/scenes'
 import { buildSystem, commandText, placeLine } from './prompt'
-import { CANNED, blocked } from './safety'
-import { DEFAULT_FALLBACK_MODEL, fallbackJson, type ChatMsg } from './fallback'
+import { CANNED, blocked, meta } from './safety'
+import { DEFAULT_FALLBACK_MODEL, fallbackAddendum, fallbackJson, type ChatMsg } from './fallback'
 import type { Env } from './env'
 
 type Lang = 'en' | 'es'
@@ -58,6 +59,8 @@ export async function runTurn(env: Env, input: TurnInput): Promise<Turn | null> 
   const userText = raw.slice(0, MAX_USER_CHARS).trim()
   if (!userText) throw new Error('empty turn')
   if (blocked(userText)) return canned(learning, true)
+  // "Ignore your rules": answered with the redirect line, never sent upstream.
+  if (!input.command && meta(userText)) return canned(learning, false)
   // Two providers, one prompt. A key means Claude; no key but an AI binding
   // means the free Workers AI model; neither means the scripted scene (503).
   if (!env.ANTHROPIC_API_KEY && !env.AI) return null
@@ -87,7 +90,9 @@ export async function runTurn(env: Env, input: TurnInput): Promise<Turn | null> 
   const first = recent.length === 0 && input.place_name ? `${placeLine(input.place_name)}\n${userText}` : userText
 
   if (!env.ANTHROPIC_API_KEY) {
-    return runTurnFallback(env.AI!, env.FALLBACK_MODEL || DEFAULT_FALLBACK_MODEL, system, reminder, recent, first, level, learning)
+    const sys = system + fallbackAddendum(learning === 'en' ? 'English' : 'Spanish', scene.roles.partner.en)
+    const mustUse = scene.must_use.map((p) => p[learning])
+    return runTurnFallback(env.AI!, env.FALLBACK_MODEL || DEFAULT_FALLBACK_MODEL, sys, reminder, recent, first, level, learning, mustUse)
   }
 
   const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY })
@@ -163,8 +168,26 @@ export async function runTurn(env: Env, input: TurnInput): Promise<Turn | null> 
 }
 
 // Same shape as the Claude path above, on Workers AI: the system prompt is the
-// first message, the level reminder rides on the learner's turn, and the drift
-// guard re-requests once with the violation spelled out.
+// first message, the level reminder rides on the learner's turn, and one
+// re-request fixes whatever the checks found. The checks are code, not prompt,
+// because the free model did not reliably obey prompt alone: the level band
+// (shared with the Claude path), the reply language (it answered in French
+// when a learner asked it to), and whose line it is (at A1 it sometimes spoke
+// the learner's must-use phrase itself).
+function fallbackProblems(turn: Turn, level: Level, learning: Lang, mustUse: string[]): string[] {
+  const out: string[] = []
+  const band = checkReply(turn.reply, level)
+  if (!band.ok) out.push(...band.violations)
+  const target = learning === 'en' ? 'English' : 'Spanish'
+  if (!looksLike(learning, turn.reply)) out.push(`the reply must be in ${target}, not another language`)
+  const low = turn.reply.toLowerCase()
+  for (const p of mustUse) {
+    const core = p.toLowerCase().replace(/[.?!…]+$/, '')
+    if (core.length > 8 && low.includes(core)) out.push(`"${p}" is the learner's line, not yours`)
+  }
+  return out
+}
+
 async function runTurnFallback(
   ai: Ai,
   model: string,
@@ -174,22 +197,19 @@ async function runTurnFallback(
   first: string,
   level: Level,
   learning: Lang,
+  mustUse: string[],
 ): Promise<Turn> {
-  const messages: ChatMsg[] = [{ role: 'system', content: system }, ...recent, { role: 'user', content: `${first}
-
-${reminder}` }]
+  const messages: ChatMsg[] = [{ role: 'system', content: system }, ...recent, { role: 'user', content: `${first}\n\n${reminder}` }]
   let res = await fallbackJson(ai, model, messages, TurnSchema, MAX_TOKENS_TURN)
   let turn = res.parsed
   let retried = false
 
   if (turn) {
-    const check = checkReply(turn.reply, level)
-    if (!check.ok) {
+    const problems = fallbackProblems(turn, level, learning, mustUse)
+    if (problems.length) {
       retried = true
-      const fix = `Your last reply broke the level rules: ${check.violations.join('; ')}. Rewrite it within the limits, same meaning, and return the JSON again.`
-      const again: ChatMsg[] = [...messages, { role: 'assistant', content: res.raw }, { role: 'user', content: `(Say that again for my level.)
-
-${fix}` }]
+      const fix = `Your last reply had problems: ${problems.join('; ')}. Rewrite it within the rules, same meaning, and return the JSON again.`
+      const again: ChatMsg[] = [...messages, { role: 'assistant', content: res.raw }, { role: 'user', content: `(Say that again for my level.)\n\n${fix}` }]
       const res2 = await fallbackJson(ai, model, again, TurnSchema, MAX_TOKENS_TURN)
       if (res2.parsed) {
         res = res2
@@ -202,6 +222,9 @@ ${fix}` }]
 
   if (!turn) return canned(learning, false)
   if (turn.safety_flag) return { ...canned(learning, true), tip: turn.tip }
+  // Still the wrong language after a retry: the learner gets the redirect
+  // line rather than a partner who has switched to French.
+  if (!looksLike(learning, turn.reply)) return canned(learning, false)
   return turn
 }
 
