@@ -115,7 +115,7 @@ h2 { font-size: 18px; margin: 20px 0 6px; }
 .langpick .alt-q { display: block; font-weight: 400; color: var(--ink-2); font-size: 16px; }
 .pick { display: grid; gap: 12px; margin: 12px 0 20px; }
 .big-pick { display: grid; text-align: left; padding: 14px 18px; font-size: 18px; }
-.big-pick small { font-size: 14px; font-weight: 400; opacity: 0.9; }
+.big-pick small { display: block; font-size: 14px; font-weight: 400; opacity: 0.9; line-height: 1.3; }
 
 /* learn */
 .levels-label { margin: 12px 0 0; }
