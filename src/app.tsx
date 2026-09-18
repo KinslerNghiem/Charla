@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'preact/hooks'
 import { useRoute } from './router'
 import { get, set } from './storage'
-import { lang, learning, setLang, setLearning, t, tIn, useLangTick } from './i18n/lang'
+import { clearNative, hasNative, setNative, t, useLangTick } from './i18n/lang'
 // BirthGate.tsx, not Gate.tsx: a file named Gate.tsx beside gate.ts collides on
 // a case-insensitive disk (Windows, macOS) and TypeScript resolves the wrong one.
 import { BirthGate } from './gate/BirthGate'
+import { LangPick } from './gate/LangPick'
 import { lowerOnly, type Mode } from './gate/gate'
 import { Ninos } from './pages/Ninos'
 
@@ -35,7 +36,21 @@ export function App() {
   useLangTick()
   const route = useRoute()
   const [mode, setMode] = useState<Mode | null>(() => get<Mode | null>('mode', null))
+  const [picked, setPicked] = useState(hasNative)
   const pages = usePages(mode !== null && mode !== 'kid')
+
+  // Language first, age second: the birth question is then asked in the
+  // learner's own language.
+  if (!picked) {
+    return (
+      <LangPick
+        onPick={(l) => {
+          setNative(l)
+          setPicked(true)
+        }}
+      />
+    )
+  }
 
   if (!mode) {
     return (
@@ -119,28 +134,6 @@ export function App() {
         <a class="brand" href="#/learn">
           {t('app_name')}
         </a>
-        <div class="switches">
-          {/* The direction button speaks the learner's own language: someone
-              learning English reads "Estoy aprendiendo inglés", whatever the
-              interface is set to. The interface switch shows both names, each
-              in its own language, with the current one marked. */}
-          <button
-            type="button"
-            class="ghost"
-            aria-label={t('switch_direction')}
-            onClick={() => setLearning(learning() === 'en' ? 'es' : 'en')}
-          >
-            {learning() === 'en' ? tIn('es', 'learning_en') : tIn('en', 'learning_es')}
-          </button>
-          <div class="seg" role="group" aria-label={t('ui_lang_label')}>
-            <button type="button" class={lang() === 'es' ? 'on' : ''} aria-pressed={lang() === 'es'} onClick={() => setLang('es')}>
-              Español
-            </button>
-            <button type="button" class={lang() === 'en' ? 'on' : ''} aria-pressed={lang() === 'en'} onClick={() => setLang('en')}>
-              English
-            </button>
-          </div>
-        </div>
       </header>
       <nav class="tabs" aria-label="Sections">
         {links.map(([path, label]) => (
@@ -156,6 +149,16 @@ export function App() {
         <a href="#/privacy" aria-current={route.path === '/privacy' ? 'page' : undefined}>
           {t('nav_privacy')}
         </a>
+        <button
+          type="button"
+          class="link"
+          onClick={() => {
+            clearNative()
+            setPicked(false)
+          }}
+        >
+          {t('change_language')}
+        </button>
       </footer>
     </div>
   )

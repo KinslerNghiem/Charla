@@ -36,6 +36,23 @@ export function learning(): Lang {
   return get<Lang>('learning', 'en')
 }
 
+/** Has the learner answered "which language do you speak?" yet. */
+export function hasNative(): boolean {
+  return get<Lang | null>('native', null) !== null
+}
+
+/** One answer sets both: the interface speaks `l`, the partner speaks the other. */
+export function setNative(l: Lang): void {
+  set('native', l)
+  set('learning', l === 'es' ? 'en' : 'es')
+  setLang(l)
+}
+
+export function clearNative(): void {
+  set('native', null)
+  dispatchEvent(new Event('charla:lang'))
+}
+
 export function setLearning(l: Lang): void {
   set('learning', l)
   dispatchEvent(new Event('charla:lang'))

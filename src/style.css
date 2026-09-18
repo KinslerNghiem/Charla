@@ -89,18 +89,14 @@ button.on, .filters button.on, .levels button.on { background: var(--en-soft); b
 .shell { max-width: 720px; margin: 0 auto; padding: 0 16px 80px; }
 .top { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 0; }
 .brand { font-weight: 700; font-size: 20px; text-decoration: none; color: var(--ink); }
-.switches { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
-.switches button { font-size: 14px; }
-.seg { display: inline-flex; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
-.seg button { border: 0; border-radius: 0; background: transparent; font-size: 14px; min-height: 40px; padding: 6px 10px; }
-.seg button + button { border-left: 1px solid var(--line); }
-.seg button.on { background: var(--en-soft); color: var(--en); font-weight: 600; }
+button.link { background: none; border: 0; padding: 0; min-height: 0; color: var(--en); text-decoration: underline; font-size: inherit; }
 .tabs { display: flex; gap: 2px; overflow-x: auto; border-bottom: 1px solid var(--line); margin-bottom: 16px; }
 .tabs a { padding: 10px 12px; text-decoration: none; color: var(--ink-2); white-space: nowrap; border-bottom: 2px solid transparent; min-height: 44px; display: flex; align-items: center; }
 .tabs a.on { color: var(--ink); border-bottom-color: var(--es); }
 main { outline: none; }
 .foot { margin-top: 40px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 14px; }
-.foot a { color: var(--ink-2); }
+.foot { display: flex; gap: 16px; flex-wrap: wrap; }
+.foot a, .foot button.link { color: var(--ink-2); }
 .foot a[aria-current] { color: var(--ink); }
 h1 { font-size: 26px; line-height: 1.15; margin: 8px 0 12px; }
 h2 { font-size: 18px; margin: 20px 0 6px; }
@@ -116,6 +112,10 @@ h2 { font-size: 18px; margin: 20px 0 6px; }
 .gate { max-width: 420px; margin: 48px auto; padding: 0 16px; }
 .gate .tagline { color: var(--ink-2); margin-bottom: 32px; }
 .gate form { display: grid; gap: 8px; }
+.langpick .alt-q { display: block; font-weight: 400; color: var(--ink-2); font-size: 16px; }
+.pick { display: grid; gap: 12px; margin: 12px 0 20px; }
+.big-pick { display: grid; text-align: left; padding: 14px 18px; font-size: 18px; }
+.big-pick small { font-size: 14px; font-weight: 400; opacity: 0.9; }
 
 /* learn */
 .levels-label { margin: 12px 0 0; }
