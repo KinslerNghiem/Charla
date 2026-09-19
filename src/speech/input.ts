@@ -19,6 +19,8 @@ export type Tier = 'recorder' | 'browser' | 'typed'
 const MAX_CLIP_MS = 20_000
 const TARGET_RATE = 16_000
 const SILENCE_PEAK = 0.04
+const SILENCE_MS = 1_300
+const MIN_SPEECH_MS = 500
 
 // Safari only ships the prefixed constructor, so look both up loosely.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -179,6 +181,11 @@ export function startRecorderListener(lang: Lang, opts: ListenOptions = {}): Lis
         // route it through silence rather than into the speaker (feedback).
         const mute = ctx.createGain()
         mute.gain.value = 0
+        // Auto-stop: once the learner has said something, a pause of
+        // SILENCE_MS ends the clip, so one tap is the whole gesture. The
+        // button still stops it early, and MAX_CLIP_MS is the ceiling.
+        let spokeAt = 0
+        let lastLoud = 0
         proc.onaudioprocess = (e) => {
           const d = e.inputBuffer.getChannelData(0)
           chunks.push(new Float32Array(d))
@@ -187,6 +194,12 @@ export function startRecorderListener(lang: Lang, opts: ListenOptions = {}): Lis
           const lvl = Math.min(1, Math.sqrt(sum / d.length) * 4)
           if (lvl > peak) peak = lvl
           const now = performance.now()
+          if (lvl > SILENCE_PEAK) {
+            if (!spokeAt) spokeAt = now
+            lastLoud = now
+          } else if (spokeAt && now - spokeAt > MIN_SPEECH_MS && now - lastLoud > SILENCE_MS) {
+            stopFn()
+          }
           if (now - lastLevel > 80) {
             lastLevel = now
             opts.onLevel?.(lvl)

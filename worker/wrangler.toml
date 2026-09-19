@@ -25,7 +25,7 @@ MODEL = "claude-opus-5"
 # helper run on this Workers AI model instead (free tier). Same prompts, same
 # JSON schema, same drift guard. Add the key and Claude takes over on the
 # next request; nothing else changes.
-FALLBACK_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+FALLBACK_MODEL = "@cf/openai/gpt-oss-120b"
 DAILY_TURN_CAP = "40"
 DAILY_IP_CAP = "400"
 # Set this to the deployed app origin before deploying, e.g.

@@ -208,12 +208,15 @@ async function runTurnFallback(
     const problems = fallbackProblems(turn, level, learning, mustUse)
     if (problems.length) {
       retried = true
-      const fix = `Your last reply had problems: ${problems.join('; ')}. Rewrite it within the rules, same meaning, and return the JSON again.`
-      const again: ChatMsg[] = [...messages, { role: 'assistant', content: res.raw }, { role: 'user', content: `(Say that again for my level.)\n\n${fix}` }]
+      const fix = `Your last reply had problems: ${problems.join('; ')}. Rewrite it: fewer or simpler sentences, but every sentence complete and grammatical. Same meaning. Return the JSON again.`
+      const again: ChatMsg[] = [...messages, { role: 'assistant', content: res.raw }, { role: 'user', content: `[Not the learner speaking. ${fix}]` }]
       const res2 = await fallbackJson(ai, model, again, TurnSchema, MAX_TOKENS_TURN)
       if (res2.parsed) {
+        // Only the reply is re-requested. The tip and the alternatives were
+        // about the learner's turn and are still right; taking them from the
+        // retry let the correction message leak into "alt".
+        turn = { ...turn, reply: res2.parsed.reply, goal_reached: res2.parsed.goal_reached, safety_flag: turn.safety_flag || res2.parsed.safety_flag }
         res = res2
-        turn = res2.parsed
       }
     }
   }

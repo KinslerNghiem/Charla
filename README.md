@@ -58,7 +58,7 @@ key), and voice on a phone.
 | App | Vite + TypeScript + Preact, PWA via vite-plugin-pwa | One build; installed from Safari it is the iOS app |
 | Map | MapLibre GL JS + OpenFreeMap tiles | Free, no key, no quota |
 | API | Cloudflare Worker + D1 + KV | Free tier, never sleeps, holds every secret |
-| AI | Claude `claude-opus-5` via `@anthropic-ai/sdk`, structured outputs; without a key, Workers AI Llama 3.3 in JSON mode | Level-adaptive partner; the free path needs no card |
+| AI | Claude `claude-opus-5` via `@anthropic-ai/sdk`, structured outputs; without a key, Workers AI gpt-oss-120b in JSON mode | Level-adaptive partner; the free path needs no card |
 | Data | `data/venues.csv` → `scripts/build_venues.py` → `public/venues.geojson` | The spreadsheet is the source of truth |
 | Tests | Vitest, plus two Python validators that run without Node | Strings parity, scene validity, drift guard, badges, gate, table script, kid-mode-offline |
 | Screens | Playwright-core driving the installed Chrome | `npm run walk`: every page at phone size, kid-mode network watch |
@@ -118,7 +118,7 @@ uploads it, and prints both links. Re-running it is safe. Cloudflare Pages
 serves the app; the Worker holds every secret.
 
 **The partner without an API key.** With no `ANTHROPIC_API_KEY`, the Worker
-runs the partner and the Table-mode helper on Workers AI's Llama 3.3 70B
+runs the partner and the Table-mode helper on Workers AI's gpt-oss-120b
 (`worker/src/fallback.ts`), which is on Cloudflare's free tier. Same prompts,
 same JSON schema, same drift guard, plus two checks the free model needed that
 Claude did not: the reply must be in the target language, and it must not be

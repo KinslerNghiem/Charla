@@ -97,9 +97,11 @@ export function Learn({ params }: { params: URLSearchParams; mode: Mode }) {
     }
   }
 
-  // Tap to start, tap to stop. The transcript lands in the text box for the
-  // learner to check, not straight into the conversation: a mishearing they
-  // can see and fix beats one they discover from the partner's reply.
+  // Tap, speak, pause. The clip stops itself after a pause, the words are sent
+  // as the learner's turn, and the reply is read aloud, so a spoken exchange is
+  // one tap per turn. Tapping again while it listens stops it early. What it
+  // heard shows in the learner's bubble; a mishearing is fixed by saying it
+  // again, the way it would be at a real counter.
   function toggleTalk() {
     if (tier === 'typed') return
     if (listening) {
@@ -119,8 +121,8 @@ export function Learn({ params }: { params: URLSearchParams; mode: Mode }) {
         .then((text) => {
           setListening(false)
           if (text) {
-            setInput((prev) => (prev.trim() ? prev.trim() + ' ' + text : text))
-            setTalkState('check')
+            setTalkState('idle')
+            send(text)
           } else {
             setTalkState('nothing')
           }
@@ -137,7 +139,7 @@ export function Learn({ params }: { params: URLSearchParams; mode: Mode }) {
 
   const talkStatus: Record<typeof talkState, string> = {
     idle: '',
-    opening: t('talk_listening'),
+    opening: t('talk_opening'),
     listening: t('talk_listening'),
     working: t('talk_working'),
     check: t('talk_check'),
@@ -235,11 +237,14 @@ export function Learn({ params }: { params: URLSearchParams; mode: Mode }) {
                   </p>
                 )}
                 {m.alt && m.alt.length > 0 && (
-                  <ul class="alt">
-                    {m.alt.map((a) => (
-                      <li>{a}</li>
-                    ))}
-                  </ul>
+                  <div class="alt">
+                    <b>{t('alt_label')}:</b>
+                    <ul>
+                      {m.alt.map((a) => (
+                        <li>{a}</li>
+                      ))}
+                    </ul>
+                  </div>
                 )}
               </li>
             ))}

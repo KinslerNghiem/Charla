@@ -127,7 +127,9 @@ h2 { font-size: 18px; margin: 20px 0 6px; }
 .chat li.assistant { background: var(--paper-2); }
 .chat .line { margin: 0 0 4px; }
 .tip { color: var(--es); font-size: 14px; margin: 6px 0 0; }
-.alt { margin: 6px 0 0; padding-left: 18px; font-size: 14px; color: var(--ink-2); }
+.alt { margin: 6px 0 0; font-size: 14px; color: var(--ink-2); }
+.alt b { font-weight: 600; }
+.alt ul { margin: 2px 0 0; padding-left: 18px; }
 .composer textarea { resize: vertical; }
 .talk { background: var(--paper); touch-action: manipulation; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 .talk.on { background: var(--es-soft); color: var(--es); border-color: var(--es); }
