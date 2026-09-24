@@ -42,13 +42,15 @@ not by a promise.
 Charla is a conversation-practice app for Spanish speakers learning English
 (and English speakers learning Spanish) in Naperville and Aurora, Illinois.
 
-- **Rehearse.** Seven scenes tied to real places: a pharmacy refill, a clinic
-  front desk, the driver-services window, the school office, a taquería order,
-  a library card, a deli counter. An AI partner plays the person behind the
-  counter and stays at your level (three bands; the server measures every reply
-  against the band and asks for a rewrite if it drifts). Corrections come inside
-  the reply; a "Simpler" button drops a level. Typing always works; speaking
-  works where the phone allows it.
+- **Rehearse.** Ten scenes, most tied to a real place you can walk into: a
+  pharmacy refill, a clinic front desk, the driver-services window, the school
+  office, a taquería order, a library card, a deli counter, an ice cream shop,
+  and two phone calls, asking a landlord for a repair and calling in sick to
+  work. An AI partner plays the person on the other side and stays at your
+  level (three bands; the server measures every reply against the band and
+  asks for a rewrite if it drifts). Corrections come inside the reply; a
+  "Simpler" button drops a level. Typing always works. Speaking is one tap:
+  talk, pause, and the reply comes back read aloud.
 - **Go Card.** Your three phrases, the reply to expect, and one line to show the
   staff. It opens in airplane mode.
 - **Places.** A map of businesses and public programs that said yes, with a
@@ -118,8 +120,10 @@ venue pipeline), SQL (the reports database), HTML and CSS.
 
 **Tools:** Vite and Preact for the app; vite-plugin-pwa for the installable
 build; MapLibre GL with OpenFreeMap tiles for the map; Cloudflare Workers, D1
-and KV for the API; the Anthropic API (Claude) for the practice partner; Vitest
-and Playwright for tests and screenshots; the U.S. Census Bureau geocoder for
+and KV for the API; Cloudflare Workers AI for the practice partner (the
+open-weight gpt-oss-120b model) and for speech-to-text (Whisper), with the
+Anthropic API (Claude) as a drop-in when a key is configured; Vitest and
+Playwright for tests and screenshots; the U.S. Census Bureau geocoder for
 addresses; Git and GitHub with a CI workflow that runs every check on every
 push.
 
@@ -127,10 +131,14 @@ push.
 
 Two ways, both disclosed in `AI-USE.md` in the repository.
 
-**Inside the app:** Claude plays the person behind the counter in Rehearse and
-answers the help box in Table mode. Everything around it is ours: the scene
-format, the level bands and the drift guard, the safety handling, the daily
-caps, the offline fallback, and the kid mode, which uses no AI at all.
+**Inside the app:** a language model plays the person behind the counter in
+Rehearse and answers the help box in Table mode, and a speech model turns the
+learner's voice into text, which is discarded after transcription. At
+submission the partner runs on gpt-oss-120b on Cloudflare Workers AI; the
+same code runs on Claude when an API key is present. Everything around the
+model is ours: the scene format, the level bands and the drift guard, the
+reply-language and whose-line checks, the safety handling, the daily caps,
+the offline fallback, and the kid mode, which uses no AI at all.
 
 **Building the app:** we used Claude Code as a coding assistant. The log in
 `AI-USE.md` records each session and what it produced. We reviewed every file,
