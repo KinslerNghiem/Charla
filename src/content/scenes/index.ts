@@ -7,6 +7,7 @@ import taqueria from './taqueria-order.json'
 import library from './library-card.json'
 import grocery from './grocery-deli.json'
 import iceCream from './ice-cream-shop.json'
+import landlord from './landlord-repair.json'
 
 // Add a scene: drop a JSON file next to these, import it here, run `npm test`
 // (or `python scripts/check_scenes.py` without Node).
@@ -20,6 +21,7 @@ export const SCENES: Scene[] = [
   library as Scene,
   grocery as Scene,
   iceCream as Scene,
+  landlord as Scene,
 ]
 
 export function sceneById(id: string | null | undefined): Scene | undefined {

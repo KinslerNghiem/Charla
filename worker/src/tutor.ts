@@ -228,7 +228,11 @@ async function runTurnFallback(
   // Still the wrong language after a retry: the learner gets the redirect
   // line rather than a partner who has switched to French.
   if (!looksLike(learning, turn.reply)) return canned(learning, false)
-  return turn
+  // "Another way to say it" that is the learner's own line, verbatim, is not
+  // another way. The free model does this when the line was already fine.
+  const said = first.trim().toLowerCase()
+  const alt = (turn.alt ?? []).filter((a) => a.trim().toLowerCase() !== said && a.trim().toLowerCase() !== turn!.reply.trim().toLowerCase())
+  return { ...turn, alt: alt.slice(0, 2) }
 }
 
 function helpSystem(from: Lang, to: Lang): string {

@@ -1,0 +1,147 @@
+{
+  "id": "landlord-repair",
+  "place_type": "home",
+  "title": { "en": "Ask your landlord to fix something", "es": "Pedirle al casero que arregle algo" },
+  "roles": {
+    "partner": { "en": "landlord or building manager", "es": "casero o administrador del edificio" },
+    "learner": { "en": "tenant whose kitchen sink is leaking", "es": "inquilino cuyo fregadero de la cocina gotea" }
+  },
+  "goal": {
+    "en": "Report the leak under the kitchen sink, say how long it has been happening, and agree on a day and time for the repair.",
+    "es": "Reportar la fuga debajo del fregadero de la cocina, decir desde cuándo pasa y acordar un día y una hora para la reparación."
+  },
+  "must_use": [
+    { "en": "There is a leak under the kitchen sink.", "es": "Hay una fuga debajo del fregadero de la cocina." },
+    { "en": "It started three days ago.", "es": "Empezó hace tres días." },
+    { "en": "When can someone come?", "es": "¿Cuándo puede venir alguien?" },
+    { "en": "Can you write that down?", "es": "¿Me lo puede poner por escrito?" }
+  ],
+  "success": {
+    "en": "The landlord understands the problem, gives a day and a time window for the repair, and you have it in writing or by text.",
+    "es": "El casero entiende el problema, da un día y una hora para la reparación, y lo tienes por escrito o por mensaje."
+  },
+  "show_staff_line": {
+    "en": "I'm practicing my English. Please speak a little more slowly.",
+    "es": "Estoy practicando mi inglés. Por favor, hábleme un poco más despacio."
+  },
+  "offline_script": {
+    "start": "s1",
+    "nodes": {
+      "s1": {
+        "partner": { "en": "Hi, this is the building manager. What's going on?", "es": "Hola, habla el administrador del edificio. ¿Qué pasa?" },
+        "choices": [
+          {
+            "text": { "en": "Hi. I'm in apartment 2B. There is a leak under the kitchen sink.", "es": "Hola. Estoy en el departamento 2B. Hay una fuga debajo del fregadero de la cocina." },
+            "picture": "💧",
+            "best": true,
+            "next": "s2"
+          },
+          {
+            "text": { "en": "Water. Kitchen.", "es": "Agua. Cocina." },
+            "picture": "💬",
+            "tip": { "en": "Say where you live and what the problem is in one sentence: \"There is a leak under the kitchen sink.\"", "es": "Di dónde vives y cuál es el problema en una oración: \"There is a leak under the kitchen sink.\"" },
+            "next": null
+          },
+          {
+            "text": { "en": "Everything in this apartment is broken.", "es": "Todo en este departamento está roto." },
+            "picture": "😤",
+            "tip": { "en": "One problem at a time gets fixed faster. Name the leak first.", "es": "Un problema a la vez se arregla más rápido. Menciona primero la fuga." },
+            "next": null
+          }
+        ]
+      },
+      "s2": {
+        "partner": { "en": "Okay. How long has it been leaking?", "es": "Muy bien. ¿Desde cuándo está goteando?" },
+        "choices": [
+          {
+            "text": { "en": "It started three days ago. There is water on the floor every morning.", "es": "Empezó hace tres días. Hay agua en el piso cada mañana." },
+            "picture": "📅",
+            "best": true,
+            "next": "s3"
+          },
+          {
+            "text": { "en": "Long time.", "es": "Mucho tiempo." },
+            "picture": "💬",
+            "tip": { "en": "Give a number: \"It started three days ago.\" It helps them decide how urgent it is.", "es": "Da un número: \"It started three days ago.\" Les ayuda a decidir qué tan urgente es." },
+            "next": null
+          },
+          {
+            "text": { "en": "I don't know.", "es": "No sé." },
+            "picture": "🤷",
+            "tip": { "en": "You do know; you noticed it. Say when: \"It started three days ago.\"", "es": "Sí sabes; tú lo notaste. Di cuándo: \"It started three days ago.\"" },
+            "next": null
+          }
+        ]
+      },
+      "s3": {
+        "partner": { "en": "Got it. Put a bucket under it for now. I'll send the plumber.", "es": "Entendido. Ponga una cubeta por ahora. Le mando al plomero." },
+        "choices": [
+          {
+            "text": { "en": "Thank you. When can someone come?", "es": "Gracias. ¿Cuándo puede venir alguien?" },
+            "picture": "🕐",
+            "best": true,
+            "next": "s4"
+          },
+          {
+            "text": { "en": "OK, bye.", "es": "Está bien, adiós." },
+            "picture": "👋",
+            "tip": { "en": "Don't hang up without a day. Ask: \"When can someone come?\"", "es": "No cuelgues sin un día. Pregunta: \"When can someone come?\"" },
+            "next": null
+          },
+          {
+            "text": { "en": "I already have a bucket.", "es": "Ya tengo una cubeta." },
+            "picture": "🪣",
+            "tip": { "en": "Fine, but the question that matters is when. Ask: \"When can someone come?\"", "es": "Bien, pero la pregunta que importa es cuándo. Pregunta: \"When can someone come?\"" },
+            "next": null
+          }
+        ]
+      },
+      "s4": {
+        "partner": { "en": "Thursday, between one and four. Will someone be home?", "es": "El jueves, entre una y cuatro. ¿Habrá alguien en casa?" },
+        "choices": [
+          {
+            "text": { "en": "Yes, I'll be home Thursday from one to four. Can you write that down?", "es": "Sí, estaré en casa el jueves de una a cuatro. ¿Me lo puede poner por escrito?" },
+            "picture": "✍️",
+            "best": true,
+            "next": "s5"
+          },
+          {
+            "text": { "en": "Thursday no. I work.", "es": "El jueves no. Trabajo." },
+            "picture": "🗓️",
+            "tip": { "en": "Fair. Then offer another day: \"I can be home Friday morning.\" In this rehearsal, Thursday works.", "es": "Es válido. Entonces ofrece otro día: \"I can be home Friday morning.\" En este ensayo, el jueves sí puedes." },
+            "next": null
+          },
+          {
+            "text": { "en": "Yes.", "es": "Sí." },
+            "picture": "💬",
+            "tip": { "en": "Repeat the day and time so you both agree, and ask for it in writing: \"Can you write that down?\"", "es": "Repite el día y la hora para que ambos estén de acuerdo, y pídelo por escrito: \"Can you write that down?\"" },
+            "next": null
+          }
+        ]
+      },
+      "s5": {
+        "partner": { "en": "Sure, I'll text you: plumber Thursday, one to four, apartment 2B.", "es": "Claro, le mando un mensaje: plomero el jueves, de una a cuatro, departamento 2B." },
+        "choices": [
+          {
+            "text": { "en": "Perfect. Thank you.", "es": "Perfecto. Gracias." },
+            "picture": "🙏",
+            "best": true,
+            "next": null
+          },
+          {
+            "text": { "en": "Why text?", "es": "¿Por qué mensaje?" },
+            "picture": "❓",
+            "tip": { "en": "A text is writing. It's your proof of the date. Say thank you.", "es": "Un mensaje de texto es por escrito. Es tu prueba de la fecha. Da las gracias." },
+            "next": null
+          },
+          {
+            "text": { "en": "Bye.", "es": "Adiós." },
+            "picture": "👋",
+            "tip": { "en": "Confirm and thank: \"Perfect. Thank you.\"", "es": "Confirma y agradece: \"Perfect. Thank you.\"" },
+            "next": null
+          }
+        ]
+      }
+    }
+  }
+}
