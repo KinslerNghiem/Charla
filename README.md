@@ -30,10 +30,11 @@ After the visit, one tap makes the map better for the next person.
 
 ## Status
 
-Week 1 done. All five must-have scenes from the plan (pharmacy refill, clinic
-front desk, driver-services window, school office, taquería order) plus three
-extras (library card, grocery deli, ice cream shop), four of them kid-enabled. The Worker with
-the drift guard, `/api/stt` behind an optional Workers AI binding, the venue
+Live at https://charla-naperville.pages.dev. All five must-have scenes from
+the plan (pharmacy refill, clinic front desk, driver-services window, school
+office, taquería order) plus five extras (library card, grocery deli, ice
+cream shop, landlord repair, calling in sick), four of them kid-enabled. The
+Worker with the drift guard, `/api/stt` on Workers AI Whisper, the venue
 pipeline with 15 geocoded seed places (one more awaiting coordinates), tests,
 CI, security headers for Pages, and drafts of the submission answers and the
 partner one-pager in `docs/`. Still to build: everything in the plan's week 3

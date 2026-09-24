@@ -1,0 +1,147 @@
+{
+  "id": "call-in-sick",
+  "place_type": "work",
+  "title": { "en": "Call in sick to work", "es": "Avisar al trabajo que estás enfermo" },
+  "roles": {
+    "partner": { "en": "shift supervisor answering the phone", "es": "supervisor de turno que contesta el teléfono" },
+    "learner": { "en": "worker calling before a morning shift", "es": "trabajador que llama antes del turno de la mañana" }
+  },
+  "goal": {
+    "en": "Tell your supervisor you are sick and cannot come in today, say when you expect to be back, and ask what they need from you.",
+    "es": "Decirle a tu supervisor que estás enfermo y no puedes ir hoy, decir cuándo crees que vuelves y preguntar qué necesita de ti."
+  },
+  "must_use": [
+    { "en": "I'm calling in sick today.", "es": "Llamo para avisar que hoy estoy enfermo." },
+    { "en": "I have a fever.", "es": "Tengo fiebre." },
+    { "en": "I think I can come back tomorrow.", "es": "Creo que puedo volver mañana." },
+    { "en": "Do you need a doctor's note?", "es": "¿Necesita una nota del doctor?" }
+  ],
+  "success": {
+    "en": "The supervisor knows you are out today, knows when to expect you, and has told you whether you need a doctor's note.",
+    "es": "El supervisor sabe que hoy no vas, sabe cuándo esperarte y te dijo si necesitas una nota del doctor."
+  },
+  "show_staff_line": {
+    "en": "I'm practicing my English. Please speak a little more slowly.",
+    "es": "Estoy practicando mi inglés. Por favor, hábleme un poco más despacio."
+  },
+  "offline_script": {
+    "start": "s1",
+    "nodes": {
+      "s1": {
+        "partner": { "en": "Morning, this is Dana. Who's this?", "es": "Buenos días, habla Dana. ¿Quién habla?" },
+        "choices": [
+          {
+            "text": { "en": "Hi Dana, this is Carlos from the morning shift. I'm calling in sick today.", "es": "Hola Dana, habla Carlos del turno de la mañana. Llamo para avisar que hoy estoy enfermo." },
+            "picture": "📞",
+            "best": true,
+            "next": "s2"
+          },
+          {
+            "text": { "en": "Carlos. Sick.", "es": "Carlos. Enfermo." },
+            "picture": "💬",
+            "tip": { "en": "Say who you are and what you need in one line: \"This is Carlos. I'm calling in sick today.\"", "es": "Di quién eres y qué necesitas en una sola línea: \"This is Carlos. I'm calling in sick today.\"" },
+            "next": null
+          },
+          {
+            "text": { "en": "I'm not coming.", "es": "No voy a ir." },
+            "picture": "🚫",
+            "tip": { "en": "That sounds like you quit. The phrase for illness is \"I'm calling in sick.\"", "es": "Eso suena a que renuncias. La frase para enfermedad es \"I'm calling in sick.\"" },
+            "next": null
+          }
+        ]
+      },
+      "s2": {
+        "partner": { "en": "Sorry to hear that. What's going on?", "es": "Lo siento. ¿Qué te pasa?" },
+        "choices": [
+          {
+            "text": { "en": "I have a fever and I was up all night. I don't want to get anyone sick.", "es": "Tengo fiebre y no dormí en toda la noche. No quiero contagiar a nadie." },
+            "picture": "🤒",
+            "best": true,
+            "next": "s3"
+          },
+          {
+            "text": { "en": "It's private.", "es": "Es privado." },
+            "picture": "🤐",
+            "tip": { "en": "You don't owe details, but one symptom helps them plan: \"I have a fever.\"", "es": "No debes dar detalles, pero un síntoma les ayuda a planear: \"I have a fever.\"" },
+            "next": null
+          },
+          {
+            "text": { "en": "Fever.", "es": "Fiebre." },
+            "picture": "💬",
+            "tip": { "en": "Make it a sentence: \"I have a fever.\"", "es": "Hazlo una oración: \"I have a fever.\"" },
+            "next": null
+          }
+        ]
+      },
+      "s3": {
+        "partner": { "en": "Okay, rest up. Any idea when you'll be back?", "es": "Está bien, descansa. ¿Sabes cuándo vuelves?" },
+        "choices": [
+          {
+            "text": { "en": "I think I can come back tomorrow. I'll call you tonight if not.", "es": "Creo que puedo volver mañana. Le llamo esta noche si no." },
+            "picture": "📅",
+            "best": true,
+            "next": "s4"
+          },
+          {
+            "text": { "en": "I don't know.", "es": "No sé." },
+            "picture": "🤷",
+            "tip": { "en": "Give your best guess and promise an update: \"I think I can come back tomorrow. I'll call if not.\"", "es": "Da tu mejor cálculo y promete avisar: \"I think I can come back tomorrow. I'll call if not.\"" },
+            "next": null
+          },
+          {
+            "text": { "en": "Maybe next week.", "es": "Quizá la próxima semana." },
+            "picture": "🗓️",
+            "tip": { "en": "For a fever, a day is the usual guess. A week needs a doctor. Try: \"I think I can come back tomorrow.\"", "es": "Para una fiebre, lo normal es un día. Una semana requiere doctor. Prueba: \"I think I can come back tomorrow.\"" },
+            "next": null
+          }
+        ]
+      },
+      "s4": {
+        "partner": { "en": "Sounds good. I'll cover your shift.", "es": "Perfecto. Yo cubro tu turno." },
+        "choices": [
+          {
+            "text": { "en": "Thank you. Do you need a doctor's note?", "es": "Gracias. ¿Necesita una nota del doctor?" },
+            "picture": "📄",
+            "best": true,
+            "next": "s5"
+          },
+          {
+            "text": { "en": "OK, bye.", "es": "Está bien, adiós." },
+            "picture": "👋",
+            "tip": { "en": "Ask before you hang up, so there is no surprise later: \"Do you need a doctor's note?\"", "es": "Pregunta antes de colgar, para que no haya sorpresas después: \"Do you need a doctor's note?\"" },
+            "next": null
+          },
+          {
+            "text": { "en": "Will I get paid?", "es": "¿Me van a pagar?" },
+            "picture": "💵",
+            "tip": { "en": "A fair question for later, in person. Right now ask what they need from you: \"Do you need a doctor's note?\"", "es": "Buena pregunta para después, en persona. Ahora pregunta qué necesitan de ti: \"Do you need a doctor's note?\"" },
+            "next": null
+          }
+        ]
+      },
+      "s5": {
+        "partner": { "en": "Not for one day. If it's more than two, yes. Feel better.", "es": "Por un día no. Si son más de dos, sí. Que te mejores." },
+        "choices": [
+          {
+            "text": { "en": "Got it. Thank you, Dana.", "es": "Entendido. Gracias, Dana." },
+            "picture": "🙏",
+            "best": true,
+            "next": null
+          },
+          {
+            "text": { "en": "Two what?", "es": "¿Dos qué?" },
+            "picture": "❓",
+            "tip": { "en": "Two days. If you didn't catch it, ask: \"Sorry, more than two days?\" Then thank her.", "es": "Dos días. Si no lo entendiste, pregunta: \"Sorry, more than two days?\" Luego da las gracias." },
+            "next": null
+          },
+          {
+            "text": { "en": "Bye.", "es": "Adiós." },
+            "picture": "👋",
+            "tip": { "en": "Confirm you understood and thank her: \"Got it. Thank you, Dana.\"", "es": "Confirma que entendiste y da las gracias: \"Got it. Thank you, Dana.\"" },
+            "next": null
+          }
+        ]
+      }
+    }
+  }
+}
