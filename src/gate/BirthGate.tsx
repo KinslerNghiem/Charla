@@ -15,7 +15,7 @@ export function BirthGate({ onDone }: { onDone: (mode: Mode) => void }) {
 
   return (
     <main class="gate">
-      <h1>{t('app_name')}</h1>
+      <h1><svg class="mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="7.5" fill="var(--en)" /><circle cx="15" cy="12" r="7.5" fill="var(--es)" fill-opacity="0.85" /></svg>{t('app_name')}</h1>
       <p class="tagline">{t('tagline')}</p>
       <form
         onSubmit={(e) => {

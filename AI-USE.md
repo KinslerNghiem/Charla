@@ -45,5 +45,7 @@ kept from day one and pasted into the submission form.
 | 2026-10-01 | Fourteen-lens audit of the whole app with adversarial verification of every finding (each claimed bug reproduced or dropped) | Claude Code |
 | 2026-10-02 | The fixes from that audit, in six parallel passes: partner quality guards (level retry, fragments, whose-line, language, meta-instructions in history, 503 instead of a canned reply); speech lifecycle (one tap per turn, 15 s timeout, mic released on navigation, TTS hushed first, browser recognition only after a 503); Places data hygiene (team notes out of the GeoJSON, online groups marked, selection flies the map) and the offline map state; About page; PWA caching (map and places runtime-cached, update prompt); content fixes and three scenes (parent-teacher conference, electric-bill call, classroom help); docs; Worker, storage, language and router tests | Claude Code |
 
+| 2026-10-03 | Visual design pass: serif display voice, brand mark, bottom tab bar on phones, icon scene cards in a grid, numbered phrases, segmented level picker, mic-first composer, Go Card laid out as a card, storefront awnings in kid mode, two-column scene page on laptops | Claude Code |
+
 Add a row whenever an AI tool writes or substantially rewrites code, content or
 copy. Reviewing, understanding, and being able to explain every file is on us.

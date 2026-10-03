@@ -9,7 +9,7 @@ import type { Lang } from '../i18n/strings'
 export function LangPick({ onPick }: { onPick: (native: Lang) => void }) {
   return (
     <main class="gate langpick">
-      <h1>Charla</h1>
+      <h1><svg class="mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="7.5" fill="var(--en)" /><circle cx="15" cy="12" r="7.5" fill="var(--es)" fill-opacity="0.85" /></svg>Charla</h1>
       <p class="tagline">
         Practica la conversación. Luego, tenla de verdad.
         <br />

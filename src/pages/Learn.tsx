@@ -9,6 +9,7 @@ import { classify, detectTier, startListener, type Listener, type TalkError } fr
 import { hush, speak, unlock } from '../speech/output'
 import { get, set } from '../storage'
 import { go } from '../router'
+import { placeIcon } from '../content/icons'
 
 interface Msg {
   role: 'user' | 'assistant'
@@ -285,7 +286,7 @@ export function Learn({ params }: { params: URLSearchParams }) {
   return (
     <section class="learn">
       <header class="scene-head">
-        <button type="button" class="ghost" onClick={() => go('/learn')}>
+        <button type="button" class="back" onClick={() => go('/learn')}>
           ← {t('back')}
         </button>
         <h1 lang={target}>{scene.title[target]}</h1>
@@ -293,15 +294,23 @@ export function Learn({ params }: { params: URLSearchParams }) {
         <p>
           <b>{t('goal_label')}:</b> {scene.goal[nat]}
         </p>
-        <p class="must">
-          <b>{t('must_use')}:</b>{' '}
-          {scene.must_use.map((p, i) => (
-            <span class={'chip' + (used[i] ? ' done' : '')}>
-              {used[i] && <span aria-hidden="true">✓ </span>}
-              <span lang={target}>{p[target]}</span> <i>{p[nat]}</i>
-            </span>
-          ))}
+        <p class="levels-label">
+          <b>{t('must_use')}:</b>
         </p>
+        <ol class="must">
+          {scene.must_use.map((p, i) => (
+            <li class={used[i] ? 'done' : ''}>
+              <span class="num" aria-hidden="true">
+                {used[i] ? '✓' : i + 1}
+              </span>
+              <span>
+                {used[i] && <span class="sr-only">✓ </span>}
+                <span lang={target}>{p[target]}</span>
+                <i>{p[nat]}</i>
+              </span>
+            </li>
+          ))}
+        </ol>
         {/* Level names are in the learner's own language, like the direction
             button: the person choosing "beginner" should not need the target
             language to read the word. */}
@@ -311,7 +320,9 @@ export function Learn({ params }: { params: URLSearchParams }) {
         <div class="levels" role="radiogroup" aria-labelledby="levels-label">
           {LEVELS.map((l) => (
             <button type="button" role="radio" aria-checked={level === l} class={level === l ? 'on' : ''} onClick={() => setLevel(l)}>
-              {tIn(nat, `level_${l}` as 'level_A1')}
+              {/* "Beginner · a few words": the name on one line, the gloss under it. */}
+              <b>{tIn(nat, `level_${l}` as 'level_A1').split(' · ')[0]}</b>
+              <small>{tIn(nat, `level_${l}` as 'level_A1').split(' · ')[1] ?? ''}</small>
             </button>
           ))}
         </div>
@@ -406,10 +417,7 @@ export function Learn({ params }: { params: URLSearchParams }) {
                 }}
                 rows={2}
               />
-              <div class="row">
-                <button type="submit" class="primary" disabled={busy || listening || !input.trim()}>
-                  {t('send')}
-                </button>
+              <div class="actions">
                 {tier !== 'typed' ? (
                   <button type="button" class={'talk' + (listening ? ' on' : '')} onClick={toggleTalk} disabled={busy || working} aria-pressed={listening}>
                     {listening ? '⏹ ' + t('talk_stop') : '🎤 ' + t('talk_tap')}
@@ -417,6 +425,9 @@ export function Learn({ params }: { params: URLSearchParams }) {
                 ) : (
                   <span class="note">{t('talk_unavailable')}</span>
                 )}
+                <button type="submit" class="primary" disabled={busy || listening || !input.trim()}>
+                  {t('send')}
+                </button>
               </div>
               {listening && (
                 <div class="meter" aria-hidden="true">
@@ -489,6 +500,9 @@ function ScenePicker({ onPick }: { onPick: (s: Scene) => void }) {
   const card = (s: Scene, isLast = false) => (
     <li>
       <button type="button" class="scene-card" onClick={() => onPick(s)}>
+        <span class="ico" aria-hidden="true">
+          {placeIcon(s.place_type)}
+        </span>
         <span class="type">{t(`type_${s.place_type}` as 'type_pharmacy')}</span>
         <span class="title" lang={target}>
           {s.title[target]}

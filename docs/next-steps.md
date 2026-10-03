@@ -52,6 +52,10 @@ with every finding re-verified against the code before it was fixed.
 - Scripted-mode distractors are plausible learner errors (false cognates, word order, register) with tips that say why, instead of "Where is the milk?".
 - The Python validator derives its rules from the schema and runs in CI.
 
+**Design** (2026-10-03)
+
+- A visual identity without a single fetched font: a book-serif voice for titles and lines to say, the two-circle mark, a bottom tab bar on phones, icon scene cards in a grid, numbered phrases that tick off, a one-piece level picker, a mic that is the biggest thing on the page, a Go Card that looks like a card, awnings on the kid storefronts, and a two-column scene page on laptops.
+
 **Docs / tests**
 
 - README, AI-USE.md, submission answers (incl. the new "what did you learn" question), storyboard (names, code shot, tools line) and partner one-pager match the code.

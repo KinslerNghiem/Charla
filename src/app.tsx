@@ -98,12 +98,12 @@ export function App() {
     )
   }
 
-  const links: [string, string][] = [
-    ['/learn', t('nav_learn')],
-    ['/places', t('nav_places')],
-    ['/card', t('nav_card')],
-    ['/table', t('nav_table')],
-    ['/ninos', t('nav_kids')],
+  const links: [string, string, string][] = [
+    ['/learn', t('nav_learn'), '💬'],
+    ['/places', t('nav_places'), '📍'],
+    ['/card', t('nav_card'), '🪪'],
+    ['/table', t('nav_table'), '☕'],
+    ['/ninos', t('nav_kids'), '⭐'],
   ]
   // Privacy and About are footer links, not tabs: six tabs overflow a 390px
   // phone and the last one scrolls out of sight with nothing to say it is there.
@@ -153,13 +153,17 @@ export function App() {
       </a>
       <header class="top">
         <a class="brand" href="#/learn">
+          <svg class="mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="7.5" fill="var(--en)" /><circle cx="15" cy="12" r="7.5" fill="var(--es)" fill-opacity="0.85" /></svg>
           {t('app_name')}
         </a>
       </header>
       <nav class="tabs" aria-label="Sections">
-        {links.map(([path, label]) => (
+        {links.map(([path, label, ico]) => (
           <a href={'#' + path} class={current === path ? 'on' : ''} aria-current={current === path ? 'page' : undefined}>
-            {label}
+            <span class="ico" aria-hidden="true">
+              {ico}
+            </span>
+            <span>{label}</span>
           </a>
         ))}
       </nav>

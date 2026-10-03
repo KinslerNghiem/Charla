@@ -5,21 +5,12 @@ import { OfflineScene } from '../tutor/OfflineScene'
 import { clearNative, learning, native, t, tIn } from '../i18n/lang'
 import { clearAll, get, set } from '../storage'
 import { speak } from '../speech/output'
+import { placeIcon } from '../content/icons'
 
 // Charlita. This file and everything it imports must never touch the network:
 // no requests to the Worker, no map tiles, no microphone, no location.
 // tests/ninos-offline.test.ts scans the source to make sure it stays that way.
 
-const STREET: Record<string, string> = {
-  restaurant: '🌮',
-  library: '📚',
-  pharmacy: '💊',
-  grocery: '🛒',
-  ice_cream: '🍦',
-  school: '🏫',
-  home: '🏠',
-  work: '🏢',
-}
 
 /** How long the Grown-ups button must be held. The kids_hold string says the same number. */
 export const HOLD_MS = 3000
@@ -120,7 +111,7 @@ export function Ninos() {
           {kidScenes().map((s) => (
             <button type="button" class="storefront" onClick={() => { setScene(s); setEarned(false) }}>
               <span class="pic" aria-hidden="true">
-                {STREET[s.place_type] ?? '🏪'}
+                {placeIcon(s.place_type)}
               </span>
               <span class="txt" lang={target}>
                 {s.title[target]}
@@ -153,11 +144,11 @@ export function Ninos() {
 
   return (
     <section class="ninos">
-      <button type="button" class="ghost" onClick={() => setScene(null)}>
+      <button type="button" class="back" onClick={() => setScene(null)}>
         ← {t('back')}
       </button>
       <h1>
-        {STREET[scene.place_type] ?? '🏪'} <span lang={target}>{scene.title[target]}</span>
+        {placeIcon(scene.place_type)} <span lang={target}>{scene.title[target]}</span>
       </h1>
       <OfflineScene scene={scene} learning={target} native={nat} pictures onDone={() => finish(scene)} />
       {earned && (
