@@ -2,6 +2,7 @@
   "id": "library-card",
   "place_type": "library",
   "kid": true,
+  "channel": "counter",
   "title": { "en": "Get a library card", "es": "Sacar una tarjeta de la biblioteca" },
   "roles": {
     "partner": { "en": "librarian", "es": "bibliotecario o bibliotecaria" },
@@ -12,17 +13,18 @@
     "es": "Pedir tu propia tarjeta de la biblioteca y encontrar los cómics."
   },
   "must_use": [
-    { "en": "library card", "es": "tarjeta de la biblioteca" },
-    { "en": "please", "es": "por favor" },
-    { "en": "Where are…?", "es": "¿Dónde están…?" }
+    { "en": "I'd like to get a library card.", "es": "Quisiera sacar una tarjeta de la biblioteca." },
+    { "en": "Yes, my mom is right there.", "es": "Sí, mi mamá está allí." },
+    { "en": "Where are the comic books?", "es": "¿Dónde están los cómics?" }
   ],
+  "expect": { "en": "What's your first name?", "es": "¿Cómo te llamas?" },
   "success": {
     "en": "The librarian gives you a card and points you to the comic books.",
     "es": "La bibliotecaria te da una tarjeta y te muestra dónde están los cómics."
   },
   "show_staff_line": {
     "en": "I'm practicing my English. Thank you for your patience.",
-    "es": "Estoy practicando mi inglés. Gracias por su paciencia."
+    "es": "Estoy practicando mi español. Gracias por su paciencia."
   },
   "offline_script": {
     "start": "s1",
@@ -31,7 +33,7 @@
         "partner": { "en": "Hello! How can I help you?", "es": "¡Hola! ¿En qué te puedo ayudar?" },
         "choices": [
           {
-            "text": { "en": "I would like a library card, please.", "es": "Quisiera una tarjeta de la biblioteca, por favor." },
+            "text": { "en": "I'd like to get a library card, please.", "es": "Quisiera sacar una tarjeta de la biblioteca, por favor." },
             "picture": "📚",
             "best": true,
             "next": "s2"
@@ -60,9 +62,9 @@
             "next": "s3"
           },
           {
-            "text": { "en": "I live at 123 Main Street.", "es": "Vivo en la calle Main 123." },
-            "picture": "🏠",
-            "tip": { "en": "They only asked your name. You never have to say where you live.", "es": "Solo preguntaron tu nombre. Nunca tienes que decir dónde vives." },
+            "text": { "en": "I am nine years old.", "es": "Tengo nueve años." },
+            "picture": "🎂",
+            "tip": { "en": "They asked your name, not your age. Say: \"My name is…\"", "es": "Preguntaron tu nombre, no tu edad. Di: \"My name is…\"" },
             "next": null
           },
           {
@@ -74,6 +76,29 @@
         ]
       },
       "s3": {
+        "partner": { "en": "Is a grown-up with you? They need to sign for your card.", "es": "¿Vienes con un adulto? Tiene que firmar por tu tarjeta." },
+        "choices": [
+          {
+            "text": { "en": "Yes, my mom is right there.", "es": "Sí, mi mamá está allí." },
+            "picture": "👩",
+            "best": true,
+            "next": "s4"
+          },
+          {
+            "text": { "en": "No, I came alone.", "es": "No, vine solo." },
+            "picture": "🚶",
+            "tip": { "en": "A grown-up signs for kids' cards. Ask them to come to the desk.", "es": "Un adulto firma por la tarjeta de los niños. Pídele que venga al mostrador." },
+            "next": null
+          },
+          {
+            "text": { "en": "I live at 123 Main Street.", "es": "Vivo en la calle Main 123." },
+            "picture": "🏠",
+            "tip": { "en": "The grown-up gives the address. You never have to say where you live.", "es": "El adulto da la dirección. Tú nunca tienes que decir dónde vives." },
+            "next": null
+          }
+        ]
+      },
+      "s4": {
         "partner": { "en": "Here is your card, Ana. You can borrow five books.", "es": "Aquí tienes tu tarjeta, Ana. Puedes llevarte cinco libros." },
         "choices": [
           {
@@ -86,6 +111,12 @@
             "text": { "en": "Bye.", "es": "Adiós." },
             "picture": "👋",
             "tip": { "en": "Say thank you first, then ask where the comics are.", "es": "Primero da las gracias, luego pregunta dónde están los cómics." },
+            "next": null
+          },
+          {
+            "text": { "en": "I want ten books.", "es": "Quiero diez libros." },
+            "picture": "📚",
+            "tip": { "en": "Five is the rule for now. Say thank you, then ask where the comics are.", "es": "Por ahora la regla son cinco. Da las gracias y luego pregunta dónde están los cómics." },
             "next": null
           }
         ]

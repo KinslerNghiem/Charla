@@ -2,6 +2,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
+import { STRINGS } from '../src/i18n/strings'
 
 // Kid mode collects nothing. That is a legal position (the FTC's COPPA guidance
 // says data that stays on the device and is never transmitted is not
@@ -115,6 +116,16 @@ describe('kid mode makes no network requests', () => {
     // no FORBIDDEN pattern above would catch.
     const out = readFileSync(join(ROOT, 'speech', 'output.ts'), 'utf8')
     expect(out).toMatch(/localService/)
+  })
+
+  it('tells the parent how long to hold, in both languages', () => {
+    // The Grown-ups button holds for HOLD_MS; kids_hold prints the seconds.
+    const src = readFileSync(join(ROOT, 'pages', 'Ninos.tsx'), 'utf8')
+    const ms = Number(/export const HOLD_MS = (\d+)/.exec(src)?.[1])
+    expect(ms).toBeGreaterThan(0)
+    const secs = String(ms / 1000)
+    expect(STRINGS.en.kids_hold).toContain(secs)
+    expect(STRINGS.es.kids_hold).toContain(secs)
   })
 
   it('scans the ninos directory too, if it ever exists', () => {

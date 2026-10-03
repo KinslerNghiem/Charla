@@ -1,5 +1,39 @@
 {
  "type": "FeatureCollection",
+ "zips": {
+  "60440": [
+   -88.08088,
+   41.68966
+  ],
+  "60505": [
+   -88.31214,
+   41.7644
+  ],
+  "60506": [
+   -88.33344,
+   41.75977
+  ],
+  "60517": [
+   -88.04541,
+   41.75696
+  ],
+  "60540": [
+   -88.16794,
+   41.76159
+  ],
+  "60563": [
+   -88.20636,
+   41.79911
+  ],
+  "60564": [
+   -88.20102,
+   41.70912
+  ],
+  "60565": [
+   -88.11753,
+   41.73227
+  ]
+ },
  "features": [
   {
    "type": "Feature",
@@ -21,13 +55,11 @@
     "lang_es": "unknown",
     "lang_en": "yes",
     "roles": "conversation group tutor",
-    "shifts": "Mondays 7:00-8:30 pm (verify)",
+    "shifts": "Mondays 7:00-8:30 pm",
     "status": "listed_public",
-    "source": "https://napervillepl.librarycalendar.com/event/english-conversation-group-16689",
-    "verified_on": "2026-09-07",
-    "club_schedule": "English Conversation Group (Literacy DuPage); listed Mondays 7-8:30 pm, may now be on Zoom; check the calendar",
+    "club_schedule": "English Conversation Group (Literacy DuPage), Mondays 7:00-8:30 pm",
     "meet_ok": "yes",
-    "notes": "VERIFY current schedule before listing"
+    "format": "in_person"
    }
   },
   {
@@ -52,40 +84,9 @@
     "roles": "",
     "shifts": "",
     "status": "unknown",
-    "source": "https://www.aurorapubliclibrary.org/13458",
-    "verified_on": "2026-09-08",
     "club_schedule": "",
     "meet_ok": "yes",
-    "notes": "Shares a building with Washington Middle School; ask whether any English program runs here"
-   }
-  },
-  {
-   "type": "Feature",
-   "id": "cermak-fresh-market",
-   "geometry": {
-    "type": "Point",
-    "coordinates": [
-     -88.318567,
-     41.783542
-    ]
-   },
-   "properties": {
-    "id": "cermak-fresh-market",
-    "name": "Cermak Fresh Market",
-    "town": "Aurora",
-    "type": "grocery",
-    "scene_id": "grocery-deli",
-    "address": "1250 N Lake St, Aurora, IL 60506",
-    "lang_es": "unknown",
-    "lang_en": "unknown",
-    "roles": "deli counter",
-    "shifts": "",
-    "status": "unknown",
-    "source": "https://www.cermakfreshmarket.com/",
-    "verified_on": "2026-09-07",
-    "club_schedule": "",
-    "meet_ok": "no",
-    "notes": "Hispanic grocery chain; walk in and ask; get permission to list"
+    "format": "in_person"
    }
   },
   {
@@ -110,11 +111,9 @@
     "roles": "adult education office",
     "shifts": "",
     "status": "listed_public",
-    "source": "https://www.cod.edu/academics/continuing-education/adult-education/locations.html",
-    "verified_on": "2026-09-07",
     "club_schedule": "Free English Language Acquisition classes (also evenings at Naperville North HS)",
     "meet_ok": "yes",
-    "notes": ""
+    "format": "in_person"
    }
   },
   {
@@ -139,11 +138,9 @@
     "roles": "conversation group tutor",
     "shifts": "Wednesdays 10:00-11:00 am (virtual)",
     "status": "listed_public",
-    "source": "https://www.literacydupage.org/conversation-groups",
-    "verified_on": "2026-09-07",
-    "club_schedule": "Literacy DuPage virtual English conversation group, Wednesdays 10-11 am",
-    "meet_ok": "yes",
-    "notes": ""
+    "club_schedule": "Literacy DuPage English conversation group on Zoom, Wednesdays 10-11 am (virtual)",
+    "meet_ok": "no",
+    "format": "online"
    }
   },
   {
@@ -168,11 +165,9 @@
     "roles": "",
     "shifts": "",
     "status": "unknown",
-    "source": "https://www.naperville-lib.org/",
-    "verified_on": "2026-09-07",
     "club_schedule": "",
     "meet_ok": "yes",
-    "notes": "Listed on the library site as an ESL group location; verify"
+    "format": "in_person"
    }
   },
   {
@@ -197,11 +192,9 @@
     "roles": "conversation group tutor",
     "shifts": "Thursdays 6:30-8:00 pm",
     "status": "listed_public",
-    "source": "https://www.literacydupage.org/conversation-groups",
-    "verified_on": "2026-09-07",
     "club_schedule": "Literacy DuPage English Conversation Group, Thursdays 6:30-8:00 pm, intermediate+, free",
     "meet_ok": "yes",
-    "notes": ""
+    "format": "in_person"
    }
   },
   {
@@ -226,11 +219,9 @@
     "roles": "conversation group tutor",
     "shifts": "Saturdays 10:30-12:00",
     "status": "listed_public",
-    "source": "https://aurora.libnet.info/event/15829646",
-    "verified_on": "2026-09-07",
     "club_schedule": "English Conversation Group, Saturdays 10:30-12:00, Room 332, bilingual, in person or Zoom, no registration (4th Saturday is a reading group)",
     "meet_ok": "yes",
-    "notes": ""
+    "format": "both"
    }
   },
   {
@@ -254,12 +245,10 @@
     "lang_en": "yes",
     "roles": "counter",
     "shifts": "Tue-Fri 8-5:30, Sat 7:30-noon",
-    "status": "unknown",
-    "source": "https://apps.ilsos.gov/facilityfinder/facilityfinder?command=getFacilityDetails&facilityId=253",
-    "verified_on": "2026-09-07",
+    "status": "listed_public",
     "club_schedule": "",
     "meet_ok": "no",
-    "notes": "Ask about Spanish at the counter"
+    "format": "in_person"
    }
   },
   {
@@ -283,12 +272,10 @@
     "lang_en": "yes",
     "roles": "counter",
     "shifts": "",
-    "status": "unknown",
-    "source": "https://www.ilsos.gov/facilities/facilitylist.html",
-    "verified_on": "2026-09-07",
+    "status": "listed_public",
     "club_schedule": "",
     "meet_ok": "no",
-    "notes": "New facility opened Nov 2025 (the 75th St one closed); ask about Spanish at the counter"
+    "format": "in_person"
    }
   },
   {
@@ -313,11 +300,9 @@
     "roles": "front desk",
     "shifts": "",
     "status": "unknown",
-    "source": "https://vnahealth.com/",
-    "verified_on": "2026-09-07",
     "club_schedule": "",
     "meet_ok": "no",
-    "notes": "Same network; confirm Spanish at the desk"
+    "format": "in_person"
    }
   },
   {
@@ -342,11 +327,9 @@
     "roles": "front desk",
     "shifts": "",
     "status": "listed_public",
-    "source": "https://vnahealth.com/",
-    "verified_on": "2026-09-07",
     "club_schedule": "",
     "meet_ok": "no",
-    "notes": "Community health center; services in English and Spanish per VNA"
+    "format": "in_person"
    }
   },
   {
@@ -371,11 +354,9 @@
     "roles": "front desk",
     "shifts": "",
     "status": "listed_public",
-    "source": "https://vnahealth.com/",
-    "verified_on": "2026-09-07",
     "club_schedule": "",
     "meet_ok": "no",
-    "notes": "Primary care and urgent care; all services in English and Spanish per VNA"
+    "format": "in_person"
    }
   },
   {
@@ -400,11 +381,9 @@
     "roles": "adult education office",
     "shifts": "Mornings 9-12, evenings 6-9",
     "status": "listed_public",
-    "source": "https://www.waubonsee.edu/community-offerings/adult-education/english-language-acquisition-ela",
-    "verified_on": "2026-09-07",
     "club_schedule": "Free English Language Acquisition classes, mornings 9-12 and evenings 6-9",
     "meet_ok": "yes",
-    "notes": "Ask the adult education office whether the front desk is bilingual"
+    "format": "in_person"
    }
   },
   {
@@ -427,13 +406,11 @@
     "lang_es": "unknown",
     "lang_en": "yes",
     "roles": "conversation group volunteer",
-    "shifts": "Tuesdays 10:00-11:00 am",
+    "shifts": "Tuesdays 10:00-11:00 am (virtual)",
     "status": "listed_public",
-    "source": "https://www.literacydupage.org/conversation-groups",
-    "verified_on": "2026-09-08",
-    "club_schedule": "Literacy DuPage ESL conversation group, Tuesdays 10-11 am, intermediate+, free (virtual)",
-    "meet_ok": "yes",
-    "notes": ""
+    "club_schedule": "Literacy DuPage ESL conversation group on Zoom, Tuesdays 10-11 am (virtual), intermediate+, free",
+    "meet_ok": "no",
+    "format": "online"
    }
   }
  ]

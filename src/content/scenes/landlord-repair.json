@@ -1,6 +1,7 @@
 {
   "id": "landlord-repair",
   "place_type": "home",
+  "channel": "phone",
   "title": { "en": "Ask your landlord to fix something", "es": "Pedirle al casero que arregle algo" },
   "roles": {
     "partner": { "en": "landlord or building manager", "es": "casero o administrador del edificio" },
@@ -12,17 +13,17 @@
   },
   "must_use": [
     { "en": "There is a leak under the kitchen sink.", "es": "Hay una fuga debajo del fregadero de la cocina." },
-    { "en": "It started three days ago.", "es": "Empezó hace tres días." },
     { "en": "When can someone come?", "es": "¿Cuándo puede venir alguien?" },
     { "en": "Can you write that down?", "es": "¿Me lo puede poner por escrito?" }
   ],
+  "expect": { "en": "How long has it been leaking?", "es": "¿Desde cuándo está goteando?" },
   "success": {
     "en": "The landlord understands the problem, gives a day and a time window for the repair, and you have it in writing or by text.",
     "es": "El casero entiende el problema, da un día y una hora para la reparación, y lo tienes por escrito o por mensaje."
   },
   "show_staff_line": {
     "en": "I'm practicing my English. Please speak a little more slowly.",
-    "es": "Estoy practicando mi inglés. Por favor, hábleme un poco más despacio."
+    "es": "Estoy practicando mi español. Por favor, hábleme un poco más despacio."
   },
   "offline_script": {
     "start": "s1",
@@ -31,21 +32,21 @@
         "partner": { "en": "Hi, this is the building manager. What's going on?", "es": "Hola, habla el administrador del edificio. ¿Qué pasa?" },
         "choices": [
           {
+            "text": { "en": "Hi. I'm in apartment 2B. The sink of the kitchen is losing water.", "es": "Hola. Estoy en el departamento 2B. El fregadero de la cocina está perdiendo agua." },
+            "picture": "🚰",
+            "tip": { "en": "\"Sink of the kitchen\" is Spanish word order (say \"kitchen sink\"), and \"losing water\" is pierde agua word for word. The word a plumber listens for is \"leak\": \"There is a leak under the kitchen sink.\"", "es": "«Sink of the kitchen» es orden del español (di «kitchen sink»), y «losing water» es «pierde agua» palabra por palabra. La palabra que el plomero entiende es «leak»: \"There is a leak under the kitchen sink.\"" },
+            "next": null
+          },
+          {
             "text": { "en": "Hi. I'm in apartment 2B. There is a leak under the kitchen sink.", "es": "Hola. Estoy en el departamento 2B. Hay una fuga debajo del fregadero de la cocina." },
             "picture": "💧",
             "best": true,
             "next": "s2"
           },
           {
-            "text": { "en": "Water. Kitchen.", "es": "Agua. Cocina." },
-            "picture": "💬",
-            "tip": { "en": "Say where you live and what the problem is in one sentence: \"There is a leak under the kitchen sink.\"", "es": "Di dónde vives y cuál es el problema en una oración: \"There is a leak under the kitchen sink.\"" },
-            "next": null
-          },
-          {
-            "text": { "en": "Everything in this apartment is broken.", "es": "Todo en este departamento está roto." },
+            "text": { "en": "Everything in this apartment is broken, you need to come today.", "es": "Todo en este departamento está roto, tiene que venir hoy." },
             "picture": "😤",
-            "tip": { "en": "One problem at a time gets fixed faster. Name the leak first.", "es": "Un problema a la vez se arregla más rápido. Menciona primero la fuga." },
+            "tip": { "en": "One problem at a time gets fixed faster. Name the leak first: \"There is a leak under the kitchen sink.\"", "es": "Un problema a la vez se arregla más rápido. Menciona primero la fuga: \"There is a leak under the kitchen sink.\"" },
             "next": null
           }
         ]
@@ -60,15 +61,15 @@
             "next": "s3"
           },
           {
-            "text": { "en": "Long time.", "es": "Mucho tiempo." },
-            "picture": "💬",
-            "tip": { "en": "Give a number: \"It started three days ago.\" It helps them decide how urgent it is.", "es": "Da un número: \"It started three days ago.\" Les ayuda a decidir qué tan urgente es." },
+            "text": { "en": "It has three days. Every morning there is water in the floor.", "es": "Tiene tres días. Cada mañana hay agua en el piso." },
+            "picture": "🗓️",
+            "tip": { "en": "\"It has three days\" is tiene tres días word for word; in English time is counted with \"ago\": \"It started three days ago.\" And water is \"on\" the floor, not \"in\".", "es": "«It has three days» es «tiene tres días» palabra por palabra; en inglés el tiempo se cuenta con «ago»: \"It started three days ago.\" Y el agua está «on» the floor, no «in»." },
             "next": null
           },
           {
-            "text": { "en": "I don't know.", "es": "No sé." },
+            "text": { "en": "I don't know exactly, I think a long time.", "es": "No sé exactamente, creo que mucho tiempo." },
             "picture": "🤷",
-            "tip": { "en": "You do know; you noticed it. Say when: \"It started three days ago.\"", "es": "Sí sabes; tú lo notaste. Di cuándo: \"It started three days ago.\"" },
+            "tip": { "en": "Give a number; it helps them decide how urgent it is: \"It started three days ago.\"", "es": "Da un número; les ayuda a decidir qué tan urgente es: \"It started three days ago.\"" },
             "next": null
           }
         ]
@@ -77,21 +78,21 @@
         "partner": { "en": "Got it. Put a bucket under it for now. I'll send the plumber.", "es": "Entendido. Ponga una cubeta por ahora. Le mando al plomero." },
         "choices": [
           {
+            "text": { "en": "OK, thank you. I wait for the plumber then, bye.", "es": "Bueno, gracias. Entonces espero al plomero, adiós." },
+            "picture": "👋",
+            "tip": { "en": "Don't hang up without a day. Ask: \"When can someone come?\"", "es": "No cuelgues sin un día. Pregunta: \"When can someone come?\"" },
+            "next": null
+          },
+          {
             "text": { "en": "Thank you. When can someone come?", "es": "Gracias. ¿Cuándo puede venir alguien?" },
             "picture": "🕐",
             "best": true,
             "next": "s4"
           },
           {
-            "text": { "en": "OK, bye.", "es": "Está bien, adiós." },
-            "picture": "👋",
-            "tip": { "en": "Don't hang up without a day. Ask: \"When can someone come?\"", "es": "No cuelgues sin un día. Pregunta: \"When can someone come?\"" },
-            "next": null
-          },
-          {
-            "text": { "en": "I already have a bucket.", "es": "Ya tengo una cubeta." },
+            "text": { "en": "I already have a bucket. Somebody can come?", "es": "Ya tengo una cubeta. ¿Puede venir alguien?" },
             "picture": "🪣",
-            "tip": { "en": "Fine, but the question that matters is when. Ask: \"When can someone come?\"", "es": "Bien, pero la pregunta que importa es cuándo. Pregunta: \"When can someone come?\"" },
+            "tip": { "en": "Right question, Spanish word order. In English the question starts with the helping verb: \"When can someone come?\"", "es": "La pregunta correcta, con orden del español. En inglés la pregunta empieza con el verbo auxiliar: \"When can someone come?\"" },
             "next": null
           }
         ]
@@ -100,21 +101,21 @@
         "partner": { "en": "Thursday, between one and four. Will someone be home?", "es": "El jueves, entre una y cuatro. ¿Habrá alguien en casa?" },
         "choices": [
           {
+            "text": { "en": "Thursday no, I work. Friday in the morning is better for me.", "es": "El jueves no, trabajo. El viernes en la mañana me queda mejor." },
+            "picture": "🗓️",
+            "tip": { "en": "Fair, and offering another day is exactly right. In this rehearsal Thursday works, so confirm it and ask for it in writing: \"Can you write that down?\"", "es": "Es válido, y ofrecer otro día es justo lo correcto. En este ensayo el jueves sí puedes, así que confírmalo y pídelo por escrito: \"Can you write that down?\"" },
+            "next": null
+          },
+          {
             "text": { "en": "Yes, I'll be home Thursday from one to four. Can you write that down?", "es": "Sí, estaré en casa el jueves de una a cuatro. ¿Me lo puede poner por escrito?" },
             "picture": "✍️",
             "best": true,
             "next": "s5"
           },
           {
-            "text": { "en": "Thursday no. I work.", "es": "El jueves no. Trabajo." },
-            "picture": "🗓️",
-            "tip": { "en": "Fair. Then offer another day: \"I can be home Friday morning.\" In this rehearsal, Thursday works.", "es": "Es válido. Entonces ofrece otro día: \"I can be home Friday morning.\" En este ensayo, el jueves sí puedes." },
-            "next": null
-          },
-          {
-            "text": { "en": "Yes.", "es": "Sí." },
-            "picture": "💬",
-            "tip": { "en": "Repeat the day and time so you both agree, and ask for it in writing: \"Can you write that down?\"", "es": "Repite el día y la hora para que ambos estén de acuerdo, y pídelo por escrito: \"Can you write that down?\"" },
+            "text": { "en": "Yes, somebody will be in the house Thursday. You can write me that?", "es": "Sí, habrá alguien en la casa el jueves. ¿Me lo puede escribir?" },
+            "picture": "📝",
+            "tip": { "en": "Good instinct to want it in writing. The question needs \"can\" first: \"Can you write that down?\"", "es": "Buen instinto pedirlo por escrito. La pregunta lleva «can» al principio: \"Can you write that down?\"" },
             "next": null
           }
         ]
@@ -123,21 +124,21 @@
         "partner": { "en": "Sure, I'll text you: plumber Thursday, one to four, apartment 2B.", "es": "Claro, le mando un mensaje: plomero el jueves, de una a cuatro, departamento 2B." },
         "choices": [
           {
+            "text": { "en": "Why text? I prefer a paper.", "es": "¿Por qué mensaje? Prefiero un papel." },
+            "picture": "❓",
+            "tip": { "en": "A text is writing. It's your proof of the date, and it's faster than paper. Say thank you.", "es": "Un mensaje de texto es por escrito. Es tu prueba de la fecha, y llega más rápido que un papel. Da las gracias." },
+            "next": null
+          },
+          {
             "text": { "en": "Perfect. Thank you.", "es": "Perfecto. Gracias." },
             "picture": "🙏",
             "best": true,
             "next": null
           },
           {
-            "text": { "en": "Why text?", "es": "¿Por qué mensaje?" },
-            "picture": "❓",
-            "tip": { "en": "A text is writing. It's your proof of the date. Say thank you.", "es": "Un mensaje de texto es por escrito. Es tu prueba de la fecha. Da las gracias." },
-            "next": null
-          },
-          {
-            "text": { "en": "Bye.", "es": "Adiós." },
+            "text": { "en": "Okay. See you Thursday, bye.", "es": "Bueno. Nos vemos el jueves, adiós." },
             "picture": "👋",
-            "tip": { "en": "Confirm and thank: \"Perfect. Thank you.\"", "es": "Confirma y agradece: \"Perfect. Thank you.\"" },
+            "tip": { "en": "Confirm you got the message and thank them: \"Perfect. Thank you.\"", "es": "Confirma que recibiste el mensaje y da las gracias: \"Perfect. Thank you.\"" },
             "next": null
           }
         ]

@@ -3,6 +3,21 @@
 //   2. the scripted no-network fallback (offline_script),
 //   3. Charlita, the kid mode (scenes marked kid: true, same offline_script).
 // This file is shared by the app and the Worker; keep it free of DOM code.
+//
+// Who reads which side:
+//   - Learner lines (choice text, must_use) are shown in the language being
+//     learned, with the other side as a subtitle. Tips are read in the
+//     learner's own language, so a tip explains the English mistake in both
+//     languages.
+//   - show_staff_line[L] is written for a reader who speaks L: the learner
+//     shows (or the app reads aloud) the TARGET-language side to the staff, so
+//     the es side is what an English speaker learning Spanish shows a
+//     Spanish-speaking clerk ("Estoy practicando mi español…"), and the en
+//     side is what a Spanish speaker shows an English-speaking clerk.
+//   - Register in Spanish: kid scenes' partner speaks tú to the child; adult
+//     scenes' partner (staff talking to a customer, patient or parent) speaks
+//     usted, and the adult learner addresses staff as usted. A first-name
+//     coworker such as a shift supervisor may use tú.
 
 export interface Bi {
   en: string
@@ -11,9 +26,34 @@ export interface Bi {
 
 export type Level = 'A1' | 'A2' | 'B1'
 
+/**
+ * Every place a scene can be tied to. Each one needs a `type_<name>` label in
+ * src/i18n/strings.ts and (for kid scenes) an icon in the Niños street.
+ * scripts/check_scenes.py parses this list out of this file, so keep it as a
+ * single array literal of quoted strings.
+ */
+export const PLACE_TYPES = [
+  'pharmacy',
+  'restaurant',
+  'clinic',
+  'driver_services',
+  'school',
+  'grocery',
+  'library',
+  'ice_cream',
+  'home',
+  'work',
+  'college',
+] as const
+
+export type PlaceType = (typeof PLACE_TYPES)[number]
+
+/** Where the conversation happens: face to face at a counter, or on the phone. */
+export type Channel = 'counter' | 'phone'
+
 export interface ScriptChoice {
   text: Bi
-  /** Emoji used as the "picture" of this choice in kid mode. */
+  /** Emoji used as the "picture" of this choice. Required on every choice; kid mode shows it. */
   picture?: string
   /** A best choice moves the script forward; any other choice shows its tip and stays. */
   best?: boolean
@@ -29,12 +69,21 @@ export interface ScriptNode {
 
 export interface Scene {
   id: string
-  place_type: string
+  place_type: PlaceType
   kid?: boolean
+  /** 'phone' for calls (landlord, calling in sick, the electric company); 'counter' for everything else. */
+  channel?: Channel
   title: Bi
   roles: { partner: Bi; learner: Bi }
   goal: Bi
+  /**
+   * Two or three lines the learner can actually say, in sentence or question
+   * form. They feed the Go Card, the chips, the Table prompts and the AI
+   * prompt, so a bare noun ("prescription") does not belong here.
+   */
   must_use: Bi[]
+  /** The staff's first real question, e.g. "Last name and date of birth?" Shown on the card as what to expect. */
+  expect?: Bi
   success: Bi
   show_staff_line: Bi
   offline_script: { start: string; nodes: Record<string, ScriptNode> }
@@ -51,6 +100,18 @@ function isBi(v: unknown): v is Bi {
   )
 }
 
+const SENTENCE_END = /[.?!…]["”]?$/
+
+/**
+ * A must_use entry has to be a line the learner can say out loud: at least
+ * three English words and sentence punctuation on both sides. "half a pound"
+ * or "prescription" fail; "Half a pound of ham, please." passes.
+ */
+export function isLearnerLine(p: Bi): boolean {
+  const words = p.en.trim().split(/\s+/).filter(Boolean)
+  return words.length >= 3 && SENTENCE_END.test(p.en.trim()) && SENTENCE_END.test(p.es.trim())
+}
+
 /** Returns a list of problems; an empty list means the scene is valid. */
 export function validateScene(s: unknown): string[] {
   const errs: string[] = []
@@ -58,12 +119,24 @@ export function validateScene(s: unknown): string[] {
   if (!x || typeof x !== 'object') return ['not an object']
   if (typeof x.id !== 'string' || !/^[a-z0-9-]+$/.test(x.id)) errs.push('id must be kebab-case')
   if (typeof x.place_type !== 'string') errs.push('place_type missing')
-  for (const k of ['title', 'goal', 'success', 'show_staff_line'] as const) {
+  else if (!(PLACE_TYPES as readonly string[]).includes(x.place_type)) {
+    errs.push(`place_type "${x.place_type}" is not one of ${PLACE_TYPES.join(', ')}`)
+  }
+  if (x.channel !== 'counter' && x.channel !== 'phone') errs.push('channel must be "counter" or "phone"')
+  for (const k of ['title', 'goal', 'success', 'show_staff_line', 'expect'] as const) {
     if (!isBi(x[k])) errs.push(`${k} needs en and es`)
   }
+  if (isBi(x.show_staff_line)) {
+    if (!/english/i.test(x.show_staff_line.en)) errs.push('show_staff_line.en must say the learner is practicing English')
+    if (!/español/i.test(x.show_staff_line.es)) errs.push('show_staff_line.es must say the learner is practicing español')
+  }
   if (!x.roles || !isBi(x.roles.partner) || !isBi(x.roles.learner)) errs.push('roles need en and es')
-  if (!Array.isArray(x.must_use) || x.must_use.length < 2 || !x.must_use.every(isBi)) {
-    errs.push('must_use needs at least 2 bilingual phrases')
+  if (!Array.isArray(x.must_use) || x.must_use.length < 2 || x.must_use.length > 3 || !x.must_use.every(isBi)) {
+    errs.push('must_use needs 2 or 3 bilingual phrases')
+  } else {
+    for (const p of x.must_use) {
+      if (!isLearnerLine(p)) errs.push(`must_use "${p.en}" must be a line the learner can say (3+ words, ends with . ? or !)`)
+    }
   }
   const script = x.offline_script
   if (!script || typeof script.start !== 'string' || !script.nodes || typeof script.nodes !== 'object') {
@@ -77,6 +150,7 @@ export function validateScene(s: unknown): string[] {
     let best = 0
     for (const c of node.choices ?? []) {
       if (!isBi(c.text)) errs.push(`node ${id}: choice text needs en and es`)
+      if (typeof c.picture !== 'string' || c.picture.trim() === '') errs.push(`node ${id}: every choice needs a picture`)
       if (c.best) {
         best++
         if (c.next !== null && !script.nodes[c.next]) errs.push(`node ${id}: next "${c.next}" does not exist`)

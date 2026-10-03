@@ -10,6 +10,13 @@ describe('looksLike', () => {
     expect(looksLike('es', 'Claro. ¿Cuál es el nombre de su mamá?')).toBe(true)
     expect(looksLike('es', 'Muy bien, ¿para aquí o para llevar?')).toBe(true)
   })
+  it('counts a word both languages share for the expected one', () => {
+    // 'a' is English too; without it on the Spanish list these read as English.
+    expect(looksLike('es', 'Vamos a ver.')).toBe(true)
+    expect(looksLike('es', 'Pase a caja.')).toBe(true)
+    expect(looksLike('es', 'Voy a buscarla.')).toBe(true)
+    expect(looksLike('es', 'Bueno, ya se lo doy.')).toBe(true)
+  })
   it('rejects a French reply where English was expected', () => {
     expect(looksLike('en', 'Bonjour, je suis le préposé au comptoir.')).toBe(false)
   })

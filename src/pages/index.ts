@@ -8,3 +8,6 @@ export { Places } from './Places'
 export { Card } from './Card'
 export { Table } from './Table'
 export { Privacy } from './Privacy'
+// About is network-free and app.tsx also imports it statically, so it can be
+// read from the first screen; it is re-exported here so the page list is complete.
+export { About } from './About'

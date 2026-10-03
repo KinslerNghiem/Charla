@@ -34,6 +34,9 @@ CREATE TABLE IF NOT EXISTS flags (
 );
 
 -- Daily counters for the caps. One atomic upsert per request; see worker/src/caps.ts.
+-- Keys are prefixed by purpose (dev:, ip:, stt:, ipstt:, rep:) and the IP ones
+-- hold a day-scoped hash, never an address. Rows older than yesterday (Chicago)
+-- are deleted on a key's first hit of the day.
 CREATE TABLE IF NOT EXISTS counters (
   k TEXT NOT NULL,
   day TEXT NOT NULL,

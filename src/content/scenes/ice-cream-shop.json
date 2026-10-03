@@ -2,6 +2,7 @@
   "id": "ice-cream-shop",
   "place_type": "ice_cream",
   "kid": true,
+  "channel": "counter",
   "title": { "en": "Order an ice cream", "es": "Pedir un helado" },
   "roles": {
     "partner": { "en": "person at the ice cream counter", "es": "persona del mostrador de helados" },
@@ -12,17 +13,18 @@
     "es": "Pedir una bola, elegir el sabor, decir si lo quieres en cono o en vaso, y dar las gracias."
   },
   "must_use": [
-    { "en": "one scoop", "es": "una bola" },
-    { "en": "in a cone", "es": "en cono" },
-    { "en": "please", "es": "por favor" }
+    { "en": "One scoop of chocolate, please.", "es": "Una bola de chocolate, por favor." },
+    { "en": "In a cone, please.", "es": "En cono, por favor." },
+    { "en": "Thank you very much!", "es": "¡Muchas gracias!" }
   ],
+  "expect": { "en": "Cone or cup?", "es": "¿En cono o en vaso?" },
   "success": {
     "en": "You get your ice cream in a cone, and the person smiles because you said thank you.",
     "es": "Te dan tu helado en cono, y la persona sonríe porque diste las gracias."
   },
   "show_staff_line": {
     "en": "I'm practicing my English. Thank you for your patience.",
-    "es": "Estoy practicando mi inglés. Gracias por su paciencia."
+    "es": "Estoy practicando mi español. Gracias por su paciencia."
   },
   "offline_script": {
     "start": "s1",
@@ -100,7 +102,7 @@
         "partner": { "en": "There you go. Enjoy!", "es": "Listo. ¡Que lo disfrutes!" },
         "choices": [
           {
-            "text": { "en": "Thank you!", "es": "¡Gracias!" },
+            "text": { "en": "Thank you very much!", "es": "¡Muchas gracias!" },
             "picture": "🙏",
             "best": true,
             "next": null
@@ -108,13 +110,13 @@
           {
             "text": { "en": "Bye.", "es": "Adiós." },
             "picture": "👋",
-            "tip": { "en": "Say thank you first: \"Thank you!\"", "es": "Primero da las gracias: \"Thank you!\"" },
+            "tip": { "en": "Say thank you first: \"Thank you very much!\"", "es": "Primero da las gracias: \"Thank you very much!\"" },
             "next": null
           },
           {
             "text": { "en": "Where is the bathroom?", "es": "¿Dónde está el baño?" },
             "picture": "🚻",
-            "tip": { "en": "Good question for later! First say \"Thank you!\"", "es": "¡Buena pregunta para después! Primero di \"Thank you!\"" },
+            "tip": { "en": "Good question for later! First say \"Thank you very much!\"", "es": "¡Buena pregunta para después! Primero di \"Thank you very much!\"" },
             "next": null
           }
         ]

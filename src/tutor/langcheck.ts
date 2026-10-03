@@ -8,7 +8,10 @@ import type { Lang } from '../i18n/strings'
 
 const WORDS: Record<Lang, string[]> = {
   en: ['the', 'a', 'an', 'is', 'are', 'you', 'your', 'i', 'we', 'it', 'what', 'and', 'or', 'to', 'for', 'of', 'in', 'on', 'with', 'here', 'please', 'can', 'do', 'have', 'that', 'this', 'okay', 'ok', 'yes', 'no', 'thank', 'thanks', 'name', 'need', 'want', 'how', 'where', 'when', 'today', 'sure', 'sorry', 'let', 'me', 'my', 'she', 'he', 'they'],
-  es: ['el', 'la', 'los', 'las', 'un', 'una', 'es', 'está', 'usted', 'tu', 'su', 'yo', 'qué', 'que', 'y', 'o', 'para', 'de', 'en', 'con', 'aquí', 'favor', 'puede', 'puedo', 'tiene', 'tengo', 'sí', 'no', 'gracias', 'nombre', 'necesito', 'quiero', 'cómo', 'dónde', 'cuándo', 'hoy', 'claro', 'perdón', 'me', 'mi', 'ella', 'él', 'ellos', 'muy', 'bien', 'algo', 'más'],
+  // 'a', 'no', 'me' and 'en' are in both lists. A word both languages share is
+  // dropped from the "other" set below, so it counts for the expected language
+  // and never against it; without 'a' here, "Vamos a ver." read as English.
+  es: ['el', 'la', 'los', 'las', 'un', 'una', 'es', 'está', 'usted', 'tu', 'su', 'yo', 'qué', 'que', 'y', 'o', 'para', 'de', 'en', 'con', 'aquí', 'allí', 'favor', 'puede', 'puedo', 'tiene', 'tengo', 'sí', 'no', 'gracias', 'nombre', 'necesito', 'quiero', 'cómo', 'dónde', 'cuándo', 'hoy', 'claro', 'perdón', 'me', 'mi', 'ella', 'él', 'ellos', 'muy', 'bien', 'algo', 'más', 'a', 'al', 'del', 'lo', 'le', 'se', 'por', 'hay', 'ya', 'voy', 'bueno'],
 }
 
 // Languages the partner has been talked into. French and Portuguese are the

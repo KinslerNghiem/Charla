@@ -16,6 +16,12 @@ export const TurnSchema = z.object({
 
 export type Turn = z.infer<typeof TurnSchema>
 
+// What /api/turn actually returns: the model's Turn plus one field the Worker
+// adds itself. kept_at_level is true when the drift guard re-requested the
+// reply, so the app can show a small "Kept at your level" tag. It is not part
+// of TurnSchema on purpose: the model never sees or sets it.
+export type TurnResponse = Turn & { kept_at_level?: boolean }
+
 export const HelpSchema = z.object({
   phrase: z.string().describe('How to say it in the target language.'),
   literal: z.string().describe('A literal gloss in the native language.'),

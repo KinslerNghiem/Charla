@@ -7,6 +7,15 @@ describe('drift guard', () => {
     expect(splitSentences('Claro.\n¿Cuál es su apellido?')).toEqual(['Claro.', '¿Cuál es su apellido?'])
   })
 
+  it('does not split on a title or a clock abbreviation', () => {
+    expect(splitSentences('Dr. Lopez will see you at 3:30 p.m. today.')).toEqual(['Dr. Lopez will see you at 3:30 p.m. today.'])
+    expect(checkReply('Dr. Lopez will see you at 3:30 p.m. today.', 'A2').ok).toBe(true)
+    expect(splitSentences('Sí, Sra. García. Un momento.')).toEqual(['Sí, Sra. García.', 'Un momento.'])
+    expect(splitSentences('Ask for No. 4. It is at the window.')).toEqual(['Ask for No. 4.', 'It is at the window.'])
+    // "No." on its own is a whole answer, not an abbreviation.
+    expect(splitSentences('No. I am sorry.')).toEqual(['No.', 'I am sorry.'])
+  })
+
   it('counts words, including accented ones, and ignores bare punctuation', () => {
     expect(countWords('¿Lo toma con comida?')).toBe(4)
     expect(countWords('Yes - with food.')).toBe(3)

@@ -1,6 +1,7 @@
 {
   "id": "clinic-front-desk",
   "place_type": "clinic",
+  "channel": "counter",
   "title": { "en": "Check in at the clinic", "es": "Registrarse en la clínica" },
   "roles": {
     "partner": { "en": "front desk receptionist", "es": "recepcionista de la clínica" },
@@ -13,16 +14,16 @@
   "must_use": [
     { "en": "I have an appointment at…", "es": "Tengo una cita a las…" },
     { "en": "Could you repeat that more slowly, please?", "es": "¿Podría repetirlo más despacio, por favor?" },
-    { "en": "Here is my insurance card.", "es": "Aquí está mi tarjeta del seguro." },
     { "en": "Do you have this form in Spanish?", "es": "¿Tiene este formulario en español?" }
   ],
+  "expect": { "en": "Can I get your date of birth and your insurance card?", "es": "¿Me da su fecha de nacimiento y su tarjeta del seguro?" },
   "success": {
     "en": "The front desk finds your appointment, takes your insurance card, and sends you to the waiting room with the form.",
     "es": "En recepción encuentran tu cita, toman tu tarjeta del seguro y te mandan a la sala de espera con el formulario."
   },
   "show_staff_line": {
     "en": "I'm practicing my English. Please speak a little more slowly.",
-    "es": "Estoy practicando mi inglés. Por favor, hábleme un poco más despacio."
+    "es": "Estoy practicando mi español. Por favor, hábleme un poco más despacio."
   },
   "offline_script": {
     "start": "s1",
@@ -31,19 +32,19 @@
         "partner": { "en": "Good morning. Are you checking in?", "es": "Buenos días. ¿Viene a registrarse?" },
         "choices": [
           {
+            "text": { "en": "Yes. My last name is Delgado and I have a cite at ten thirty with the doctor.", "es": "Sí. Mi apellido es Delgado y tengo una cita a las diez y media con el doctor." },
+            "picture": "🩺",
+            "tip": { "en": "\"Cite\" is not the word for cita. In English a cita at a clinic is an \"appointment\": \"I have an appointment at ten thirty.\"", "es": "«Cite» no es la palabra para cita. En inglés una cita en la clínica es «appointment»: \"I have an appointment at ten thirty.\"" },
+            "next": null
+          },
+          {
             "text": { "en": "Yes. My last name is Delgado and I have an appointment at ten thirty.", "es": "Sí. Mi apellido es Delgado y tengo una cita a las diez y media." },
             "picture": "🗓️",
             "best": true,
             "next": "s2"
           },
           {
-            "text": { "en": "Yes.", "es": "Sí." },
-            "picture": "💬",
-            "tip": { "en": "Give your last name and the time of your appointment so they can find it.", "es": "Di tu apellido y la hora de tu cita para que puedan encontrarla." },
-            "next": null
-          },
-          {
-            "text": { "en": "My head hurts a lot today.", "es": "Hoy me duele mucho la cabeza." },
+            "text": { "en": "My head hurts a lot today, I need to see the doctor.", "es": "Hoy me duele mucho la cabeza, necesito ver al doctor." },
             "picture": "🤕",
             "tip": { "en": "The front desk only needs your last name and your appointment time. The nurse will ask what hurts.", "es": "En recepción solo necesitan tu apellido y la hora de tu cita. Lo que te duele te lo pregunta la enfermera." },
             "next": null
@@ -60,15 +61,15 @@
             "next": "s3"
           },
           {
-            "text": { "en": "June 12th, 1988.", "es": "12 de junio de 1988." },
-            "picture": "💬",
-            "tip": { "en": "You caught the first part. They asked three things at once, so ask them to slow down: \"Could you repeat that more slowly, please?\"", "es": "Entendiste la primera parte. Preguntaron tres cosas de un jalón, así que pide que hablen más despacio: \"Could you repeat that more slowly, please?\"" },
+            "text": { "en": "June 12th, 1988, and here is the card of insurance.", "es": "12 de junio de 1988, y aquí está la tarjeta del seguro." },
+            "picture": "💳",
+            "tip": { "en": "You caught two of the three things, but \"the card of insurance\" is Spanish word order; in English it is \"insurance card\". And when they ask three things at once, it's fine to say: \"Could you repeat that more slowly, please?\"", "es": "Entendiste dos de las tres cosas, pero «the card of insurance» es orden del español; en inglés es «insurance card». Y cuando preguntan tres cosas de un jalón, puedes decir: \"Could you repeat that more slowly, please?\"" },
             "next": null
           },
           {
-            "text": { "en": "What?", "es": "¿Qué?" },
+            "text": { "en": "What? Speak slow.", "es": "¿Qué? Hable despacio." },
             "picture": "❓",
-            "tip": { "en": "\"What?\" can sound sharp. Ask for the same thing this way: \"Could you repeat that more slowly, please?\"", "es": "\"What?\" puede sonar cortante. Pide lo mismo así: \"Could you repeat that more slowly, please?\"" },
+            "tip": { "en": "\"What?\" can sound sharp, and \"speak slow\" is an order. Ask the polite way: \"Could you repeat that more slowly, please?\"", "es": "«What?» puede sonar cortante, y «speak slow» es una orden. Pídelo con cortesía: \"Could you repeat that more slowly, please?\"" },
             "next": null
           }
         ]
@@ -77,21 +78,21 @@
         "partner": { "en": "Of course. First, what is your date of birth?", "es": "Claro que sí. Primero, ¿cuál es su fecha de nacimiento?" },
         "choices": [
           {
+            "text": { "en": "I have thirty-eight years. I was born in 1988.", "es": "Tengo treinta y ocho años. Nací en 1988." },
+            "picture": "🔢",
+            "tip": { "en": "In English you \"are\" an age, you don't \"have\" it: \"I am thirty-eight.\" But they asked for the full date, not your age: \"June 12th, 1988.\"", "es": "En inglés la edad se «es», no se «tiene»: \"I am thirty-eight.\" Pero pidieron la fecha completa, no la edad: \"June 12th, 1988.\"" },
+            "next": null
+          },
+          {
             "text": { "en": "My date of birth is June 12th, 1988.", "es": "Mi fecha de nacimiento es el 12 de junio de 1988." },
             "picture": "🎂",
             "best": true,
             "next": "s4"
           },
           {
-            "text": { "en": "1988.", "es": "1988." },
-            "picture": "💬",
-            "tip": { "en": "Give the whole date: first the month, then the day, then the year.", "es": "Di la fecha completa: primero el mes, luego el día y luego el año." },
-            "next": null
-          },
-          {
-            "text": { "en": "Twelve June.", "es": "Doce de junio." },
+            "text": { "en": "The twelve of June of 1988.", "es": "El doce de junio de 1988." },
             "picture": "📅",
-            "tip": { "en": "In English the month goes first: \"June 12th.\"", "es": "En inglés el mes va primero: \"June 12th.\"" },
+            "tip": { "en": "That is Spanish word order. In English the month goes first and the day takes -th: \"June 12th, 1988.\"", "es": "Ese es el orden del español. En inglés el mes va primero y el día lleva -th: \"June 12th, 1988.\"" },
             "next": null
           }
         ]
@@ -106,15 +107,15 @@
             "next": "s5"
           },
           {
-            "text": { "en": "Here is my insurance card.", "es": "Aquí está mi tarjeta del seguro." },
+            "text": { "en": "Here you have my insurance card. Nothing is changed.", "es": "Aquí tiene mi tarjeta del seguro. No ha cambiado nada." },
             "picture": "💳",
-            "tip": { "en": "They asked two things. Say whether anything has changed too.", "es": "Preguntaron dos cosas. Di también si algo ha cambiado." },
+            "tip": { "en": "\"Here you have\" is aquí tiene translated word for word; in English say \"Here is\". And it's \"nothing has changed\", with \"has\".", "es": "«Here you have» es «aquí tiene» traducido palabra por palabra; en inglés se dice «Here is». Y es «nothing has changed», con «has»." },
             "next": null
           },
           {
-            "text": { "en": "Nothing has changed.", "es": "No ha cambiado nada." },
-            "picture": "💬",
-            "tip": { "en": "Hand over the card too: \"Here is my insurance card.\"", "es": "Dale también la tarjeta: \"Here is my insurance card.\"" },
+            "text": { "en": "Nothing has changed since the last time I came.", "es": "No ha cambiado nada desde la última vez que vine." },
+            "picture": "🙂",
+            "tip": { "en": "They also asked for the card. Hand it over as you answer: \"Here is my insurance card.\"", "es": "También pidieron la tarjeta. Entrégala mientras contestas: \"Here is my insurance card.\"" },
             "next": null
           }
         ]
@@ -123,21 +124,21 @@
         "partner": { "en": "Thank you. Please fill out this form and bring it back to me.", "es": "Gracias. Por favor llene este formulario y me lo regresa." },
         "choices": [
           {
+            "text": { "en": "You have this form in Spanish?", "es": "¿Tiene este formulario en español?" },
+            "picture": "📝",
+            "tip": { "en": "Almost. English questions start with \"do\": \"Do you have this form in Spanish?\" Without it, it sounds like you are telling them, not asking.", "es": "Casi. En inglés las preguntas empiezan con «do»: \"Do you have this form in Spanish?\" Sin «do», suena a que afirmas, no a que preguntas." },
+            "next": null
+          },
+          {
             "text": { "en": "Do you have this form in Spanish?", "es": "¿Tiene este formulario en español?" },
             "picture": "📄",
             "best": true,
             "next": "s6"
           },
           {
-            "text": { "en": "OK.", "es": "Está bien." },
-            "picture": "💬",
-            "tip": { "en": "You can ask for it in Spanish. Try \"Do you have this form in Spanish?\"", "es": "Puedes pedirlo en español. Prueba \"Do you have this form in Spanish?\"" },
-            "next": null
-          },
-          {
-            "text": { "en": "Can you fill it out for me?", "es": "¿Me lo puede llenar usted?" },
+            "text": { "en": "Can you fill it out for me? I don't read English very well.", "es": "¿Me lo puede llenar usted? No leo muy bien el inglés." },
             "picture": "🖊️",
-            "tip": { "en": "They cannot fill it out for you, but they can give it to you in Spanish. Ask for that.", "es": "No te lo pueden llenar, pero sí te lo pueden dar en español. Pide eso." },
+            "tip": { "en": "They cannot fill it out for you, but they can give it to you in Spanish. Ask for that: \"Do you have this form in Spanish?\"", "es": "No te lo pueden llenar, pero sí te lo pueden dar en español. Pide eso: \"Do you have this form in Spanish?\"" },
             "next": null
           }
         ]
@@ -152,13 +153,13 @@
             "next": null
           },
           {
-            "text": { "en": "No, thank you.", "es": "No, gracias." },
+            "text": { "en": "No, thank you, I'm fine.", "es": "No, gracias, estoy bien." },
             "picture": "🙅",
             "tip": { "en": "They are telling you where to wait, not offering you something. Say thank you and take a seat.", "es": "Te están diciendo dónde esperar, no te están ofreciendo nada. Da las gracias y toma asiento." },
             "next": null
           },
           {
-            "text": { "en": "Okay. I will bring the form back tomorrow.", "es": "Está bien. Mañana le traigo el formulario." },
+            "text": { "en": "Okay. I will bring the form back tomorrow, I don't have time now.", "es": "Está bien. Mañana le traigo el formulario, ahora no tengo tiempo." },
             "picture": "📝",
             "tip": { "en": "The form is for today. Fill it out here in the waiting room and bring it back to the desk.", "es": "El formulario es para hoy. Llénalo aquí en la sala de espera y regrésalo a la recepción." },
             "next": null

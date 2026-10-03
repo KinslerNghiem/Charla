@@ -5,6 +5,9 @@
   --ink: #17191e;
   --ink-2: #4b4e58;
   --line: #d8d7cf;
+  /* --line separates; --edge outlines a control. The line is 1.3:1 on paper,
+     which is fine for a divider and invisible as a button edge (3:1 is the floor). */
+  --edge: #8f8e86;
   --en: #24476b;
   --en-soft: #dce6f0;
   --es: #8f5800;
@@ -25,6 +28,7 @@
     --ink: #eceae3;
     --ink-2: #b2b0a8;
     --line: #32353c;
+    --edge: #6a6d75;
     --en: #93b6dc;
     --en-soft: #1c2b3b;
     --es: #e8b24c;
@@ -52,14 +56,16 @@ body {
 a { color: var(--en); }
 button, input, select, textarea { font: inherit; }
 /* 16px minimum on form controls: below that iOS zooms on focus. */
-input, select, textarea { font-size: 16px; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--r); background: var(--paper); color: var(--ink); width: 100%; }
+input, select, textarea { font-size: 16px; padding: 10px 12px; border: 1px solid var(--edge); border-radius: var(--r); background: var(--paper); color: var(--ink); width: 100%; }
+/* Browsers fade placeholders to about 2.5:1; this keeps them at the secondary ink. */
+::placeholder { color: var(--ink-2); opacity: 1; }
 label { display: block; font-size: 14px; color: var(--ink-2); margin: 0 0 12px; }
 label > input, label > select { margin-top: 4px; }
 button {
   min-height: 44px;
   padding: 10px 16px;
   border-radius: var(--r);
-  border: 1px solid var(--line);
+  border: 1px solid var(--edge);
   background: var(--paper-2);
   color: var(--ink);
   cursor: pointer;
@@ -85,8 +91,14 @@ button.on, .filters button.on, .levels button.on { background: var(--en-soft); b
 :focus-visible { outline: 3px solid var(--es); outline-offset: 2px; }
 .skip { position: absolute; left: -999px; }
 .skip:focus { left: 8px; top: 8px; background: var(--paper); padding: 8px; z-index: 10; }
+/* Visually hidden, still read aloud. */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
-.shell { max-width: 720px; margin: 0 auto; padding: 0 16px 80px; }
+/* Installed on an iPhone the page runs under the notch and the home bar; the
+   env() insets are 0 everywhere else. */
+.shell { max-width: 720px; margin: 0 auto; padding: env(safe-area-inset-top) 16px calc(80px + env(safe-area-inset-bottom)); }
+/* "A new version is ready." One line above the home bar, until it is tapped. */
+.update-bar { position: fixed; left: 16px; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); max-width: 688px; margin: 0 auto; display: flex; gap: 12px; align-items: center; justify-content: space-between; background: var(--paper-2); border: 1px solid var(--edge); border-radius: var(--r); padding: 10px 12px; z-index: 20; }
 .top { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 0; }
 .brand { font-weight: 700; font-size: 20px; text-decoration: none; color: var(--ink); }
 button.link { background: none; border: 0; padding: 0; min-height: 0; color: var(--en); text-decoration: underline; font-size: inherit; }
@@ -107,6 +119,10 @@ h2 { font-size: 18px; margin: 20px 0 6px; }
 .chip { display: inline-block; background: var(--en-soft); color: var(--en); padding: 2px 8px; border-radius: 3px; margin: 2px 4px 2px 0; font-size: 14px; }
 .chip i { color: var(--ink-2); font-style: normal; }
 .big { font-size: 22px; font-weight: 700; }
+/* Cards you can tap or hand over get the control edge, not the divider line.
+   `main` is in the selector so this outranks the one-class rules in the
+   sections below regardless of order. */
+main .scene-card, main .venue, main .choice, main .kid-card { border-color: var(--edge); }
 
 /* gate */
 .gate { max-width: 420px; margin: 48px auto; padding: 0 16px; }
@@ -138,6 +154,23 @@ h2 { font-size: 18px; margin: 20px 0 6px; }
 .meter i { display: block; height: 100%; width: 0; background: var(--es); transition: width 80ms linear; }
 .talk-status { font-size: 14px; color: var(--ink-2); margin: 4px 0 8px; }
 .talk-status.on { color: var(--es); }
+/* The composer stays reachable while the chat grows above it. */
+.composer { position: sticky; bottom: 0; background: var(--paper); padding-top: 8px; }
+/* The partner is thinking: three dots breathe in turn. Reduced motion stills them. */
+.chat li.pending { color: var(--ink-2); }
+.chat .dots { display: inline-block; margin-left: 6px; }
+.chat .dots i { display: inline-block; width: 6px; height: 6px; border-radius: 3px; background: currentColor; margin: 0 1px; opacity: 0.35; animation: dot 1.2s infinite; }
+.chat .dots i:nth-child(2) { animation-delay: 0.2s; }
+.chat .dots i:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dot { 0%, 60%, 100% { opacity: 0.35; } 30% { opacity: 1; } }
+.chat .kept { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; color: var(--ink-2); margin: 6px 0 0; }
+.chip.done { background: var(--go-soft); color: var(--go-ink); }
+.chip.done i { color: var(--go-ink); }
+.scene-group { margin: 16px 0 0; }
+.scene-group h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); margin: 0 0 8px; }
+.scene-card .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+.scene-card .tag { font-size: 12px; padding: 1px 6px; border-radius: 3px; background: var(--paper-2); color: var(--ink-2); }
+.scene-card .tag.last { background: var(--en-soft); color: var(--en); }
 .scenes { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
 .scene-card { width: 100%; text-align: left; display: grid; padding: 14px; }
 .scene-card .type { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); }
@@ -159,7 +192,7 @@ h2 { font-size: 18px; margin: 20px 0 6px; }
 .storefront { display: grid; justify-items: center; padding: 16px 8px; position: relative; min-height: 120px; }
 .storefront .pic { font-size: 44px; }
 .storefront .sticker { position: absolute; top: 6px; right: 8px; }
-.kid-card { border: 2px dashed var(--line); padding: 16px; font-size: 20px; }
+.kid-card { border: 2px dashed var(--edge); padding: 16px; font-size: 20px; }
 .hold { margin-top: 24px; }
 
 /* places */
@@ -182,11 +215,20 @@ h2 { font-size: 18px; margin: 20px 0 6px; }
 .dot.listed_by_business, .dot.listed_public { background: var(--en); }
 .streak { font-size: 15px; }
 .streak b { font-size: 22px; }
+.map.down { height: 80px; overflow: hidden; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; color: var(--ink-2); margin: 10px 0 4px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.venue-row[aria-current='true'] { background: var(--en-soft); }
+.notice a { color: inherit; font-weight: 600; }
+.went-saved { margin: 8px 0; }
+/* Visually hidden, still read aloud. Remove if the shell adds a global copy. */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
 /* card */
 .phrases { list-style: none; padding: 0; }
 .phrases li { display: flex; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--line); }
 .phrases i { color: var(--ink-2); font-style: normal; }
+.phrases .listen { flex: none; }
 .staff-line { font-size: 22px; border: 2px solid var(--ink); padding: 14px; border-radius: var(--r); }
 
 /* table */
@@ -200,6 +242,15 @@ h2 { font-size: 18px; margin: 20px 0 6px; }
 .prompts li { margin: 6px 0; font-size: 18px; }
 .help { display: flex; gap: 8px; }
 .help-out { background: var(--paper-2); padding: 10px 12px; border-radius: var(--r); margin: 8px 0; }
+
+/* about */
+.about .lede { font-size: 18px; }
+.about .numbers { border-collapse: collapse; margin: 8px 0; }
+.about .numbers th { text-align: left; font-weight: 400; padding: 4px 24px 4px 0; }
+.about .numbers td { text-align: right; font-variant-numeric: tabular-nums; padding: 4px 0; }
+.about ul { padding-left: 20px; }
+.about li { margin: 6px 0; }
+.about .team { margin-top: 24px; }
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }

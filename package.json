@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.110.0",
-    "maplibre-gl": "^5.0.0",
+    "maplibre-gl": "^6.11.2",
     "preact": "^10.25.0",
     "zod": "^3.25.0"
   },

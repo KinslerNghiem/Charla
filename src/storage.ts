@@ -34,8 +34,10 @@ export function clearAll(): void {
   } catch {}
 }
 
-// A random id minted on first launch. It is sent only with anonymous venue
-// reports, so the server can rate-limit. It is linked to nothing and never shown.
+// A random id minted on first launch. It goes with every request to the Worker
+// (turns, help, reports, flags, speech) so the server can apply the daily caps;
+// the Worker hashes it and never stores the raw value. It is linked to nothing
+// and never shown.
 export function deviceId(): string {
   let id = get<string>('device', '')
   if (!id) {

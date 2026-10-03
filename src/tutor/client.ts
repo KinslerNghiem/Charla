@@ -1,5 +1,5 @@
 import type { Level } from './levels'
-import type { Turn, Help } from './turn'
+import type { Help, TurnResponse } from './turn'
 import type { Lang } from '../i18n/strings'
 import type { Reports } from '../places/badges'
 import { deviceId } from '../storage'
@@ -7,6 +7,9 @@ import { deviceId } from '../storage'
 // In production the Worker can live on another origin; set VITE_API_BASE.
 // In dev, vite proxies /api to wrangler on 8787 and this stays empty.
 const BASE = (import.meta.env.VITE_API_BASE as string | undefined) ?? ''
+
+// Whisper on the free tier can take a while; past this it is not coming.
+const STT_TIMEOUT_MS = 15_000
 
 /** Carries the status so callers can tell "you are offline" from "that is all for today". */
 export class ApiError extends Error {
@@ -34,6 +37,8 @@ export interface TurnRequest {
   place_name?: string
 }
 
+export type { TurnResponse }
+
 async function post<T>(path: string, body: unknown): Promise<T> {
   const res = await fetch(BASE + path, {
     method: 'POST',
@@ -47,8 +52,8 @@ async function post<T>(path: string, body: unknown): Promise<T> {
   return (await res.json()) as T
 }
 
-export function askTutor(req: TurnRequest): Promise<Turn> {
-  return post<Turn>('/api/turn', req)
+export function askTutor(req: TurnRequest): Promise<TurnResponse> {
+  return post<TurnResponse>('/api/turn', req)
 }
 
 export function askHelp(text: string, from: Lang, to: Lang): Promise<Help> {
@@ -73,14 +78,21 @@ export function flagReply(scene_id: string, reply: string, reason: string): Prom
 
 /** Posts a push-to-talk clip and returns the transcript. The clip is not kept. */
 export async function transcribe(clip: Blob, lang: Lang): Promise<string> {
-  const res = await fetch(`${BASE}/api/stt?lang=${lang}`, {
-    method: 'POST',
-    headers: { 'content-type': clip.type || 'application/octet-stream', 'x-charla-device': deviceId() },
-    body: clip,
-  })
-  if (!res.ok) throw new ApiError(res.status, `/api/stt ${res.status}`)
-  const json = (await res.json()) as { text?: string }
-  return json.text ?? ''
+  const ctl = new AbortController()
+  const timer = setTimeout(() => ctl.abort(), STT_TIMEOUT_MS)
+  try {
+    const res = await fetch(`${BASE}/api/stt?lang=${lang}`, {
+      method: 'POST',
+      headers: { 'content-type': clip.type || 'application/octet-stream', 'x-charla-device': deviceId() },
+      body: clip,
+      signal: ctl.signal,
+    })
+    if (!res.ok) throw new ApiError(res.status, `/api/stt ${res.status}`)
+    const json = (await res.json()) as { text?: string }
+    return json.text ?? ''
+  } finally {
+    clearTimeout(timer)
+  }
 }
 
 export async function fetchReports(): Promise<Reports> {

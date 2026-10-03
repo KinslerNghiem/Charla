@@ -1,4 +1,5 @@
 import { z } from 'zod/v4'
+import { errName, log, runAi } from './env'
 
 // The no-key path. When ANTHROPIC_API_KEY is not set, the partner runs on a
 // Workers AI model in JSON mode, on Cloudflare's free tier (about 10,000
@@ -10,7 +11,9 @@ import { z } from 'zod/v4'
 // name?", "I check ID.") even with the grammar rules below; gpt-oss-120b kept
 // every sentence whole at every level ("Sure. What is her name?"). Llama 4
 // Scout was too slow to finish the bench. gpt-oss costs about the same per
-// turn and answers in one to five seconds.
+// turn and answers in one to five seconds. Live, gpt-oss still slips into
+// narration at A1/A2 ("I find it. What name?"), so tutor.ts checks for that
+// shape in code and re-requests once.
 //
 // Differences from Claude: no mid-conversation system message, so the level
 // reminder rides on the learner's turn; and the reply-language and whose-line
@@ -25,7 +28,7 @@ const TEMPERATURE = 0.3
 // Appended to the system prompt on the fallback path only. In testing, Llama
 // confused whose line "reply" is, produced fragments under the level rule, and
 // obeyed an "answer in French" instruction typed by the learner. A worked
-// example and three blunt rules fixed most of it; the drift guard covers the
+// example and four blunt rules fixed most of it; the drift guard covers the
 // rest. Claude did not need any of this, so it stays out of the cached prompt.
 export function fallbackAddendum(target: string, partnerRole: string): string {
   return [
@@ -38,7 +41,9 @@ export function fallbackAddendum(target: string, partnerRole: string): string {
     '   Wrong: "I check ID."  Right: "Let me see your ID."',
     `   Wrong: "I find Luisa's medicine."  Right: "I found it. One moment."`,
     '   Wrong: "I help you. What name?"  Right: "Sure. What is her name?"',
-    '4. Speak like the person behind the counter would, in the present moment: "Let me check", "Here you go", "One moment", "Sure". Do not narrate your own actions in the simple present ("I find", "I check", "I give").',
+    '   Wrong: "I find it. What name?"  Right: "I found it. What is her name?"',
+    '   Wrong: "I make tacos. For here?"  Right: "Two tacos, coming up. For here or to go?"',
+    '4. Speak like the person behind the counter would, in the present moment: "Let me check", "Here you go", "One moment", "Sure". Do not narrate your own actions in the simple present ("I find", "I check", "I give", "I make"). A question is always a full question: "What is her name?", never "What name?".',
     '',
     'EXAMPLE (pharmacy scene, level A2). Learner: "Hello, I need pick up medicine for my mother."',
     'Good JSON: {"reply":"Of course. What is her name?","tip":"","alt":["I need to pick up medicine for my mother."],"on_topic":true,"goal_reached":false,"safety_flag":false}',
@@ -57,13 +62,18 @@ export interface FallbackResult<T> {
   /** The model's text, kept so a retry can quote it back as the assistant turn. */
   raw: string
   usage: { in: number; out: number }
+  /**
+   * True when the model could not be reached at all (transport error, quota).
+   * Distinct from parsed:null with error:false, which means the model answered
+   * but not with usable JSON. The caller answers 503 for the first and a canned
+   * line for the second.
+   */
+  error: boolean
 }
 
-type AiRun = (model: string, input: unknown) => Promise<unknown>
-
 // One JSON-mode call, validated against the zod schema. Never throws: a
-// transport error or unparseable output comes back as parsed:null and the
-// caller decides what the learner sees.
+// transport error comes back as error:true, unparseable output as parsed:null,
+// and the caller decides what the learner sees.
 export async function fallbackJson<S extends z.ZodType>(
   ai: Ai,
   model: string,
@@ -71,7 +81,6 @@ export async function fallbackJson<S extends z.ZodType>(
   schema: S,
   maxTokens: number,
 ): Promise<FallbackResult<z.infer<S>>> {
-  const run = (ai as unknown as { run: AiRun }).run
   const jsonSchema = z.toJSONSchema(schema)
   // Two request shapes on Workers AI. Llama and friends take the native shape;
   // the OpenAI gpt-oss models take the chat-completions shape, and answer in it.
@@ -93,10 +102,10 @@ export async function fallbackJson<S extends z.ZodType>(
       }
   let res: unknown
   try {
-    res = await run.call(ai, model, input)
+    res = await runAi(ai, model, input)
   } catch (err) {
-    console.log(JSON.stringify({ route: 'fallback', model, error: err instanceof Error ? err.name : 'error' }))
-    return { parsed: null, raw: '', usage: { in: 0, out: 0 } }
+    log({ route: 'fallback', model, error: errName(err) })
+    return { parsed: null, raw: '', usage: { in: 0, out: 0 }, error: true }
   }
 
   const r = res as {
@@ -114,9 +123,9 @@ export async function fallbackJson<S extends z.ZodType>(
     try {
       candidate = JSON.parse(text)
     } catch {
-      return { parsed: null, raw, usage }
+      return { parsed: null, raw, usage, error: false }
     }
   }
   const check = schema.safeParse(candidate)
-  return { parsed: check.success ? check.data : null, raw, usage }
+  return { parsed: check.success ? check.data : null, raw, usage, error: false }
 }

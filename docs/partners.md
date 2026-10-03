@@ -2,6 +2,7 @@
 
 Print this two-up. Hand the Spanish side to the person at the counter and the
 English side to the manager, or the other way round. The ask takes two minutes.
+Before printing, replace "(see src/contact.ts)" with the address set there.
 
 ---
 
@@ -23,7 +24,7 @@ is the whole commitment. No sign, no training, no app on your side.
 - the **role** and **shift** where a learner is most likely to find help, for
   example "cashier, afternoons". Never a name. Never a photo of a person.
 
-**What learners see and do:** the app gives them a card with three phrases
+**What learners see and do:** the app gives them a card with their phrases
 and one line to show you: *"I'm practicing my English. Please speak a little
 more slowly."* After the visit they tap "I went" once. That tap is anonymous
 and only counts; it never carries a name, a location or a review.
@@ -34,7 +35,7 @@ star ratings, free-text reviews, anyone's location.
 **Changing or removing the listing:** email us at the address below or tell
 any team member. We remove a listing the same day, no questions.
 
-Team contact: ______________________________  (email)
+Team contact: (see src/contact.ts)  (email)
 
 ☐ Yes, list us.   Name of business: __________________________________
 
@@ -65,7 +66,7 @@ aplicación de su lado.
   "cajero, por las tardes". Nunca un nombre. Nunca la foto de una persona.
 
 **Lo que ven y hacen quienes aprenden:** la aplicación les da una tarjeta con
-tres frases y una línea para mostrarle a usted: *"I'm practicing my English.
+sus frases y una línea para mostrarle a usted: *"I'm practicing my English.
 Please speak a little more slowly."* Después de la visita tocan "Fui" una vez.
 Ese toque es anónimo y solo cuenta; nunca lleva un nombre, una ubicación ni
 una reseña.
@@ -78,7 +79,7 @@ de nadie.
 cualquier integrante del equipo. Quitamos el registro el mismo día, sin
 preguntas.
 
-Contacto del equipo: ______________________________  (correo)
+Contacto del equipo: (see src/contact.ts)  (correo)
 
 ☐ Sí, pueden ponernos.   Nombre del negocio: _______________________________
 
@@ -90,12 +91,20 @@ Firma (dueño o gerente): ________________________   Fecha: _______________
 
 ### For the team: after a yes
 
-1. Add one row to `data/venues.csv`. `status` is `listed_by_business`. Roles
-   and shifts only, from the list in `worker/src/index.ts` (cashier, pharmacist,
-   clerk, server, librarian, nurse, front_desk, other).
-2. Geocode the address once (the Census geocoder in `scripts/build_venues.py`
-   does it) and run `npm run venues`.
+1. Add one row to `data/venues.csv`. `status` is `listed_by_business`.
+   `roles` and `shifts` are free text, written the way the sheet says it
+   ("cashier, afternoons"); never a name. The tests fail on anything in those
+   columns that looks like a person's name. `format` is `in_person`, `online`
+   or `both` (a business is `in_person`; a Zoom conversation group is `online`).
+   `notes`, `source` and `verified_on` are for us and never reach the app.
+2. Look the address up once, on the Census Bureau geocoder website
+   (geocoding.geo.census.gov) or any map, and paste `lat` and `lng` into the
+   row. There is no geocoder in the script. Then run `npm run venues`; a row
+   without coordinates is skipped and named loudly in the output, so nothing
+   silently vanishes from the map.
 3. Keep the signed sheet. If a judge or the business asks, that is the proof of
    consent.
 4. Public programs (libraries, community colleges, the driver-services office)
    do not need a signature; they are `listed_public`.
+5. A business that asks to be removed: delete the row, run `npm run venues`,
+   deploy. Same day.

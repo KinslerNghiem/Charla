@@ -4,9 +4,9 @@
 // the partner speaks the other one. There is no separate "interface language"
 // switch, because two independent switches confused every tester.
 
-export type Native = 'es' | 'en'
+import type { Lang } from '../i18n/strings'
 
-export function LangPick({ onPick }: { onPick: (native: Native) => void }) {
+export function LangPick({ onPick }: { onPick: (native: Lang) => void }) {
   return (
     <main class="gate langpick">
       <h1>Charla</h1>
@@ -31,6 +31,8 @@ export function LangPick({ onPick }: { onPick: (native: Native) => void }) {
       <p class="note">
         Puedes cambiarlo después, abajo de cada página. <br />
         You can change this later, at the bottom of every page.
+        <br />
+        <a href="#/about">Acerca de Charla · About Charla</a>
       </p>
     </main>
   )

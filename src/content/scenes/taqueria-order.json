@@ -2,33 +2,35 @@
   "id": "taqueria-order",
   "place_type": "restaurant",
   "kid": true,
+  "channel": "counter",
   "title": { "en": "Order at the taquería", "es": "Pedir en la taquería" },
   "roles": {
     "partner": { "en": "person at the counter", "es": "persona del mostrador" },
-    "learner": { "en": "customer ordering food", "es": "cliente que pide comida" }
+    "learner": { "en": "kid ordering food", "es": "niño o niña que pide comida" }
   },
   "goal": {
     "en": "Order two tacos and a drink by yourself, and say whether it is for here or to go.",
     "es": "Pedir dos tacos y una bebida tú solo, y decir si es para aquí o para llevar."
   },
   "must_use": [
-    { "en": "please", "es": "por favor" },
-    { "en": "for here or to go", "es": "para aquí o para llevar" },
-    { "en": "thank you", "es": "gracias" }
+    { "en": "Two chicken tacos, please.", "es": "Dos tacos de pollo, por favor." },
+    { "en": "A horchata, please.", "es": "Una horchata, por favor." },
+    { "en": "For here, please.", "es": "Para aquí, por favor." }
   ],
+  "expect": { "en": "Anything to drink?", "es": "¿Algo de tomar?" },
   "success": {
     "en": "You get your food and your drink and say thank you.",
     "es": "Recibes tu comida y tu bebida y das las gracias."
   },
   "show_staff_line": {
     "en": "I'm practicing my English. Thank you for your patience.",
-    "es": "Estoy practicando mi inglés. Gracias por su paciencia."
+    "es": "Estoy practicando mi español. Gracias por su paciencia."
   },
   "offline_script": {
     "start": "s1",
     "nodes": {
       "s1": {
-        "partner": { "en": "Hi! What would you like?", "es": "¡Hola! ¿Qué le gustaría?" },
+        "partner": { "en": "Hi! What would you like?", "es": "¡Hola! ¿Qué te doy?" },
         "choices": [
           {
             "text": { "en": "Two chicken tacos, please.", "es": "Dos tacos de pollo, por favor." },
@@ -97,7 +99,7 @@
         ]
       },
       "s4": {
-        "partner": { "en": "Here you go. Enjoy!", "es": "Aquí tiene. ¡Buen provecho!" },
+        "partner": { "en": "Here you go. Enjoy!", "es": "Aquí tienes. ¡Buen provecho!" },
         "choices": [
           {
             "text": { "en": "Thank you!", "es": "¡Gracias!" },

@@ -1,3 +1,5 @@
+import type { Help } from '../../src/tutor/turn'
+
 export interface Env {
   ANTHROPIC_API_KEY: string
   MODEL: string
@@ -5,9 +7,10 @@ export interface Env {
   FALLBACK_MODEL?: string
   DAILY_TURN_CAP: string
   DAILY_IP_CAP: string
+  /** Spoken turns have their own cap: a transcription is cheaper than a model turn. */
+  DAILY_STT_CAP?: string
   ALLOWED_ORIGIN: string
   DB: D1Database
-  CAPS: KVNamespace
   /** The Workers AI binding: speech-to-text, and the partner when there is no key. */
   AI?: Ai
 }
@@ -34,3 +37,33 @@ const DAY_FMT = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Chicago' }
 export function today(): string {
   return DAY_FMT.format(new Date())
 }
+
+// The Chicago calendar day before today(), as YYYY-MM-DD. Computed from the
+// formatted date rather than "now minus 24 hours", which is off by a day around
+// the DST switch. Counters older than this are pruned; see caps.ts.
+export function yesterday(): string {
+  const [y, m, d] = today().split('-').map(Number)
+  return new Date(Date.UTC(y, m - 1, d) - 86400000).toISOString().slice(0, 10)
+}
+
+// The one loose cast onto the Workers AI binding. The binding's generated model
+// types change between workers-types releases, and we make three calls in all
+// (Whisper, the partner, Table-mode help), so each caller types its own result.
+export function runAi(ai: Ai, model: string, input: unknown): Promise<unknown> {
+  const run = (ai as unknown as { run: (model: string, input: unknown) => Promise<unknown> }).run
+  return run.call(ai, model, input)
+}
+
+// Every log line is one JSON object of counts, names and flags. Never learner
+// text, never a model reply, never an error message (an SDK error's message can
+// carry the upstream body, and a parse error can carry a fragment of the input).
+export function log(fields: Record<string, unknown>): void {
+  console.log(JSON.stringify(fields))
+}
+
+export function errName(err: unknown): string {
+  return err instanceof Error ? err.name : 'error'
+}
+
+/** What /api/help returns when it cannot answer; Table mode shows its "unavailable" string. */
+export const NO_HELP: Help = { phrase: '', literal: '', tip: '' }

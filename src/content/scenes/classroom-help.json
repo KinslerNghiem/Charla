@@ -1,0 +1,149 @@
+{
+  "id": "classroom-help",
+  "place_type": "school",
+  "kid": true,
+  "channel": "counter",
+  "title": { "en": "Ask your teacher for help", "es": "Pedirle ayuda a tu maestra" },
+  "roles": {
+    "partner": { "en": "your teacher, during quiet reading time", "es": "tu maestra, en la hora de lectura en silencio" },
+    "learner": { "en": "9-year-old who is stuck on a word", "es": "niño o niña de 9 años que se atoró en una palabra" }
+  },
+  "goal": {
+    "en": "Ask for help, say what you don't understand, and ask to go to the bathroom.",
+    "es": "Pedir ayuda, decir qué no entiendes y pedir permiso para ir al baño."
+  },
+  "must_use": [
+    { "en": "Can you help me, please?", "es": "¿Me puedes ayudar, por favor?" },
+    { "en": "I don't understand this word.", "es": "No entiendo esta palabra." },
+    { "en": "May I go to the bathroom?", "es": "¿Puedo ir al baño?" }
+  ],
+  "expect": { "en": "What do you need?", "es": "¿Qué necesitas?" },
+  "success": {
+    "en": "Your teacher helps you with the word, and you know how to ask next time.",
+    "es": "Tu maestra te ayuda con la palabra, y ya sabes cómo pedir ayuda la próxima vez."
+  },
+  "show_staff_line": {
+    "en": "I'm practicing my English. Thank you for your patience.",
+    "es": "Estoy practicando mi español. Gracias por su paciencia."
+  },
+  "offline_script": {
+    "start": "s1",
+    "nodes": {
+      "s1": {
+        "partner": { "en": "Yes, Leo? I see your hand up.", "es": "¿Sí, Leo? Vi tu mano levantada." },
+        "choices": [
+          {
+            "text": { "en": "Can you help me, please?", "es": "¿Me puedes ayudar, por favor?" },
+            "picture": "🙋",
+            "best": true,
+            "next": "s2"
+          },
+          {
+            "text": { "en": "Teacher! Teacher! Come!", "es": "¡Maestra! ¡Maestra! ¡Venga!" },
+            "picture": "📣",
+            "tip": { "en": "She's already listening. Ask the kind way: \"Can you help me, please?\"", "es": "Ya te está escuchando. Pídelo con amabilidad: \"Can you help me, please?\"" },
+            "next": null
+          },
+          {
+            "text": { "en": "Nothing.", "es": "Nada." },
+            "picture": "😶",
+            "tip": { "en": "It's okay to need help. Everyone does. Say: \"Can you help me, please?\"", "es": "Está bien necesitar ayuda. A todos nos pasa. Di: \"Can you help me, please?\"" },
+            "next": null
+          }
+        ]
+      },
+      "s2": {
+        "partner": { "en": "Of course! What do you need?", "es": "¡Claro! ¿Qué necesitas?" },
+        "choices": [
+          {
+            "text": { "en": "I don't understand this word.", "es": "No entiendo esta palabra." },
+            "picture": "📖",
+            "best": true,
+            "next": "s3"
+          },
+          {
+            "text": { "en": "This.", "es": "Esto." },
+            "picture": "👉",
+            "tip": { "en": "Pointing helps, but say it too: \"I don't understand this word.\"", "es": "Señalar ayuda, pero también dilo: \"I don't understand this word.\"" },
+            "next": null
+          },
+          {
+            "text": { "en": "The book is boring.", "es": "El libro está aburrido." },
+            "picture": "😑",
+            "tip": { "en": "Maybe! But tell her what is hard: \"I don't understand this word.\"", "es": "¡Quizá! Pero dile qué es lo difícil: \"I don't understand this word.\"" },
+            "next": null
+          }
+        ]
+      },
+      "s3": {
+        "partner": { "en": "Let's look. \"Enormous.\" It means very, very big. Like an elephant!", "es": "Vamos a ver. «Enormous». Significa muy, muy grande. ¡Como un elefante!" },
+        "choices": [
+          {
+            "text": { "en": "Oh! Enormous. Like an enormous elephant!", "es": "¡Ah! Enormous. ¡Como un elefante enorme!" },
+            "picture": "🐘",
+            "best": true,
+            "next": "s4"
+          },
+          {
+            "text": { "en": "Okay.", "es": "Bueno." },
+            "picture": "🙂",
+            "tip": { "en": "Try the new word out loud; it helps you remember it: \"Enormous!\"", "es": "Di la palabra nueva en voz alta; así se te queda: \"Enormous!\"" },
+            "next": null
+          },
+          {
+            "text": { "en": "I don't like elephants.", "es": "No me gustan los elefantes." },
+            "picture": "🙃",
+            "tip": { "en": "Ha! The elephant is just an example. Say the word: \"Enormous, like an elephant!\"", "es": "¡Ja! El elefante es solo un ejemplo. Di la palabra: \"Enormous, like an elephant!\"" },
+            "next": null
+          }
+        ]
+      },
+      "s4": {
+        "partner": { "en": "Exactly! Keep reading. Do you need anything else?", "es": "¡Exacto! Sigue leyendo. ¿Necesitas algo más?" },
+        "choices": [
+          {
+            "text": { "en": "May I go to the bathroom?", "es": "¿Puedo ir al baño?" },
+            "picture": "🚻",
+            "best": true,
+            "next": "s5"
+          },
+          {
+            "text": { "en": "I go to the bathroom.", "es": "Voy al baño." },
+            "picture": "🚶",
+            "tip": { "en": "In class you ask first. Try: \"May I go to the bathroom?\"", "es": "En clase primero se pide permiso. Prueba: \"May I go to the bathroom?\"" },
+            "next": null
+          },
+          {
+            "text": { "en": "Bathroom!", "es": "¡Baño!" },
+            "picture": "😬",
+            "tip": { "en": "Make it a question: \"May I go to the bathroom?\"", "es": "Hazlo pregunta: \"May I go to the bathroom?\"" },
+            "next": null
+          }
+        ]
+      },
+      "s5": {
+        "partner": { "en": "Yes, you may. Take the pass and come right back.", "es": "Sí, puedes. Lleva el pase y regresa pronto." },
+        "choices": [
+          {
+            "text": { "en": "Thank you, Ms. Rivera!", "es": "¡Gracias, maestra Rivera!" },
+            "picture": "🙏",
+            "best": true,
+            "next": null
+          },
+          {
+            "text": { "en": "Okay.", "es": "Bueno." },
+            "picture": "😐",
+            "tip": { "en": "Say thank you: \"Thank you, Ms. Rivera!\"", "es": "Da las gracias: \"Thank you, Ms. Rivera!\"" },
+            "next": null
+          },
+          {
+            "text": { "en": "Can I take my friend?", "es": "¿Puedo llevar a mi amigo?" },
+            "picture": "👫",
+            "tip": { "en": "One at a time with the pass. Say thank you and go: \"Thank you, Ms. Rivera!\"", "es": "Uno a la vez con el pase. Da las gracias y ve: \"Thank you, Ms. Rivera!\"" },
+            "next": null
+          }
+        ]
+      }
+    }
+  }
+}

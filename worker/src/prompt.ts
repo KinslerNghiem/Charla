@@ -31,7 +31,7 @@ export function buildSystem(scene: Scene, level: Level, learning: Lang): string 
     '',
     `LEVEL RULE (${level}), hard constraints on "reply": at most ${band.maxSentences} sentences; each sentence ${band.maxWordsPerSentence} words or fewer; at most ${band.maxQuestions} question. ${
       level === 'A1'
-        ? 'Present tense only. The most common everyday words. No idioms.'
+        ? 'Present tense and short polite requests (Tome asiento / Please have a seat) are fine; no past or future. The most common everyday words. No idioms.'
         : level === 'A2'
           ? 'Simple past and future are fine. Everyday words. No idioms.'
           : 'Connectors, opinions and follow-up questions are fine. Avoid rare idioms.'
@@ -58,7 +58,8 @@ export function placeLine(placeName: string): string {
 }
 
 export function commandText(command: 'simpler' | 'another_way' | undefined, learning: Lang): string {
-  if (command === 'simpler') return learning === 'en' ? '(Please say that more simply.)' : '(Por favor, dilo más simple.)'
-  if (command === 'another_way') return learning === 'en' ? '(Please say that another way.)' : '(Por favor, dilo de otra manera.)'
+  // Usted, not tú: the learner is addressing a pharmacist or a clerk.
+  if (command === 'simpler') return learning === 'en' ? '(Please say that more simply.)' : '(¿Me lo puede decir más simple, por favor?)'
+  if (command === 'another_way') return learning === 'en' ? '(Please say that another way.)' : '(¿Me lo puede decir de otra manera, por favor?)'
   return ''
 }

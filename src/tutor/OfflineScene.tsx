@@ -24,6 +24,8 @@ export function OfflineScene({
   const [nodeId, setNodeId] = useState(scene.offline_script.start)
   const [tip, setTip] = useState<string | null>(null)
   const [done, setDone] = useState(false)
+  // Shown once, the first time Listen has nothing to say with.
+  const [noVoice, setNoVoice] = useState(false)
   const node = scene.offline_script.nodes[nodeId]
 
   function choose(c: ScriptChoice) {
@@ -40,14 +42,21 @@ export function OfflineScene({
     }
   }
 
+  function listen() {
+    if (!speak(node.partner[learning], learning)) setNoVoice(true)
+  }
+
   return (
     <div class="offline-scene">
       <div class="partner">
-        <p class="line">{node.partner[learning]}</p>
+        <p class="line" lang={learning}>
+          {node.partner[learning]}
+        </p>
         <p class="gloss">{node.partner[native]}</p>
-        <button type="button" class="ghost" onClick={() => speak(node.partner[learning], learning)}>
+        <button type="button" class="ghost" onClick={listen}>
           🔊 {t('listen')}
         </button>
+        {noVoice && <p class="note">{t(learning === 'es' ? 'no_voice_es' : 'no_voice_en')}</p>}
       </div>
       {tip && <p class="tip">{tip}</p>}
       {!done && (
@@ -55,7 +64,9 @@ export function OfflineScene({
           {node.choices.map((c) => (
             <button type="button" class={'choice' + (pictures && c.picture ? '' : ' nopic')} onClick={() => choose(c)}>
               {pictures && c.picture && <span class="pic" aria-hidden="true">{c.picture}</span>}
-              <span class="txt">{c.text[learning]}</span>
+              <span class="txt" lang={learning}>
+                {c.text[learning]}
+              </span>
               <span class="sub">{c.text[native]}</span>
             </button>
           ))}

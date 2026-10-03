@@ -1,43 +1,59 @@
-import { json, sha256, today, type Env } from './env'
-import { clientIp, underCap, underIpCap } from './caps'
+import { errName, json, log, runAi, sha256, today, type Env } from './env'
+import { bump, ipKey, underCap, underIpCap, underIpSttCap, underSttCap } from './caps'
 import { runHelp, runTurn, type TurnInput } from './tutor'
+import { meta } from './safety'
 import { sceneById } from '../../src/content/scenes'
+import venuesText from '../../public/venues.geojson'
 
-// One Worker, every secret, six routes. Nothing here stores who a learner is.
+// One Worker, every secret, seven routes. Nothing here stores who a learner is.
 
 const YEAR = 365 * 86400000
 const MONTH = 30 * 86400000
 const FLAG_RETENTION = 60 * 86400000
 const MAX_BODY = 32_000
-// A push-to-talk clip: ten seconds of AAC or Opus is well under this.
+// A push-to-talk clip is 20 s of 16 kHz 16-bit mono WAV (~640 KB); this leaves
+// room for a longer or fatter encoding without accepting a whole song.
 const MAX_AUDIO = 1_500_000
+// One IP contributes at most this many reports per place per day.
+const REPORTS_PER_PLACE = 2
 
 // Free text from a report is limited to a short list of counter roles. The map
 // is about places, so a role is a job, never a person.
 const ROLES = ['cashier', 'pharmacist', 'clerk', 'server', 'librarian', 'nurse', 'front_desk', 'other']
 const SHIFTS = ['morning', 'afternoon', 'evening', 'weekend']
 
-// Workers AI's Whisper turbo takes base64 audio and a language hint. Typed
-// loosely on purpose: the binding's generated model types change between
-// workers-types releases, and this is the one call we make.
+// The shipped venue file is bundled in as text (see the [[rules]] block in
+// wrangler.toml), so a report can only ever name a place the map shows.
+// Parsed once per isolate, on the first report.
+let venueIds: Set<string> | null = null
+function knownPlace(id: string): boolean {
+  if (!venueIds) {
+    const fc = JSON.parse(venuesText) as { features?: { properties?: { id?: string } }[] }
+    venueIds = new Set((fc.features ?? []).map((f) => f.properties?.id).filter((x): x is string => typeof x === 'string'))
+  }
+  return venueIds.has(id)
+}
+
+// Workers AI's Whisper turbo takes base64 audio and a language hint.
 async function transcribe(ai: Ai, bytes: Uint8Array, lang: 'en' | 'es'): Promise<string | null> {
   let b64 = ''
   const CHUNK = 0x8000
   for (let i = 0; i < bytes.length; i += CHUNK) b64 += String.fromCharCode(...bytes.subarray(i, i + CHUNK))
   b64 = btoa(b64)
   try {
-    const run = (ai as unknown as { run: (model: string, input: unknown) => Promise<{ text?: string }> }).run
-    const res = await run.call(ai, '@cf/openai/whisper-large-v3-turbo', { audio: b64, language: lang })
+    const res = (await runAi(ai, '@cf/openai/whisper-large-v3-turbo', { audio: b64, language: lang })) as { text?: string } | null
     return typeof res?.text === 'string' ? res.text.trim().slice(0, 600) : ''
   } catch (err) {
-    console.log(JSON.stringify({ route: 'stt', error: err instanceof Error ? err.name : 'error' }))
+    log({ route: 'stt', error: errName(err) })
     return null
   }
 }
 
+// With ALLOWED_ORIGIN unset there is no allow-origin header at all (never the
+// string 'null', which some browsers honour for sandboxed pages).
 function cors(res: Response, env: Env): Response {
   const h = new Headers(res.headers)
-  h.set('access-control-allow-origin', env.ALLOWED_ORIGIN || 'null')
+  if (env.ALLOWED_ORIGIN) h.set('access-control-allow-origin', env.ALLOWED_ORIGIN)
   h.set('access-control-allow-methods', 'GET, POST, OPTIONS')
   h.set('access-control-allow-headers', 'content-type, x-charla-device')
   h.set('access-control-max-age', '86400')
@@ -45,10 +61,41 @@ function cors(res: Response, env: Env): Response {
   return new Response(res.body, { status: res.status, headers: h })
 }
 
-async function readBody<T>(req: Request): Promise<T | null> {
-  if (Number(req.headers.get('content-length') ?? 0) > MAX_BODY) return null
+// Bodies are read against a byte budget, not a content-length header, which a
+// caller sets to whatever it likes. Over budget, the read stops where it is and
+// the route answers 413.
+const TOO_LARGE: unique symbol = Symbol('too large')
+
+async function readBytes(req: Request, max: number): Promise<Uint8Array | typeof TOO_LARGE> {
+  if (Number(req.headers.get('content-length') ?? 0) > max) return TOO_LARGE
+  const reader = req.body?.getReader()
+  if (!reader) return new Uint8Array(0)
+  const chunks: Uint8Array[] = []
+  let total = 0
+  for (;;) {
+    const { done, value } = await reader.read()
+    if (done) break
+    total += value.byteLength
+    if (total > max) {
+      await reader.cancel()
+      return TOO_LARGE
+    }
+    chunks.push(value)
+  }
+  const out = new Uint8Array(total)
+  let off = 0
+  for (const c of chunks) {
+    out.set(c, off)
+    off += c.byteLength
+  }
+  return out
+}
+
+async function readBody<T>(req: Request): Promise<T | null | typeof TOO_LARGE> {
+  const bytes = await readBytes(req, MAX_BODY)
+  if (bytes === TOO_LARGE) return TOO_LARGE
   try {
-    return (await req.json()) as T
+    return JSON.parse(new TextDecoder().decode(bytes)) as T
   } catch {
     return null
   }
@@ -57,9 +104,17 @@ async function readBody<T>(req: Request): Promise<T | null> {
 export default {
   async fetch(req: Request, env: Env): Promise<Response> {
     if (req.method === 'OPTIONS') return cors(new Response(null, { status: 204 }), env)
+    // A browser always sends Origin on a POST. One that is not the app is
+    // refused outright rather than answered and then hidden by CORS, which
+    // would still have spent a model call. Requests with no Origin (curl, the
+    // tests, server-to-server) are not browsers and pass.
+    const origin = req.headers.get('origin')
+    if (req.method === 'POST' && origin !== null && origin !== env.ALLOWED_ORIGIN) {
+      return cors(json({ error: 'forbidden' }, 403), env)
+    }
     const url = new URL(req.url)
     try {
-      const res = await route(req, env, url.pathname)
+      const res = await route(req, env, url)
       return cors(res, env)
     } catch (err) {
       // A shape, never a message: an SDK error's message can carry the upstream
@@ -67,7 +122,7 @@ export default {
       console.error(
         JSON.stringify({
           route: url.pathname,
-          error: err instanceof Error ? err.name : 'error',
+          error: errName(err),
           status: (err as { status?: number })?.status ?? null,
         }),
       )
@@ -76,31 +131,38 @@ export default {
   },
 }
 
-async function route(req: Request, env: Env, path: string): Promise<Response> {
+async function route(req: Request, env: Env, url: URL): Promise<Response> {
+  const path = url.pathname
   if (path === '/api/health') return json({ ok: true })
 
   // Every route that can reach the model or write a row is bounded twice: by the
   // caller's device id (fair use) and by their IP (which the edge sets, so a
-  // script cannot mint its way around it).
+  // script cannot mint its way around it). Validation comes first, so a
+  // malformed request never spends a counter.
   if (path === '/api/turn' && req.method === 'POST') {
     const body = await readBody<TurnInput & { device?: string }>(req)
-    if (!body?.device || !body.scene_id) return json({ error: 'bad request' }, 400)
-    if (!(await underIpCap(env, clientIp(req)))) return json({ error: 'slow down' }, 429)
-    const hash = await sha256(body.device)
-    if (!(await underCap(env, hash))) return json({ error: 'daily cap reached' }, 429)
-    const place_name =
-      typeof body.place_name === 'string' ? body.place_name.replace(/[^\p{L}\p{N} '&.,()-]/gu, '').slice(0, 60) : undefined
-    const turn = await runTurn(env, { ...body, place_name })
+    if (body === TOO_LARGE) return json({ error: 'too large' }, 413)
+    if (!body?.device) return json({ error: 'bad request' }, 400)
+    if (!sceneById(body.scene_id)) return json({ error: 'unknown scene' }, 400)
+    const command = body.command === 'simpler' || body.command === 'another_way' ? body.command : undefined
+    if (!command && !String(body.user ?? '').trim()) return json({ error: 'bad request' }, 400)
+    if (!(await underIpCap(env, await ipKey(req)))) return json({ error: 'slow down' }, 429)
+    if (!(await underCap(env, await sha256(body.device)))) return json({ error: 'daily cap reached' }, 429)
+    // The place name comes from a URL parameter. It is clamped to a name's
+    // characters, and one that reads as an instruction is dropped, not sent.
+    let place_name = typeof body.place_name === 'string' ? body.place_name.replace(/[^\p{L}\p{N} '&.,()-]/gu, '').slice(0, 60) : undefined
+    if (place_name && meta(place_name)) place_name = undefined
+    const turn = await runTurn(env, { ...body, command, place_name })
     // 503, not a canned 200: the app shows the scripted scene and a retry button.
     return turn ? json(turn) : json({ error: 'model unavailable' }, 503)
   }
 
   if (path === '/api/help' && req.method === 'POST') {
     const body = await readBody<{ text: string; from: 'en' | 'es'; to: 'en' | 'es'; device?: string }>(req)
+    if (body === TOO_LARGE) return json({ error: 'too large' }, 413)
     if (!body?.device || !body.text) return json({ error: 'bad request' }, 400)
-    if (!(await underIpCap(env, clientIp(req)))) return json({ error: 'slow down' }, 429)
-    const hash = await sha256(body.device)
-    if (!(await underCap(env, hash))) return json({ error: 'daily cap reached' }, 429)
+    if (!(await underIpCap(env, await ipKey(req)))) return json({ error: 'slow down' }, 429)
+    if (!(await underCap(env, await sha256(body.device)))) return json({ error: 'daily cap reached' }, 429)
     return json(await runHelp(env, body.text, body.from === 'es' ? 'es' : 'en', body.to === 'es' ? 'es' : 'en'))
   }
 
@@ -113,8 +175,14 @@ async function route(req: Request, env: Env, path: string): Promise<Response> {
       shift?: string
       device?: string
     }>(req)
-    if (!body?.device || !body.place_id) return json({ error: 'bad request' }, 400)
-    if (!(await underIpCap(env, clientIp(req)))) return json({ error: 'slow down' }, 429)
+    if (body === TOO_LARGE) return json({ error: 'too large' }, 413)
+    if (!body?.device || typeof body.place_id !== 'string') return json({ error: 'bad request' }, 400)
+    if (!knownPlace(body.place_id)) return json({ error: 'unknown place' }, 400)
+    const ip = await ipKey(req)
+    if (!(await underIpCap(env, ip))) return json({ error: 'slow down' }, 429)
+    // A fresh device id per request would otherwise let one script fill a
+    // place's count; an IP gets a couple of reports per place per day.
+    if (!(await bump(env, `rep:${ip}:${body.place_id}`, REPORTS_PER_PLACE))) return json({ error: 'slow down' }, 429)
     // Salted with the place id: one visitor gets a different hash at every
     // place, so a place can still count distinct devices but the rows cannot be
     // joined into one person's trail.
@@ -125,21 +193,21 @@ async function route(req: Request, env: Env, path: string): Promise<Response> {
     const res = await env.DB.prepare(
       'INSERT OR IGNORE INTO reports (place_id, lang, positive, role, shift, device_hash, day, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
     )
-      .bind(
-        String(body.place_id).slice(0, 64),
-        body.lang === 'en' ? 'en' : 'es',
-        body.positive === false ? 0 : 1,
-        role,
-        shift,
-        hash,
-        today(),
-        Date.now(),
-      )
+      .bind(body.place_id, body.lang === 'en' ? 'en' : 'es', body.positive === false ? 0 : 1, role, shift, hash, today(), Date.now())
       .run()
     return json({ ok: true, duplicate: (res.meta?.changes ?? 0) === 0 })
   }
 
   if (path === '/api/places' && req.method === 'GET') {
+    // Served from the edge cache for the max-age below, so a classroom opening
+    // the map together costs one aggregate, not thirty. The cached response is
+    // the bare JSON; cors() is applied to it on the way out like any other.
+    const cache = (globalThis as { caches?: { default?: Cache } }).caches?.default
+    const key = new Request(url.origin + url.pathname)
+    if (cache) {
+      const hit = await cache.match(key)
+      if (hit) return hit
+    }
     // Aggregated in SQL, in 30-day buckets, so the response stays a fixed size
     // however many reports exist, and no per-device identifier ever leaves here.
     const since = Date.now() - YEAR
@@ -170,35 +238,38 @@ async function route(req: Request, env: Env, path: string): Promise<Response> {
     for (const r of devices.results ?? []) {
       slot(r.place_id, r.lang).devices = r.devices
     }
-    return json(out, 200, { 'cache-control': 'public, max-age=300' })
+    const res = json(out, 200, { 'cache-control': 'public, max-age=300' })
+    if (cache) await cache.put(key, res.clone())
+    return res
   }
 
   if (path === '/api/flag' && req.method === 'POST') {
     const body = await readBody<{ scene_id?: string; reply?: string; reason?: string; device?: string }>(req)
+    if (body === TOO_LARGE) return json({ error: 'too large' }, 413)
     if (!body?.device) return json({ error: 'bad request' }, 400)
-    if (!(await underIpCap(env, clientIp(req)))) return json({ error: 'slow down' }, 429)
-    const hash = await sha256(body.device)
-    if (!(await underCap(env, hash))) return json({ error: 'daily cap reached' }, 429)
+    if (!(await underIpCap(env, await ipKey(req)))) return json({ error: 'slow down' }, 429)
+    if (!(await underCap(env, await sha256(body.device)))) return json({ error: 'daily cap reached' }, 429)
     await env.DB.prepare('INSERT INTO flags (scene_id, reply, reason, created_at) VALUES (?, ?, ?, ?)')
-      .bind(sceneById(body.scene_id)?.id ?? null, (body.reply ?? '').slice(0, 2000), (body.reason ?? '').slice(0, 200), Date.now())
+      .bind(sceneById(body.scene_id)?.id ?? null, String(body.reply ?? '').slice(0, 2000), String(body.reason ?? '').slice(0, 200), Date.now())
       .run()
     await env.DB.prepare('DELETE FROM flags WHERE created_at < ?').bind(Date.now() - FLAG_RETENTION).run()
     return json({ ok: true })
   }
 
   if (path === '/api/stt' && req.method === 'POST') {
-    // The installed iOS app cannot use Safari's speech recognition, so it posts
-    // a short clip here. The clip is transcribed by Workers AI and discarded:
-    // nothing is written, and the transcript goes back only to the caller.
+    // The recorder tier is the default on every browser: the app posts a short
+    // clip here. The clip is transcribed by Workers AI and discarded: nothing
+    // is written, and the transcript goes back only to the caller. Speech has
+    // its own caps, so a spoken turn does not cost two of the day's turns.
     if (!env.AI) return json({ error: 'speech not enabled' }, 503)
     const device = req.headers.get('x-charla-device') ?? ''
     if (!device) return json({ error: 'bad request' }, 400)
     if (Number(req.headers.get('content-length') ?? 0) > MAX_AUDIO) return json({ error: 'too long' }, 413)
-    if (!(await underIpCap(env, clientIp(req)))) return json({ error: 'slow down' }, 429)
-    if (!(await underCap(env, await sha256(device)))) return json({ error: 'daily cap reached' }, 429)
-    const bytes = new Uint8Array(await req.arrayBuffer())
-    if (bytes.byteLength === 0 || bytes.byteLength > MAX_AUDIO) return json({ error: 'too long' }, 413)
-    const lang = new URL(req.url).searchParams.get('lang') === 'es' ? 'es' : 'en'
+    if (!(await underIpSttCap(env, await ipKey(req)))) return json({ error: 'slow down' }, 429)
+    if (!(await underSttCap(env, await sha256(device)))) return json({ error: 'daily cap reached' }, 429)
+    const bytes = await readBytes(req, MAX_AUDIO)
+    if (bytes === TOO_LARGE || bytes.byteLength === 0) return json({ error: 'too long' }, 413)
+    const lang = url.searchParams.get('lang') === 'es' ? 'es' : 'en'
     const out = await transcribe(env.AI, bytes, lang)
     return out === null ? json({ error: 'speech unavailable' }, 503) : json({ text: out })
   }

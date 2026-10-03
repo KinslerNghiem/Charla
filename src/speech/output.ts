@@ -57,16 +57,48 @@ export function unlock(): void {
   } catch {}
 }
 
-export function speak(text: string, lang: Lang, rate = 1): void {
-  if (!available() || !text) return
-  const voice = pickVoice(lang)
-  // No local voice, no speaking. Letting the platform choose could hand the
-  // phrase to a network synthesizer.
-  if (!voice) return
+/** Stop whatever is being read. Called before the mic opens, so the clip does not contain our own voice. */
+export function hush(): void {
+  if (!available()) return
+  try {
+    speechSynthesis.cancel()
+  } catch {}
+}
+
+function say(text: string, lang: Lang, rate: number, voice: SpeechSynthesisVoice): void {
   const u = new SpeechSynthesisUtterance(text)
   u.lang = lang === 'es' ? 'es-US' : 'en-US'
   u.voice = voice
   u.rate = rate
   speechSynthesis.cancel()
   speechSynthesis.speak(u)
+}
+
+/**
+ * Reads the line aloud. Returns false when nothing will be heard, so the UI
+ * can say so: a laptop with no Spanish voice pack is common, and a silent
+ * Listen button looks broken.
+ */
+export function speak(text: string, lang: Lang, rate = 1): boolean {
+  if (!available() || !text) return false
+  const voice = pickVoice(lang)
+  if (voice) {
+    say(text, lang, rate, voice)
+    return true
+  }
+  // No local voice, no speaking. Letting the platform choose could hand the
+  // phrase to a network synthesizer. One exception: an empty list usually means
+  // Chrome has not loaded the voices yet, so wait for them once and try again.
+  if (speechSynthesis.getVoices().length === 0 && typeof speechSynthesis.addEventListener === 'function') {
+    speechSynthesis.addEventListener(
+      'voiceschanged',
+      () => {
+        const late = pickVoice(lang)
+        if (late) say(text, lang, rate, late)
+      },
+      { once: true },
+    )
+    return true
+  }
+  return false
 }

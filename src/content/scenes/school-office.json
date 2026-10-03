@@ -1,7 +1,8 @@
 {
   "id": "school-office",
   "place_type": "school",
-  "title": { "en": "Pick up your child early", "es": "Recoger a su hijo temprano" },
+  "channel": "counter",
+  "title": { "en": "Pick up your child early", "es": "Recoger a tu hijo temprano" },
   "roles": {
     "partner": { "en": "school office secretary", "es": "secretaria de la oficina de la escuela" },
     "learner": { "en": "parent picking up their child early for an appointment", "es": "madre o padre que recoge a su hijo temprano por una cita" }
@@ -13,16 +14,16 @@
   "must_use": [
     { "en": "I'm here to pick up my son early.", "es": "Vengo a recoger a mi hijo temprano." },
     { "en": "He has a dentist appointment.", "es": "Tiene una cita con el dentista." },
-    { "en": "Where do I sign?", "es": "¿Dónde firmo?" },
     { "en": "Can I request an interpreter for the parent-teacher conference?", "es": "¿Puedo pedir un intérprete para la junta con la maestra?" }
   ],
+  "expect": { "en": "What's the reason for the early pickup?", "es": "¿Cuál es el motivo de la salida temprana?" },
   "success": {
     "en": "The office checks your ID, calls your child down, you sign the sign-out sheet, and they tell you how to ask for an interpreter.",
     "es": "En la oficina revisan tu identificación, llaman a tu hijo, firmas la hoja de salida y te dicen cómo pedir un intérprete."
   },
   "show_staff_line": {
     "en": "I'm practicing my English. Please speak a little more slowly.",
-    "es": "Estoy practicando mi inglés. Por favor, hábleme un poco más despacio."
+    "es": "Estoy practicando mi español. Por favor, hábleme un poco más despacio."
   },
   "offline_script": {
     "start": "s1",
@@ -31,21 +32,21 @@
         "partner": { "en": "Hi, how can I help you?", "es": "Hola, ¿en qué le puedo ayudar?" },
         "choices": [
           {
+            "text": { "en": "I come for my son Mateo Delgado, third grade. He has to go out early today.", "es": "Vengo por mi hijo Mateo Delgado, de tercer grado. Hoy tiene que salir temprano." },
+            "picture": "🚶",
+            "tip": { "en": "They'll understand you, but \"I come for\" is vengo por word for word. The office phrase is \"pick up\": \"I'm here to pick up my son early.\"", "es": "Te van a entender, pero «I come for» es «vengo por» palabra por palabra. La frase de la oficina es «pick up»: \"I'm here to pick up my son early.\"" },
+            "next": null
+          },
+          {
             "text": { "en": "I'm here to pick up my son early. His name is Mateo Delgado, in third grade.", "es": "Vengo a recoger a mi hijo temprano. Se llama Mateo Delgado, de tercer grado." },
             "picture": "🎒",
             "best": true,
             "next": "s2"
           },
           {
-            "text": { "en": "Mateo.", "es": "Mateo." },
-            "picture": "💬",
-            "tip": { "en": "Say why you are here, then the full name and the grade: \"I'm here to pick up my son early. His name is…\"", "es": "Di a qué vienes y luego el nombre completo y el grado: \"I'm here to pick up my son early. His name is…\"" },
-            "next": null
-          },
-          {
-            "text": { "en": "I want to go to his classroom now.", "es": "Quiero ir a su salón ahora." },
+            "text": { "en": "I want to go to his classroom now, I'm in a hurry.", "es": "Quiero ir a su salón ahora, tengo prisa." },
             "picture": "🚪",
-            "tip": { "en": "Parents don't walk to the classroom; the office calls the child down. Tell them why you are here.", "es": "Los padres no van al salón; la oficina llama al niño. Diles a qué vienes." },
+            "tip": { "en": "Parents don't walk to the classroom; the office calls the child down. Tell them why you are here: \"I'm here to pick up my son early.\"", "es": "Los padres no van al salón; la oficina llama al niño. Diles a qué vienes: \"I'm here to pick up my son early.\"" },
             "next": null
           }
         ]
@@ -60,15 +61,15 @@
             "next": "s3"
           },
           {
-            "text": { "en": "Dentist.", "es": "Dentista." },
-            "picture": "💬",
-            "tip": { "en": "A full sentence works better here: \"He has a dentist appointment.\"", "es": "Aquí funciona mejor una oración completa: \"He has a dentist appointment.\"" },
+            "text": { "en": "He has a cite with the dentist at the two.", "es": "Tiene una cita con el dentista a las dos." },
+            "picture": "📅",
+            "tip": { "en": "Two Spanish patterns: \"cite\" for cita (the word is \"appointment\") and \"at the two\" for a las dos (just \"at two\"). \"He has a dentist appointment at two.\"", "es": "Dos calcos del español: «cite» por cita (la palabra es «appointment») y «at the two» por «a las dos» (solo «at two»). \"He has a dentist appointment at two.\"" },
             "next": null
           },
           {
-            "text": { "en": "It's personal.", "es": "Es algo personal." },
+            "text": { "en": "It's personal, I prefer not to say.", "es": "Es algo personal, prefiero no decir." },
             "picture": "🤐",
-            "tip": { "en": "The school needs a reason to excuse the absence. A dentist or doctor appointment is an excused reason, so say it.", "es": "La escuela necesita un motivo para justificar la falta. Una cita con el dentista o el doctor es un motivo válido; dilo." },
+            "tip": { "en": "The school needs a reason to excuse the absence. A dentist or doctor appointment is an excused reason, so say it: \"He has a dentist appointment.\"", "es": "La escuela necesita un motivo para justificar la falta. Una cita con el dentista o el doctor es un motivo válido; dilo: \"He has a dentist appointment.\"" },
             "next": null
           }
         ]
@@ -77,28 +78,34 @@
         "partner": { "en": "Okay. Can I see your ID, please? I need to check that you're on his pickup list.", "es": "Muy bien. ¿Me permite su identificación, por favor? Necesito confirmar que está en su lista de personas autorizadas." },
         "choices": [
           {
+            "text": { "en": "Why? Actually I'm his mother, I pick him up every day.", "es": "¿Por qué? Actualmente soy su mamá, lo recojo todos los días." },
+            "picture": "❓",
+            "tip": { "en": "They ask everyone; it's how they keep kids safe. And \"actually\" means en realidad, not actualmente, so it sounds like you're correcting them. Just show it: \"Here is my ID.\"", "es": "Se lo piden a todos; así cuidan a los niños. Y «actually» significa «en realidad», no «actualmente», así que suena a que los corriges. Solo muéstrala: \"Here is my ID.\"" },
+            "next": null
+          },
+          {
             "text": { "en": "Yes, here is my ID.", "es": "Sí, aquí está mi identificación." },
             "picture": "🪪",
             "best": true,
             "next": "s4"
           },
           {
-            "text": { "en": "Why? I'm his mother.", "es": "¿Por qué? Soy su mamá." },
-            "picture": "❓",
-            "tip": { "en": "They ask everyone. It's how they keep kids safe, not a doubt about you. Show it: \"Here is my ID.\"", "es": "Se lo piden a todos. Así cuidan a los niños; no es que duden de ti. Muéstrala: \"Here is my ID.\"" },
-            "next": null
-          },
-          {
-            "text": { "en": "I don't have it with me.", "es": "No la traigo." },
-            "picture": "🤷",
+            "text": { "en": "I don't have it with me, I left it in the car.", "es": "No la traigo, la dejé en el carro." },
+            "picture": "🚗",
             "tip": { "en": "In this rehearsal you have it. In real life, bring an ID every time you pick up early: the office can't release a child without checking.", "es": "En este ensayo sí la traes. En la vida real, trae una identificación cada vez que recojas temprano: la oficina no puede entregar a un niño sin revisarla." },
             "next": null
           }
         ]
       },
       "s4": {
-        "partner": { "en": "Thank you, you're on the list. I'll call him down. Please sign him out on this sheet.", "es": "Gracias, sí está en la lista. Ahorita lo llamo. Por favor, fírmele la salida en esta hoja." },
+        "partner": { "en": "Thank you, you're on the list. I'll call him down. Please sign him out on this sheet.", "es": "Gracias, sí está en la lista. Ahorita lo llamo. Por favor, firme la salida aquí en esta hoja." },
         "choices": [
+          {
+            "text": { "en": "OK, I sign here? With the pen of the office?", "es": "Bueno, ¿firmo aquí? ¿Con la pluma de la oficina?" },
+            "picture": "🖊️",
+            "tip": { "en": "\"I sign here?\" is a statement with a question mark, the Spanish pattern. English puts the question word first: \"Where do I sign?\"", "es": "«I sign here?» es una afirmación con signo de pregunta, el patrón del español. En inglés la palabra interrogativa va primero: \"Where do I sign?\"" },
+            "next": null
+          },
           {
             "text": { "en": "Thank you. Where do I sign?", "es": "Gracias. ¿Dónde firmo?" },
             "picture": "✍️",
@@ -106,15 +113,9 @@
             "next": "s5"
           },
           {
-            "text": { "en": "OK.", "es": "Está bien." },
-            "picture": "💬",
-            "tip": { "en": "Ask where, so you don't miss the sheet: \"Where do I sign?\"", "es": "Pregunta dónde, para que no se te pase la hoja: \"Where do I sign?\"" },
-            "next": null
-          },
-          {
-            "text": { "en": "Can you sign for me?", "es": "¿Puede firmar usted por mí?" },
-            "picture": "🖊️",
-            "tip": { "en": "The parent signs the child out. Ask where: \"Where do I sign?\"", "es": "Quien firma la salida es el padre o la madre. Pregunta dónde: \"Where do I sign?\"" },
+            "text": { "en": "Can you sign for me? My handwriting is bad.", "es": "¿Puede firmar usted por mí? Tengo mala letra." },
+            "picture": "📋",
+            "tip": { "en": "The parent signs the child out, and any signature works. Ask where: \"Where do I sign?\"", "es": "Quien firma la salida es el padre o la madre, y cualquier firma sirve. Pregunta dónde: \"Where do I sign?\"" },
             "next": null
           }
         ]
@@ -129,14 +130,14 @@
             "next": "s6"
           },
           {
-            "text": { "en": "No, that's all.", "es": "No, eso es todo." },
+            "text": { "en": "No, that's all. Thank you very much for your help today.", "es": "No, eso es todo. Muchas gracias por su ayuda hoy." },
             "picture": "🙅",
             "tip": { "en": "This is the moment to ask about the conference. Try \"Can I request an interpreter for the parent-teacher conference?\"", "es": "Este es el momento de preguntar por la junta. Prueba \"Can I request an interpreter for the parent-teacher conference?\"" },
             "next": null
           },
           {
-            "text": { "en": "Do you speak Spanish?", "es": "¿Habla español?" },
-            "picture": "💬",
+            "text": { "en": "Do you speak Spanish? I want to talk about the conference.", "es": "¿Habla español? Quiero hablar de la junta." },
+            "picture": "🗨️",
             "tip": { "en": "A fair question, but ask for what you need: \"Can I request an interpreter for the parent-teacher conference?\" Schools have to provide one.", "es": "Es una pregunta válida, pero pide lo que necesitas: \"Can I request an interpreter for the parent-teacher conference?\" Las escuelas tienen la obligación de darte uno." },
             "next": null
           }
@@ -146,21 +147,21 @@
         "partner": { "en": "Yes. Tell his teacher, or write it on the conference form, and the school will arrange one at no cost.", "es": "Sí. Dígale a la maestra, o escríbalo en el formulario de la junta, y la escuela lo consigue sin costo." },
         "choices": [
           {
+            "text": { "en": "How much does it cost? I can pay a little.", "es": "¿Cuánto cuesta? Puedo pagar un poco." },
+            "picture": "💵",
+            "tip": { "en": "It's free. Schools are required to provide an interpreter for parents. Say thank you and that you'll write it on the form.", "es": "Es gratis. Las escuelas están obligadas a dar un intérprete a los padres. Da las gracias y di que lo escribirás en el formulario." },
+            "next": null
+          },
+          {
             "text": { "en": "Thank you. I'll write it on the form.", "es": "Gracias. Lo escribo en el formulario." },
             "picture": "🙏",
             "best": true,
             "next": null
           },
           {
-            "text": { "en": "How much does it cost?", "es": "¿Cuánto cuesta?" },
-            "picture": "💵",
-            "tip": { "en": "It's free. Schools are required to provide an interpreter for parents. Say thank you and that you'll write it on the form.", "es": "Es gratis. Las escuelas están obligadas a dar un intérprete a los padres. Da las gracias y di que lo escribirás en el formulario." },
-            "next": null
-          },
-          {
-            "text": { "en": "Bye.", "es": "Adiós." },
+            "text": { "en": "Bye, see you in the conference.", "es": "Adiós, nos vemos en la junta." },
             "picture": "👋",
-            "tip": { "en": "Say thank you first, and tell them what you'll do: \"I'll write it on the form.\"", "es": "Primero da las gracias y di qué vas a hacer: \"I'll write it on the form.\"" },
+            "tip": { "en": "Say thank you first, and tell them what you'll do: \"I'll write it on the form.\" (Also: \"at the conference\", not \"in\".)", "es": "Primero da las gracias y di qué vas a hacer: \"I'll write it on the form.\" (Además: «at the conference», no «in».)" },
             "next": null
           }
         ]

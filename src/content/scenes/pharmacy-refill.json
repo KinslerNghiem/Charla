@@ -1,27 +1,29 @@
 {
   "id": "pharmacy-refill",
   "place_type": "pharmacy",
-  "title": { "en": "Refill a prescription", "es": "Recoger una receta" },
+  "channel": "counter",
+  "title": { "en": "Pick up a prescription", "es": "Recoger una receta" },
   "roles": {
     "partner": { "en": "pharmacist", "es": "farmacéutico o farmacéutica" },
     "learner": { "en": "customer picking up medicine for a family member", "es": "cliente que recoge medicina para un familiar" }
   },
   "goal": {
     "en": "Pick up your mother's prescription and ask one question about the medicine.",
-    "es": "Recoger la receta de tu madre y hacer una pregunta sobre el medicamento."
+    "es": "Recoger la receta de tu mamá y hacer una pregunta sobre el medicamento."
   },
   "must_use": [
-    { "en": "pick up", "es": "recoger" },
-    { "en": "prescription", "es": "receta" },
-    { "en": "Does she take it with food?", "es": "¿Lo toma con comida?" }
+    { "en": "I'm here to pick up a prescription for my mother.", "es": "Vengo a recoger una receta para mi mamá." },
+    { "en": "Her last name is Garcia and her date of birth is May 3rd, 1960.", "es": "Su apellido es García y su fecha de nacimiento es el 3 de mayo de 1960." },
+    { "en": "Should she take it with food?", "es": "¿Debe tomarlo con comida?" }
   ],
+  "expect": { "en": "What's her last name and date of birth?", "es": "¿Cuál es su apellido y su fecha de nacimiento?" },
   "success": {
     "en": "The pharmacist finds the prescription, hands it to you, and answers your question.",
     "es": "El farmacéutico encuentra la receta, te la entrega y responde tu pregunta."
   },
   "show_staff_line": {
     "en": "I'm practicing my English. Thank you for your patience.",
-    "es": "Estoy practicando mi inglés. Gracias por su paciencia."
+    "es": "Estoy practicando mi español. Gracias por su paciencia."
   },
   "offline_script": {
     "start": "s1",
@@ -30,21 +32,21 @@
         "partner": { "en": "Hi, how can I help you today?", "es": "Hola, ¿en qué le puedo ayudar hoy?" },
         "choices": [
           {
-            "text": { "en": "I need to pick up a prescription for my mother.", "es": "Necesito recoger una receta para mi madre." },
+            "text": { "en": "I'm here to pick up a prescription for my mother.", "es": "Vengo a recoger una receta para mi mamá." },
             "picture": "💊",
             "best": true,
             "next": "s2"
           },
           {
-            "text": { "en": "Medicine. Mother.", "es": "Medicina. Madre." },
-            "picture": "💬",
-            "tip": { "en": "Try a full sentence: \"I need to pick up…\"", "es": "Prueba una oración completa: \"I need to pick up…\"" },
+            "text": { "en": "I need to recollect a prescription for my mother, please.", "es": "Necesito recordar una receta para mi mamá, por favor." },
+            "picture": "🧠",
+            "tip": { "en": "\"Recollect\" means to remember. The word for recoger at a counter is \"pick up\": \"I'm here to pick up a prescription for my mother.\"", "es": "«Recollect» significa recordar. Para recoger algo en un mostrador se dice «pick up»: \"I'm here to pick up a prescription for my mother.\"" },
             "next": null
           },
           {
-            "text": { "en": "Where is the milk?", "es": "¿Dónde está la leche?" },
-            "picture": "🥛",
-            "tip": { "en": "This is the pharmacy counter. Ask about the prescription.", "es": "Este es el mostrador de la farmacia. Pregunta por la receta." },
+            "text": { "en": "Give me the medicine of my mother.", "es": "Deme la medicina de mi madre." },
+            "picture": "📋",
+            "tip": { "en": "\"Give me\" sounds like an order in English, and \"the medicine of my mother\" is Spanish word order. Try \"I'm here to pick up a prescription for my mother.\"", "es": "«Give me» suena a orden en inglés, y «the medicine of my mother» es orden de palabras del español. Prueba \"I'm here to pick up a prescription for my mother.\"" },
             "next": null
           }
         ]
@@ -53,21 +55,21 @@
         "partner": { "en": "Sure. What's her last name and date of birth?", "es": "Claro. ¿Cuál es su apellido y su fecha de nacimiento?" },
         "choices": [
           {
-            "text": { "en": "Her last name is Garcia. She was born on May 3rd, 1960.", "es": "Su apellido es García. Nació el 3 de mayo de 1960." },
+            "text": { "en": "Her last name is Garcia and she born in the 3 of May of 1960.", "es": "Su apellido es García y nació el 3 de mayo de 1960." },
+            "picture": "📅",
+            "tip": { "en": "Dates in English go month, day, year, and the verb needs \"was\": \"She was born on May 3rd, 1960.\" Or simply \"Her date of birth is May 3rd, 1960.\"", "es": "En inglés la fecha va mes, día, año, y el verbo necesita «was»: \"She was born on May 3rd, 1960.\" O más simple: \"Her date of birth is May 3rd, 1960.\"" },
+            "next": null
+          },
+          {
+            "text": { "en": "Her last name is Garcia and her date of birth is May 3rd, 1960.", "es": "Su apellido es García y su fecha de nacimiento es el 3 de mayo de 1960." },
             "picture": "🪪",
             "best": true,
             "next": "s3"
           },
           {
-            "text": { "en": "Garcia.", "es": "García." },
-            "picture": "💬",
-            "tip": { "en": "They asked two things. Add the date of birth.", "es": "Preguntaron dos cosas. Agrega la fecha de nacimiento." },
-            "next": null
-          },
-          {
-            "text": { "en": "I don't know.", "es": "No sé." },
-            "picture": "🤷",
-            "tip": { "en": "You know this one. Say the last name and the birthday.", "es": "Esta sí la sabes. Di el apellido y el cumpleaños." },
+            "text": { "en": "Garcia. She's sixty-six years old.", "es": "García. Tiene sesenta y seis años." },
+            "picture": "🔢",
+            "tip": { "en": "They asked for her date of birth, not her age; the computer searches by the exact date. Say the month, the day and the year.", "es": "Pidieron la fecha de nacimiento, no la edad; la computadora busca por la fecha exacta. Di el mes, el día y el año." },
             "next": null
           }
         ]
@@ -76,21 +78,21 @@
         "partner": { "en": "I found it. It's ready. Do you have any questions about the medicine?", "es": "Ya la encontré. Está lista. ¿Tiene alguna pregunta sobre el medicamento?" },
         "choices": [
           {
-            "text": { "en": "Yes. Does she take it with food?", "es": "Sí. ¿Lo toma con comida?" },
+            "text": { "en": "Yes. She takes it with food?", "es": "Sí. ¿Lo toma con comida?" },
+            "picture": "🍴",
+            "tip": { "en": "A statement with a question mark is the Spanish pattern. In English the question starts with the helping verb: \"Should she take it with food?\"", "es": "Una afirmación con signo de interrogación es un patrón del español. En inglés la pregunta empieza con el verbo auxiliar: \"Should she take it with food?\"" },
+            "next": null
+          },
+          {
+            "text": { "en": "Yes. Should she take it with food?", "es": "Sí. ¿Debe tomarlo con comida?" },
             "picture": "🍽️",
             "best": true,
             "next": "s4"
           },
           {
-            "text": { "en": "No.", "es": "No." },
-            "picture": "🙅",
-            "tip": { "en": "This is your chance to ask. Try \"Does she take it with food?\"", "es": "Es tu oportunidad de preguntar. Prueba \"Does she take it with food?\"" },
-            "next": null
-          },
-          {
-            "text": { "en": "Thank you, bye.", "es": "Gracias, adiós." },
+            "text": { "en": "No questions. My mother knows how to take it, she has taken it for years.", "es": "No tengo preguntas. Mi mamá sabe cómo tomarlo, lleva años tomándolo." },
             "picture": "👋",
-            "tip": { "en": "Not yet. Ask your question first.", "es": "Todavía no. Primero haz tu pregunta." },
+            "tip": { "en": "Even with a refill, this is your chance to ask. The question you need: \"Should she take it with food?\"", "es": "Aunque sea una renovación, este es tu momento para preguntar. La pregunta que necesitas: \"Should she take it with food?\"" },
             "next": null
           }
         ]
@@ -105,9 +107,15 @@
             "next": null
           },
           {
-            "text": { "en": "Yes.", "es": "Sí." },
-            "picture": "💬",
-            "tip": { "en": "If you have nothing else, say \"No, that's all\" and thank them.", "es": "Si no necesitas nada más, di \"No, that's all\" y da las gracias." },
+            "text": { "en": "One more thing. Actually she is taking another pill too.", "es": "Una cosa más. Actualmente toma otra pastilla también." },
+            "picture": "💊",
+            "tip": { "en": "\"Actually\" means en realidad, not actualmente. For 'now' say \"right now\" or \"currently\": \"Right now she is also taking another pill.\" A good thing to tell the pharmacist, if it is true.", "es": "«Actually» significa «en realidad», no «actualmente». Para decir «ahora» usa «right now» o «currently»: \"Right now she is also taking another pill.\" Es bueno decírselo al farmacéutico, si es cierto." },
+            "next": null
+          },
+          {
+            "text": { "en": "Yes, that's all. Thank you.", "es": "Sí, eso es todo. Gracias." },
+            "picture": "✅",
+            "tip": { "en": "\"Anything else?\" asks if you need more. If you don't, the answer is \"No, that's all.\" \"Yes\" tells them to wait for another request.", "es": "«Anything else?» pregunta si necesitas algo más. Si no, la respuesta es «No, that's all». Con «Yes» se quedan esperando otra cosa." },
             "next": null
           }
         ]

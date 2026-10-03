@@ -35,8 +35,7 @@ export function weight(ageDays: number): number {
   return Math.pow(0.5, ageDays / 182.5)
 }
 
-export function computeStatus(base: Status, agg: PlaceAgg | undefined, now = Date.now()): Status {
-  void now
+export function computeStatus(base: Status, agg: PlaceAgg | undefined): Status {
   if (base === 'listed_by_business' || base === 'listed_public') return base
   if (!agg) return 'unknown'
   let score = 0

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'preact/hooks'
 import { SCENES, sceneById } from '../content/scenes'
 import { buildTableScript, phaseAt, totalSeconds } from '../table/script'
 import { lang, t } from '../i18n/lang'
+import { isTeen } from '../gate/gate'
 import { askHelp } from '../tutor/client'
 import type { Help } from '../tutor/turn'
 import { go } from '../router'
@@ -35,6 +36,42 @@ export function Table({ params }: { params: URLSearchParams }) {
   const at = running ? phaseAt(phases, elapsed) : null
   const finished = running && at === null
   const phase = at ? phases[at.index] : null
+  const active = running && !finished
+
+  // The phone lies on the table for ten minutes with nobody touching it. Keep
+  // the screen on while a phase is running; browsers drop the lock whenever the
+  // tab is hidden, so it is asked for again when the tab comes back.
+  useEffect(() => {
+    if (!active || typeof navigator === 'undefined' || !navigator.wakeLock) return
+    let lock: WakeLockSentinel | null = null
+    let alive = true
+    const request = async () => {
+      try {
+        const got = await navigator.wakeLock.request('screen')
+        if (alive) lock = got
+        else got.release().catch(() => {})
+      } catch {
+        // Denied or unsupported (low battery, hidden tab): the timer still runs.
+      }
+    }
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') request()
+    }
+    request()
+    document.addEventListener('visibilitychange', onVisible)
+    return () => {
+      alive = false
+      document.removeEventListener('visibilitychange', onVisible)
+      lock?.release().catch(() => {})
+    }
+  }, [active])
+
+  function end() {
+    setRunning(false)
+    setElapsed(0)
+    setHelp(null)
+    setHelpText('')
+  }
 
   async function getHelp(e: Event) {
     e.preventDefault()
@@ -55,9 +92,18 @@ export function Table({ params }: { params: URLSearchParams }) {
       <h1>{t('table_title')}</h1>
       <p class="intro">{t('table_intro')}</p>
       <p class="not-recorded">🔒 {t('table_not_recorded')}</p>
+      {/* Announces the phase title when the phase changes, and nothing else.
+          The timer itself is silent: a live region ticking every second talks
+          over the two people it is supposed to help. */}
+      <p class="sr-only" aria-live="polite">
+        {phase ? phase.title[ui] : finished ? t('table_done') : ''}
+      </p>
       {!running && (
         <>
-          <p class="notice">{t('table_checklist')}</p>
+          <p class="notice">
+            {t('table_checklist')}
+            {isTeen() && ` ${t('table_checklist_teen')}`}
+          </p>
           <label>
             {t('pick_scene')}
             <select value={scene.id} onChange={(e) => go('/table', { scene: (e.target as HTMLSelectElement).value })}>
@@ -73,12 +119,12 @@ export function Table({ params }: { params: URLSearchParams }) {
       )}
       {phase && at && (
         <div class={'phase ' + phase.id}>
-          <p class="timer" aria-live="polite">
+          <p class="timer" role="timer">
             {Math.floor(at.remaining / 60)}:{String(at.remaining % 60).padStart(2, '0')}
           </p>
           <h2>{phase.id === 'switch' ? '⇄ ' : ''}{phase.title[ui]}</h2>
           <p class="lang-tag">{phase.lang === 'en' ? 'English' : 'Español'}</p>
-          <ul class="prompts">
+          <ul class="prompts" lang={phase.lang}>
             {phase.prompts.map((p) => (
               <li>{p[phase.lang]}</li>
             ))}
@@ -87,7 +133,12 @@ export function Table({ params }: { params: URLSearchParams }) {
               never saw the Rehearse screen, so the AI notice belongs here too. */}
           <p class="ai-banner">{t('table_help_ai')}</p>
           <form class="help" onSubmit={getHelp}>
-            <input value={helpText} placeholder={t('table_help_placeholder')} onInput={(e) => setHelpText((e.target as HTMLInputElement).value)} />
+            <input
+              value={helpText}
+              placeholder={t('table_help_placeholder')}
+              aria-label={t('table_help_placeholder')}
+              onInput={(e) => setHelpText((e.target as HTMLInputElement).value)}
+            />
             <button type="submit" class="ghost" disabled={busy}>
               {t('table_help')}
             </button>
@@ -99,7 +150,7 @@ export function Table({ params }: { params: URLSearchParams }) {
               {help.tip && <p class="tip">{help.tip}</p>}
             </div>
           )}
-          <button type="button" class="ghost" onClick={() => location.reload()}>
+          <button type="button" class="ghost" onClick={end}>
             {t('table_end')}
           </button>
         </div>
@@ -107,7 +158,7 @@ export function Table({ params }: { params: URLSearchParams }) {
       {finished && (
         <div class="done">
           <p class="big">{t('table_done')}</p>
-          <button type="button" class="primary" onClick={() => location.reload()}>
+          <button type="button" class="primary" onClick={end}>
             {t('table_end')}
           </button>
         </div>

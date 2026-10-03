@@ -45,7 +45,6 @@ const ALLOWED = [
   'Community College',
   'Health Care',
   'Health Center',
-  'Fresh Market',
   'Public Library',
   'West Branch',
   'Meeting Room',
@@ -69,14 +68,47 @@ describe('venues.geojson', () => {
       expect(lat, f.id).toBeGreaterThan(41.4)
       expect(lat, f.id).toBeLessThan(42.1)
       expect(STATUSES, `${f.id} status`).toContain(f.properties.status)
-      expect(f.properties.source, `${f.id} source`).toBeTruthy()
+      expect(['in_person', 'online', 'both'], `${f.id} format`).toContain(f.properties.format)
+    }
+  })
+
+  it('ships only public columns (notes, source and verified_on stay in the CSV)', () => {
+    for (const f of data.features) {
+      expect(f.properties, f.id).not.toHaveProperty('notes')
+      expect(f.properties, f.id).not.toHaveProperty('source')
+      expect(f.properties, f.id).not.toHaveProperty('verified_on')
+    }
+  })
+
+  it('carries a ZIP -> centroid table derived from the venues', () => {
+    expect(data.zips).toBeTypeOf('object')
+    for (const [zip, [lng, lat]] of Object.entries<[number, number]>(data.zips)) {
+      expect(zip).toMatch(/^\d{5}$/)
+      expect(lng).toBeGreaterThan(-88.6)
+      expect(lng).toBeLessThan(-87.8)
+      expect(lat).toBeGreaterThan(41.4)
+      expect(lat).toBeLessThan(42.1)
+    }
+    // Woodridge and the Eola branch ZIPs are typed in centers.ts; the rest come from here.
+    expect(Object.keys(data.zips)).toContain('60517')
+  })
+
+  it('lists no business without a signed yes and no row still marked for checking', () => {
+    for (const f of data.features) {
+      // A business row exists only after someone there said yes. Public programs need no signature.
+      if (!['library', 'college', 'clinic', 'driver_services', 'community'].includes(f.properties.type)) {
+        expect(f.properties.status, `${f.id} is a business without a signed yes`).toBe('listed_by_business')
+      }
+      for (const col of ['roles', 'shifts', 'club_schedule'] as const) {
+        expect(f.properties[col] ?? '', `${f.id}.${col}`).not.toMatch(/verify/i)
+      }
     }
   })
 
   it('never names a staff member, in any free-text column', () => {
-    // build_venues.py ships every CSV column to the client, so check them all.
+    // Every free-text column that reaches the client. `notes` never does.
     for (const f of data.features) {
-      for (const col of ['roles', 'shifts', 'club_schedule', 'notes'] as const) {
+      for (const col of ['roles', 'shifts', 'club_schedule'] as const) {
         let text: string = f.properties[col] ?? ''
         for (const phrase of ALLOWED) text = text.split(phrase).join('')
         expect(text, `${f.id}.${col} looks like it names a person`).not.toMatch(LOOKS_LIKE_A_NAME)

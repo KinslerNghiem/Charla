@@ -16,6 +16,60 @@ jobs:
           python-version: '3.12'
       - run: npm ci
       - run: python scripts/build_venues.py
+      - run: python scripts/check_scenes.py
       - run: npm test
       - run: npm run typecheck
       - run: npm run build
+      # Production dependencies only; a high-severity advisory fails the build.
+      - run: npm audit --omit=dev --audit-level=high
+      # Compiles the Worker without uploading it. A dry run does not talk to
+      # the Cloudflare API, so it needs no token.
+      - run: npx wrangler deploy --dry-run --config worker/wrangler.toml
+
+  # Every page screenshotted in Chrome against the production build, with the
+  # API answering 503 the way the Worker does when no model is reachable.
+  walk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci
+      - run: python scripts/build_venues.py
+      # Vite's /api proxy only exists in dev, so the production build is
+      # pointed at the stub's origin instead.
+      - run: npm run build
+        env:
+          VITE_API_BASE: http://127.0.0.1:8787
+      - name: Stub API (503 on /api/*) and preview server
+        run: |
+          cat > /tmp/stub.cjs <<'EOF'
+          const http = require('node:http')
+          const cors = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': 'GET,POST,OPTIONS' }
+          http.createServer((req, res) => {
+            if (req.method === 'OPTIONS') { res.writeHead(204, cors); return res.end() }
+            const api = req.url.startsWith('/api/')
+            res.writeHead(api ? 503 : 404, { ...cors, 'Content-Type': 'application/json' })
+            res.end(JSON.stringify({ error: api ? 'stub: no model here' : 'not found' }))
+          }).listen(8787, '127.0.0.1')
+          EOF
+          node /tmp/stub.cjs &
+          npx vite preview --port 5173 --strictPort &
+          for i in $(seq 1 30); do curl -sf http://localhost:5173/ >/dev/null && break; sleep 1; done
+          curl -sf http://localhost:5173/ >/dev/null
+      - run: node scripts/walk.mjs
+        env:
+          WALK_BASE: http://localhost:5173
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: walk-screenshots
+          path: |
+            .walk/*.png
+            .walk/report.json
+          if-no-files-found: warn

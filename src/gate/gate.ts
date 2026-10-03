@@ -1,8 +1,20 @@
 // The neutral birth screen sets one of three modes. The three modes differ in
-// capability, not just content: kid mode has no network, no mic, no map, no chat.
+// capability, not just content:
+//   kid   - Charlita only: no network, no mic, no map, no AI, no chat.
+//   teen  - the full app, minus anything that points at meeting strangers:
+//           the Places "good place to meet a partner" line is hidden and the
+//           Table checklist adds "talk to a parent first".
+//   adult - everything.
 // The birth date itself is never stored; only the resulting mode flag is.
 
+import { get } from '../storage'
+
 export type Mode = 'kid' | 'teen' | 'adult'
+
+/** True when the stored mode is teen. Pages read this to hide meet-up copy. */
+export function isTeen(): boolean {
+  return get<Mode | null>('mode', null) === 'teen'
+}
 
 const RANK: Record<Mode, number> = { kid: 0, teen: 1, adult: 2 }
 

@@ -1,4 +1,4 @@
-﻿name = "charla-api"
+name = "charla-api"
 main = "src/index.ts"
 compatibility_date = "2026-09-01"
 compatibility_flags = ["nodejs_compat"]
@@ -8,6 +8,13 @@ compatibility_flags = ["nodejs_compat"]
 [observability]
 enabled = true
 head_sampling_rate = 1
+
+# public/venues.geojson is imported as text so /api/report can refuse a place id
+# the map does not show. esbuild only knows .json on its own; this names .geojson.
+[[rules]]
+type = "Text"
+globs = ["**/*.geojson"]
+fallthrough = true
 
 [vars]
 # claude-opus-5 accepts mid-conversation system messages, which is where the
@@ -26,23 +33,28 @@ MODEL = "claude-opus-5"
 # JSON schema, same drift guard. Add the key and Claude takes over on the
 # next request; nothing else changes.
 FALLBACK_MODEL = "@cf/openai/gpt-oss-120b"
+# Per device per Chicago day. Turns (/api/turn, /api/help, /api/flag) share one
+# counter; speech (/api/stt) has its own, so a spoken turn costs one of each,
+# not two turns. Both have a per-IP twin (DAILY_IP_CAP for turns, a fixed 600
+# for speech) that a script minting fresh device ids cannot get around.
 DAILY_TURN_CAP = "40"
 DAILY_IP_CAP = "400"
-# Set this to the deployed app origin before deploying, e.g.
-# "https://charla.pages.dev". It fails closed: an unset value blocks browsers.
+DAILY_STT_CAP = "60"
+# The deployed app origin, e.g. "https://charla.pages.dev". A POST whose Origin
+# header is anything else is answered 403 before any counter or model call; a
+# request with no Origin header (curl, the tests) is not a browser and passes.
+# Left empty, no allow-origin header is sent at all and every browser POST is
+# refused. For local dev, put ALLOWED_ORIGIN=http://localhost:5173 in
+# worker/.dev.vars so the Vite proxy's requests are accepted.
 ALLOWED_ORIGIN = "https://charla-naperville.pages.dev"
 
-# Create these once, then paste the ids:
+# Create this once, then paste the id:
 #   wrangler d1 create charla
-#   wrangler kv namespace create CAPS
+# Caps live in D1 too (see src/caps.ts); there is no KV namespace.
 [[d1_databases]]
 binding = "DB"
 database_name = "charla"
 database_id = "65e4b78a-2185-4faa-81fa-8f2916784c95"
-
-[[kv_namespaces]]
-binding = "CAPS"
-id = "559dbe29f6484770b926dd9d80caf0b1"
 
 # Workers AI: Whisper for /api/stt, and the FALLBACK_MODEL partner when there is
 # no Anthropic key. Local `wrangler dev` proxies this binding to the real

@@ -25,10 +25,18 @@ export function simplerThan(level: Level): Level {
   return LEVELS[Math.max(0, i - 1)]
 }
 
+// Titles and clock abbreviations end in a period without ending a sentence.
+// "Dr. Lopez will see you at 3:30 p.m. today." is one sentence, not three.
+// The period is swapped for a placeholder before the split and put back after.
+// "No." only when a number follows ("No. 4"): on its own it is a whole answer.
+const ABBREV = /\b(Dr|Mr|Mrs|Ms|St|Sr|Sra|Srta|Dra|a\.m|p\.m)\.|\bNo\.(?=\s?\d)/gi
+const DOT = '\u0000'
+
 export function splitSentences(text: string): string[] {
-  return text
+  const guarded = text.replace(ABBREV, (m) => m.replaceAll('.', DOT))
+  return guarded
     .split(/(?<=[.!?])\s+|\n+/)
-    .map((s) => s.trim())
+    .map((s) => s.trim().replaceAll(DOT, '.'))
     .filter(Boolean)
 }
 
@@ -64,7 +72,7 @@ export function checkReply(text: string, level: Level): Check {
 // About 60 tokens each. Injected after every learner turn so the level rule is
 // always the most recent instruction the model sees.
 export const LEVEL_REMINDER: Record<Level, string> = {
-  A1: 'Level reminder: the learner is A1. At most 2 sentences, each 8 words or fewer. One question at most. Present tense, everyday words only. Reply in the target language.',
+  A1: 'Level reminder: the learner is A1. At most 2 sentences, each 8 words or fewer. One question at most. Present tense and short polite requests (Tome asiento / Please have a seat) are fine; no past or future. Everyday words only. Reply in the target language.',
   A2: 'Level reminder: the learner is A2. At most 3 sentences, each 12 words or fewer. One question at most. Simple past and future are fine. Reply in the target language.',
   B1: 'Level reminder: the learner is B1. At most 4 sentences, each 18 words or fewer. Up to 2 questions. Connectors and opinions are fine. Reply in the target language.',
 }

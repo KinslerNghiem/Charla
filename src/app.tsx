@@ -8,11 +8,12 @@ import { BirthGate } from './gate/BirthGate'
 import { LangPick } from './gate/LangPick'
 import { lowerOnly, type Mode } from './gate/gate'
 import { Ninos } from './pages/Ninos'
+import { About } from './pages/About'
 
-// Kid mode is structurally offline, not just behaviourally: Ninos is the only
-// page imported at module scope, and everything networked lives behind this
-// dynamic import, so a child's browser never downloads the map or the API
-// client at all.
+// Kid mode is structurally offline, not just behaviourally: Ninos (and About,
+// which is plain text) are the only pages imported at module scope, and
+// everything networked lives behind this dynamic import, so a child's browser
+// never downloads the map or the API client at all.
 type Pages = typeof import('./pages')
 let cached: Pages | null = null
 
@@ -38,6 +39,24 @@ export function App() {
   const [mode, setMode] = useState<Mode | null>(() => get<Mode | null>('mode', null))
   const [picked, setPicked] = useState(hasNative)
   const pages = usePages(mode !== null && mode !== 'kid')
+
+  // About is linked from the very first screen, before any question has been
+  // answered, so it gets a bare shell of its own until the gate is done.
+  if (route.path === '/about' && (!picked || !mode)) {
+    return (
+      <div class="shell">
+        <header class="top">
+          <a class="brand" href="#/">
+            {t('app_name')}
+          </a>
+          <a href="#/">← {t('back')}</a>
+        </header>
+        <main id="main" tabIndex={-1}>
+          <About />
+        </main>
+      </div>
+    )
+  }
 
   // Language first, age second: the birth question is then asked in the
   // learner's own language.
@@ -86,12 +105,14 @@ export function App() {
     ['/table', t('nav_table')],
     ['/ninos', t('nav_kids')],
   ]
-  // Privacy is a footer link, not a sixth tab: six tabs overflow a 390px phone
-  // and the last one scrolls out of sight with nothing to say it is there.
+  // Privacy and About are footer links, not tabs: six tabs overflow a 390px
+  // phone and the last one scrolls out of sight with nothing to say it is there.
   const current = route.path === '/' ? '/learn' : route.path
 
   let page
-  if (!pages) {
+  if (route.path === '/about') {
+    page = <About />
+  } else if (!pages) {
     page = <p class="empty">{t('loading')}</p>
   } else {
     switch (route.path) {
@@ -112,7 +133,7 @@ export function App() {
         break
       default:
         // Keyed on the scene so picking a new one starts a clean conversation.
-        page = <pages.Learn key={route.params.get('scene') ?? 'picker'} params={route.params} mode={mode} />
+        page = <pages.Learn key={route.params.get('scene') ?? 'picker'} params={route.params} />
     }
   }
 
@@ -148,6 +169,9 @@ export function App() {
       <footer class="foot">
         <a href="#/privacy" aria-current={route.path === '/privacy' ? 'page' : undefined}>
           {t('nav_privacy')}
+        </a>
+        <a href="#/about" aria-current={route.path === '/about' ? 'page' : undefined}>
+          {t('nav_about')}
         </a>
         <button
           type="button"

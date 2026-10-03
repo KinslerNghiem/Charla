@@ -1,0 +1,148 @@
+{
+  "id": "parent-teacher-conference",
+  "place_type": "school",
+  "channel": "counter",
+  "title": { "en": "Talk with the teacher at conferences", "es": "Hablar con la maestra en la junta" },
+  "roles": {
+    "partner": { "en": "third-grade teacher at the fall parent-teacher conference", "es": "maestra de tercer grado en la junta de otoño con los padres" },
+    "learner": { "en": "parent of a third grader", "es": "madre o padre de una niña de tercer grado" }
+  },
+  "goal": {
+    "en": "Hear how your daughter is doing, ask about her reading, and leave with one thing to do at home.",
+    "es": "Escuchar cómo va tu hija, preguntar por su lectura y salir con una cosa para hacer en casa."
+  },
+  "must_use": [
+    { "en": "How is she doing in reading?", "es": "¿Cómo va en lectura?" },
+    { "en": "What can we do at home?", "es": "¿Qué podemos hacer en casa?" },
+    { "en": "Could you say that another way?", "es": "¿Me lo puede decir de otra manera?" }
+  ],
+  "expect": { "en": "How are things at home?", "es": "¿Cómo van las cosas en casa?" },
+  "success": {
+    "en": "You know your daughter's strengths, what her reading level means, and one thing to practice at home, and you know you can ask for an interpreter next time.",
+    "es": "Sabes en qué es fuerte tu hija, qué significa su nivel de lectura y una cosa para practicar en casa, y sabes que puedes pedir un intérprete la próxima vez."
+  },
+  "show_staff_line": {
+    "en": "I'm practicing my English. Please speak a little more slowly.",
+    "es": "Estoy practicando mi español. Por favor, hábleme un poco más despacio."
+  },
+  "offline_script": {
+    "start": "s1",
+    "nodes": {
+      "s1": {
+        "partner": { "en": "Thank you for coming in! I'm Ms. Park. First, Sofia is a kind friend to everyone in class, and she loves math. How are things at home?", "es": "¡Gracias por venir! Soy la maestra Park. Primero, Sofía es muy buena compañera con todos en la clase, y le encantan las matemáticas. ¿Cómo van las cosas en casa?" },
+        "choices": [
+          {
+            "text": { "en": "Thank you. She is very good girl, she makes the tasks every night.", "es": "Gracias. Es muy buena niña, hace las tareas todas las noches." },
+            "picture": "📝",
+            "tip": { "en": "Nice to share. One note: tarea is \"homework\", not \"tasks\", and it's \"a very good girl\". Then ask what you came to ask: \"How is she doing in reading?\"", "es": "Bien compartirlo. Un detalle: tarea es «homework», no «tasks», y es «a very good girl». Luego pregunta lo que viniste a preguntar: \"How is she doing in reading?\"" },
+            "next": null
+          },
+          {
+            "text": { "en": "Thank you. She's happy at school. How is she doing in reading?", "es": "Gracias. Está contenta en la escuela. ¿Cómo va en lectura?" },
+            "picture": "📖",
+            "best": true,
+            "next": "s2"
+          },
+          {
+            "text": { "en": "Good. Actually she reads in Spanish at home with her grandmother every night.", "es": "Bien. Actualmente lee en español en casa con su abuela todas las noches." },
+            "picture": "👵",
+            "tip": { "en": "That's great for her reading, in any language; tell the teacher. But \"actually\" means en realidad, not actualmente: say \"right now\" or \"these days\". Then ask: \"How is she doing in reading?\"", "es": "Eso es buenísimo para su lectura, en cualquier idioma; cuéntaselo a la maestra. Pero «actually» significa «en realidad», no «actualmente»: di «right now» o «these days». Luego pregunta: \"How is she doing in reading?\"" },
+            "next": null
+          }
+        ]
+      },
+      "s2": {
+        "partner": { "en": "Good question. She's reading at a level M, which is right at grade level for fall. Her MAP score in reading went up since spring, and her IAR from last year was 'approaching'. Does that make sense?", "es": "Buena pregunta. Está leyendo en el nivel M, que es justo el nivel de tercer grado para el otoño. Su puntaje MAP de lectura subió desde la primavera, y en el IAR del año pasado salió en «approaching». ¿Tiene sentido?" },
+        "choices": [
+          {
+            "text": { "en": "Yes, perfect, I understand everything. Thank you.", "es": "Sí, perfecto, entiendo todo. Gracias." },
+            "picture": "👍",
+            "tip": { "en": "If you understood level M, MAP and IAR, great. If not, this is the moment; teachers expect the question: \"Could you say that another way?\"", "es": "Si entendiste nivel M, MAP e IAR, perfecto. Si no, este es el momento; las maestras esperan la pregunta: \"Could you say that another way?\"" },
+            "next": null
+          },
+          {
+            "text": { "en": "Not all of it. Could you say that another way?", "es": "No todo. ¿Me lo puede decir de otra manera?" },
+            "picture": "🔁",
+            "best": true,
+            "next": "s3"
+          },
+          {
+            "text": { "en": "Sorry, I don't understand nothing. My English is very bad.", "es": "Perdón, no entiendo nada. Mi inglés es muy malo." },
+            "picture": "😔",
+            "tip": { "en": "Your English is doing its job. In English one negative is enough: \"I don't understand.\" And ask for a second try instead of apologizing: \"Could you say that another way?\"", "es": "Tu inglés está funcionando. En inglés basta una negación: \"I don't understand.\" Y en vez de disculparte, pide un segundo intento: \"Could you say that another way?\"" },
+            "next": null
+          }
+        ]
+      },
+      "s3": {
+        "partner": { "en": "Of course. Sofia reads like a third grader should in October. The test scores say the same thing: she's growing. My goal is for her to read a little faster and understand more.", "es": "Claro. Sofía lee como debe leer una niña de tercero en octubre. Los puntajes dicen lo mismo: está avanzando. Mi meta es que lea un poco más rápido y entienda más." },
+        "choices": [
+          {
+            "text": { "en": "Thank you. Does she need a tutor? I can pay for classes.", "es": "Gracias. ¿Necesita un tutor? Puedo pagar clases." },
+            "picture": "💵",
+            "tip": { "en": "She's at grade level, so no. Ask the free question first; the teacher will have ideas: \"What can we do at home?\"", "es": "Va al nivel de su grado, así que no. Primero haz la pregunta gratis; la maestra tendrá ideas: \"What can we do at home?\"" },
+            "next": null
+          },
+          {
+            "text": { "en": "Thank you, that's clear. What can we do at home?", "es": "Gracias, así sí. ¿Qué podemos hacer en casa?" },
+            "picture": "🏠",
+            "best": true,
+            "next": "s4"
+          },
+          {
+            "text": { "en": "Thank you. What we can do in the house for help her?", "es": "Gracias. ¿Qué podemos hacer en la casa para ayudarla?" },
+            "picture": "❓",
+            "tip": { "en": "Right question, Spanish shape. In English the helping verb goes first and it's \"at home\" and \"to help her\": \"What can we do at home to help her?\"", "es": "La pregunta correcta con forma del español. En inglés el auxiliar va primero y se dice «at home» y «to help her»: \"What can we do at home to help her?\"" },
+            "next": null
+          }
+        ]
+      },
+      "s4": {
+        "partner": { "en": "Read together twenty minutes a night, in Spanish or English, both count. Then ask her one question about the story. That's it.", "es": "Lean juntos veinte minutos cada noche, en español o en inglés, los dos cuentan. Luego háganle una pregunta sobre el cuento. Eso es todo." },
+        "choices": [
+          {
+            "text": { "en": "In Spanish? But I want that she learns English.", "es": "¿En español? Pero quiero que aprenda inglés." },
+            "picture": "🤔",
+            "tip": { "en": "The teacher means it: reading in Spanish builds the same skills, and it is what the research says. (Also: \"I want her to learn English\".) Say the plan back: \"Twenty minutes, then one question.\"", "es": "La maestra lo dice en serio: leer en español desarrolla las mismas habilidades, y es lo que dicen los estudios. (Además: «I want her to learn English».) Repite el plan: \"Twenty minutes, then one question.\"" },
+            "next": null
+          },
+          {
+            "text": { "en": "We can do that. Twenty minutes, then one question.", "es": "Eso sí podemos. Veinte minutos y luego una pregunta." },
+            "picture": "✅",
+            "best": true,
+            "next": "s5"
+          },
+          {
+            "text": { "en": "Okay. She can read alone, she is big now.", "es": "Bueno. Puede leer sola, ya está grande." },
+            "picture": "📚",
+            "tip": { "en": "She can, but \"together\" is the point: the question you ask after is what grows her understanding. Say it back: \"Twenty minutes together, then one question.\"", "es": "Sí puede, pero lo importante es «juntos»: la pregunta que le haces después es lo que hace crecer su comprensión. Repítelo: \"Twenty minutes together, then one question.\"" },
+            "next": null
+          }
+        ]
+      },
+      "s5": {
+        "partner": { "en": "Perfect. One more thing: next time, I can request an interpreter so we can go deeper. Would you like that?", "es": "Perfecto. Una cosa más: la próxima vez puedo pedir un intérprete para platicar con más detalle. ¿Le gustaría?" },
+        "choices": [
+          {
+            "text": { "en": "No, no, it's not necessary, I don't want to molest.", "es": "No, no, no es necesario, no quiero molestar." },
+            "picture": "🙈",
+            "tip": { "en": "It's free and it's your right; say yes. And careful: \"molest\" is a serious false friend in English. Molestar is \"bother\": \"I don't want to bother you.\"", "es": "Es gratis y es tu derecho; di que sí. Y cuidado: «molest» es un falso amigo grave en inglés. Molestar es «bother»: \"I don't want to bother you.\"" },
+            "next": null
+          },
+          {
+            "text": { "en": "Yes, please. Thank you for your time, Ms. Park.", "es": "Sí, por favor. Gracias por su tiempo, maestra Park." },
+            "picture": "🙏",
+            "best": true,
+            "next": null
+          },
+          {
+            "text": { "en": "Yes. How much it costs? My husband can come too.", "es": "Sí. ¿Cuánto cuesta? Mi esposo también puede venir." },
+            "picture": "💵",
+            "tip": { "en": "Free; the school pays. (The question is \"How much does it cost?\".) Say yes and thank her: \"Yes, please. Thank you for your time.\"", "es": "Gratis; lo paga la escuela. (La pregunta es «How much does it cost?».) Di que sí y dale las gracias: \"Yes, please. Thank you for your time.\"" },
+            "next": null
+          }
+        ]
+      }
+    }
+  }
+}

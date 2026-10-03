@@ -2,15 +2,24 @@ import { useEffect, useState } from 'preact/hooks'
 import { get, set } from '../storage'
 import { STRINGS, type Lang, type StringKey } from './strings'
 
-// Two independent switches:
-//   lang()     = the language of the interface (buttons, labels)
-//   learning() = the language the learner is practicing (the partner speaks it)
-// native() is the other one, where tips and translations go.
+// One question sets everything: "which language do you speak?" (LangPick).
+// native() is the answer. The interface, the tips and the glosses are in it;
+// the partner speaks the other one, learning(). There is no separate interface
+// switch: two independent switches confused every tester.
+//
+// `lang` is the stored interface language. It equals native() once the learner
+// has answered; before that it is a guess from the browser so the first screen
+// and the birth gate already read right.
 
 const guess: Lang =
   typeof navigator !== 'undefined' && navigator.language.toLowerCase().startsWith('es') ? 'es' : 'en'
 
 let current: Lang = get<Lang>('lang', guess)
+
+// index.html ships lang="es". Without this a returning English speaker gets a
+// Spanish document (screen readers, hyphenation, autocorrect) on every reload,
+// because setLang() only runs when the answer changes.
+if (typeof document !== 'undefined') document.documentElement.lang = current
 
 export function lang(): Lang {
   return current
@@ -32,6 +41,7 @@ export function tIn(l: Lang, key: StringKey): string {
   return STRINGS[l][key] ?? STRINGS.en[key]
 }
 
+/** The language the learner is practicing: the partner speaks it. */
 export function learning(): Lang {
   return get<Lang>('learning', 'en')
 }
@@ -53,16 +63,12 @@ export function clearNative(): void {
   dispatchEvent(new Event('charla:lang'))
 }
 
-export function setLearning(l: Lang): void {
-  set('learning', l)
-  dispatchEvent(new Event('charla:lang'))
-}
-
+/** The learner's own language: where tips and translations go. */
 export function native(): Lang {
   return learning() === 'en' ? 'es' : 'en'
 }
 
-// Re-render a component when either switch changes.
+// Re-render a component when the language answer changes.
 export function useLangTick(): void {
   const [, force] = useState(0)
   useEffect(() => {

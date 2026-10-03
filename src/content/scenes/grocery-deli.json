@@ -2,27 +2,29 @@
   "id": "grocery-deli",
   "place_type": "grocery",
   "kid": true,
+  "channel": "counter",
   "title": { "en": "Order at the deli counter", "es": "Pedir en el deli" },
   "roles": {
     "partner": { "en": "person behind the deli counter", "es": "persona que atiende el deli" },
-    "learner": { "en": "customer ordering for the family", "es": "cliente que pide para la familia" }
+    "learner": { "en": "kid ordering for the family", "es": "niño o niña que pide para la familia" }
   },
   "goal": {
     "en": "Ask for half a pound of ham, say if you want it sliced, and check the weight on the scale.",
     "es": "Pedir media libra de jamón, decir si lo quieres rebanado y ver cuánto marca la báscula."
   },
   "must_use": [
-    { "en": "half a pound", "es": "media libra" },
-    { "en": "a little more, please", "es": "un poco más, por favor" },
-    { "en": "that's perfect", "es": "así está perfecto" }
+    { "en": "Half a pound of ham, please.", "es": "Media libra de jamón, por favor." },
+    { "en": "A little more, please.", "es": "Un poco más, por favor." },
+    { "en": "That's perfect, thank you.", "es": "Así está perfecto, gracias." }
   ],
+  "expect": { "en": "Do you want it sliced?", "es": "¿Lo quieres rebanado?" },
   "success": {
     "en": "You get half a pound of ham, the way you asked for it, and you say thank you.",
     "es": "Te dan media libra de jamón, como lo pediste, y das las gracias."
   },
   "show_staff_line": {
     "en": "I'm practicing my English. Thank you for your patience.",
-    "es": "Estoy practicando mi inglés. Gracias por su paciencia."
+    "es": "Estoy practicando mi español. Gracias por su paciencia."
   },
   "offline_script": {
     "start": "s1",
@@ -108,13 +110,13 @@
           {
             "text": { "en": "More.", "es": "Más." },
             "picture": "💬",
-            "tip": { "en": "That is the half pound you asked for. Say \"that's perfect\".", "es": "Esa es la media libra que pediste. Di \"that's perfect\"." },
+            "tip": { "en": "That is already half a pound. Say \"that's perfect\".", "es": "Ya es media libra. Di \"that's perfect\"." },
             "next": null
           },
           {
             "text": { "en": "I don't like ham.", "es": "No me gusta el jamón." },
             "picture": "😕",
-            "tip": { "en": "Your family asked for ham. Say \"that's perfect\".", "es": "Tu familia pidió jamón. Di \"that's perfect\"." },
+            "tip": { "en": "That is the half pound you asked for; if you want something else, say it after.", "es": "Esa es la media libra que pediste; si quieres otra cosa, dila después." },
             "next": null
           }
         ]
