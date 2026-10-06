@@ -26,8 +26,11 @@ if (-not $existing) {
 
 Write-Host "`n3/5  Worker (the API)" -ForegroundColor Cyan
 # The Worker only answers the app's own origin.
-(Get-Content worker/wrangler.toml -Raw) -replace 'ALLOWED_ORIGIN = "[^"]*"', "ALLOWED_ORIGIN = `"$pagesUrl`"" |
-  Set-Content worker/wrangler.toml -Encoding utf8 -NoNewline
+# Written through .NET, not Set-Content: Windows PowerShell's -Encoding utf8
+# prepends a byte-order mark, which shows up as a changed first line in git.
+$noBom = New-Object System.Text.UTF8Encoding($false)
+$toml = (Get-Content worker/wrangler.toml -Raw) -replace 'ALLOWED_ORIGIN = "[^"]*"', "ALLOWED_ORIGIN = `"$pagesUrl`""
+[System.IO.File]::WriteAllText((Join-Path (Get-Location) 'worker/wrangler.toml'), $toml, $noBom)
 $out = npx wrangler deploy --config worker/wrangler.toml 2>&1 | Tee-Object -Variable deployLog
 $workerUrl = ($deployLog | Select-String -Pattern 'https://[a-z0-9.-]+\.workers\.dev' -AllMatches).Matches |
   Select-Object -First 1 -ExpandProperty Value
@@ -36,8 +39,8 @@ Write-Host "  API at $workerUrl"
 
 Write-Host "`n4/5  App build, pointed at the API" -ForegroundColor Cyan
 # The CSP in public/_headers must allow the API origin or every call fails silently.
-(Get-Content public/_headers -Raw) -replace "connect-src 'self'[^;]*;", "connect-src 'self' https://tiles.openfreemap.org $workerUrl;" |
-  Set-Content public/_headers -Encoding utf8 -NoNewline
+$headers = (Get-Content public/_headers -Raw) -replace "connect-src 'self'[^;]*;", "connect-src 'self' https://tiles.openfreemap.org $workerUrl;"
+[System.IO.File]::WriteAllText((Join-Path (Get-Location) 'public/_headers'), $headers, $noBom)
 $env:VITE_API_BASE = $workerUrl
 npm run build
 if ($LASTEXITCODE -ne 0) { throw 'Build failed.' }

@@ -40,6 +40,15 @@ FALLBACK_MODEL = "@cf/openai/gpt-oss-120b"
 DAILY_TURN_CAP = "40"
 DAILY_IP_CAP = "400"
 DAILY_STT_CAP = "60"
+# The partner's voice (worker/src/tts.ts). TTS_MODEL is the natural one and
+# costs about 130 neurons a reply; TTS_BUDGET_MODEL costs about one. The free
+# tier's 10,000 neurons a day are shared with the partner and with Whisper, so
+# the natural voice reads only the first DAILY_TTS_PREMIUM clips of the day,
+# across everyone. On a paid plan, raise it (e.g. "100000") and it reads all.
+TTS_MODEL = "@cf/deepgram/aura-2-{lang}"
+TTS_BUDGET_MODEL = "@cf/myshell-ai/melotts"
+DAILY_TTS_PREMIUM = "40"
+DAILY_TTS_CAP = "200"
 # The deployed app origin, e.g. "https://charla.pages.dev". A POST whose Origin
 # header is anything else is answered 403 before any counter or model call; a
 # request with no Origin header (curl, the tests) is not a browser and passes.

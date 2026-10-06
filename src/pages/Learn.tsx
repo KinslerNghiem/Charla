@@ -5,8 +5,8 @@ import { LEVELS, simplerThan, type Level } from '../tutor/levels'
 import { ApiError, askTutor, flagReply, type HistoryItem } from '../tutor/client'
 import { OfflineScene } from '../tutor/OfflineScene'
 import { learning, native, t, tIn } from '../i18n/lang'
-import { classify, detectTier, startListener, type Listener, type TalkError } from '../speech/input'
-import { hush, speak, unlock } from '../speech/output'
+import { classify, detectTier, distanceAdvice, paceAdvice, startListener, type ClipStats, type Distance, type Listener, type Pace, type TalkError } from '../speech/input'
+import { hushVoice, say, unlockVoice } from '../speech/voice'
 import { get, set } from '../storage'
 import { go } from '../router'
 import { placeIcon } from '../content/icons'
@@ -72,7 +72,16 @@ export function Learn({ params }: { params: URLSearchParams }) {
   const [crisis, setCrisis] = useState(false)
   const [breakDue, setBreakDue] = useState(false)
   const [listening, setListening] = useState(false)
-  const [talkState, setTalkState] = useState<'idle' | 'opening' | 'listening' | 'working' | 'nothing' | TalkError>('idle')
+  const [talkState, setTalkState] = useState<'idle' | 'opening' | 'listening' | 'working' | 'nothing' | 'faint' | TalkError>('idle')
+  // What the last spoken clip sounded like: too far, too close, too fast, too slow, or fine.
+  const [coach, setCoach] = useState<{ distance: Distance; pace: Pace } | null>(null)
+  // The same advice about distance, live, while the mic is still open.
+  const [hint, setHint] = useState<Distance>(null)
+  // The line being read aloud right now, so its button can say Stop.
+  const [speaking, setSpeaking] = useState<string | null>(null)
+  const [voiceOn, setVoiceOn] = useState(() => get<boolean>('voice', true))
+  // The goal, phrases and level fold away on a phone once the conversation starts.
+  const [briefOpen, setBriefOpen] = useState(true)
   const [flagged, setFlagged] = useState<Record<string, 'sent' | 'failed'>>({})
   const [noVoice, setNoVoice] = useState(false)
   const listener = useRef<Listener | null>(null)
@@ -84,8 +93,11 @@ export function Learn({ params }: { params: URLSearchParams }) {
   const busyRef = useRef(false)
   const msgsRef = useRef<Msg[]>([])
   const levelRef = useRef<Level>('A2')
+  const voiceOnRef = useRef(voiceOn)
+  const stats = useRef<ClipStats | null>(null)
   msgsRef.current = msgs
   levelRef.current = level
+  voiceOnRef.current = voiceOn
   const tier = detectTier()
   const target = learning()
   const nat = native()
@@ -103,7 +115,7 @@ export function Learn({ params }: { params: URLSearchParams }) {
     () => () => {
       alive.current = false
       listener.current?.cancel()
-      hush()
+      hushVoice()
     },
     [],
   )
@@ -131,9 +143,22 @@ export function Learn({ params }: { params: URLSearchParams }) {
     setDone(true)
   }
 
+  // Beginners get the line a little slower; the voice keeps its pitch.
+  function read(text: string) {
+    setSpeaking(text)
+    say(text, target, {
+      rate: levelRef.current === 'A1' ? 0.9 : 1,
+      onEnd: () => alive.current && setSpeaking((s) => (s === text ? null : s)),
+    }).then((how) => {
+      if (!alive.current || how !== 'none') return
+      setNoVoice(true)
+      setSpeaking((s) => (s === text ? null : s))
+    })
+  }
+
   async function send(text: string, command?: 'simpler' | 'another_way') {
     if (!scene || busyRef.current) return
-    unlock()
+    unlockVoice()
     const prev = msgsRef.current
     const history: HistoryItem[] = prev.slice(-HISTORY_TURNS).map((m) => ({ role: m.role, content: m.text }))
     const shown = command ? prev : [...prev, { role: 'user' as const, text }]
@@ -163,7 +188,10 @@ export function Learn({ params }: { params: URLSearchParams }) {
       // lock the rest of the session into the scripted scene.
       setOffline(false)
       setCapped(false)
-      speak(turn.reply, target)
+      if (voiceOnRef.current) read(turn.reply)
+      // On a phone the first reply is the cue to get the brief out of the way,
+      // so the conversation and the mic share the screen.
+      if (prev.length === 0 && typeof matchMedia === 'function' && matchMedia('(max-width: 899px)').matches) setBriefOpen(false)
       if (turn.safety_flag) setCrisis(true)
       if (turn.goal_reached) finish()
     } catch (e) {
@@ -197,9 +225,13 @@ export function Learn({ params }: { params: URLSearchParams }) {
       listener.current?.stop()
       return
     }
-    unlock()
+    unlockVoice()
     // Otherwise the mic records the phone reading the last reply.
-    hush()
+    hushVoice()
+    setSpeaking(null)
+    setCoach(null)
+    setHint(null)
+    stats.current = null
     setTalkState('opening')
     const fail = (err: unknown) => {
       setListening(false)
@@ -219,6 +251,10 @@ export function Learn({ params }: { params: URLSearchParams }) {
           setListening(false)
           setTalkState('working')
         },
+        onStats: (s) => {
+          stats.current = s
+        },
+        onHint: (h) => alive.current && setHint(h),
       })
       listener.current = l
       if (!l) return
@@ -227,11 +263,16 @@ export function Learn({ params }: { params: URLSearchParams }) {
         .then((text) => {
           if (!alive.current) return
           setListening(false)
+          setHint(null)
+          const st = stats.current
           if (text) {
+            // Only a recorded clip has levels to judge; the browser's own recogniser does not.
+            if (st) setCoach({ distance: distanceAdvice(st), pace: paceAdvice(text, st.speechMs, target) })
             setTalkState('idle')
             send(text)
           } else {
-            setTalkState('nothing')
+            // "Too far away" is a different problem from "said nothing", and has a different fix.
+            setTalkState(st?.faint ? 'faint' : 'nothing')
           }
         })
         .catch((err) => {
@@ -243,7 +284,13 @@ export function Learn({ params }: { params: URLSearchParams }) {
   }
 
   function listen(text: string) {
-    if (!speak(text, target)) setNoVoice(true)
+    if (speaking === text) {
+      hushVoice()
+      setSpeaking(null)
+      return
+    }
+    unlockVoice()
+    read(text)
   }
 
   function report(text: string) {
@@ -259,6 +306,7 @@ export function Learn({ params }: { params: URLSearchParams }) {
     listening: t('talk_listening'),
     working: t('talk_working'),
     nothing: t('talk_nothing'),
+    faint: t('talk_faint'),
     denied: t('talk_denied'),
     unavailable: t('talk_unavailable'),
     failed: t('talk_nothing'),
@@ -291,6 +339,13 @@ export function Learn({ params }: { params: URLSearchParams }) {
         </button>
         <h1 lang={target}>{scene.title[target]}</h1>
         {placeName && <p class="place">{placeName}</p>}
+        <details class="brief" open={briefOpen} onToggle={(e) => setBriefOpen((e.currentTarget as HTMLDetailsElement).open)}>
+          <summary>
+            <span>{t('brief_label')}</span>
+            <span class="progress">
+              {used.filter(Boolean).length}/{scene.must_use.length} ✓
+            </span>
+          </summary>
         <p>
           <b>{t('goal_label')}:</b> {scene.goal[nat]}
         </p>
@@ -326,6 +381,7 @@ export function Learn({ params }: { params: URLSearchParams }) {
             </button>
           ))}
         </div>
+        </details>
       </header>
 
       {capped && <p class="notice">{t('daily_cap')}</p>}
@@ -354,8 +410,8 @@ export function Learn({ params }: { params: URLSearchParams }) {
                   {m.text}
                 </p>
                 {m.role === 'assistant' && (
-                  <button type="button" class="ghost small" onClick={() => listen(m.text)}>
-                    🔊 {t('listen')}
+                  <button type="button" class={'ghost small' + (speaking === m.text ? ' speaking' : '')} onClick={() => listen(m.text)}>
+                    {speaking === m.text ? '⏹ ' + t('stop_voice') : '🔊 ' + t('listen')}
                   </button>
                 )}
                 {m.kept && <p class="kept">{t('kept_at_level')}</p>}
@@ -436,7 +492,16 @@ export function Learn({ params }: { params: URLSearchParams }) {
               )}
               {talkState !== 'idle' && (
                 <p class={'talk-status' + (listening ? ' on' : '')} aria-live="polite">
-                  {talkStatus[talkState]}
+                  {talkState === 'listening' && hint ? t(hint === 'closer' ? 'coach_live_closer' : 'coach_live_farther') : talkStatus[talkState]}
+                </p>
+              )}
+              {coach && !listening && (
+                <p class={'coach' + (coach.distance || coach.pace ? '' : ' ok')} aria-live="polite">
+                  {coach.distance === 'closer' && <span>📏 {t('coach_closer')}</span>}
+                  {coach.distance === 'farther' && <span>📏 {t('coach_farther')}</span>}
+                  {coach.pace === 'slower' && <span>🐢 {t('coach_slower')}</span>}
+                  {coach.pace === 'faster' && <span>🐇 {t('coach_faster')}</span>}
+                  {!coach.distance && !coach.pace && <span>✓ {t('coach_good')}</span>}
                 </p>
               )}
               {earned && (
@@ -459,6 +524,22 @@ export function Learn({ params }: { params: URLSearchParams }) {
                       {t('report_reply')}
                     </button>
                   </div>
+                  <label class="voice-toggle">
+                    <input
+                      type="checkbox"
+                      checked={voiceOn}
+                      onChange={(e) => {
+                        const on = (e.currentTarget as HTMLInputElement).checked
+                        setVoiceOn(on)
+                        set('voice', on)
+                        if (!on) {
+                          hushVoice()
+                          setSpeaking(null)
+                        }
+                      }}
+                    />
+                    {t('voice_label')}
+                  </label>
                   <p class="note" aria-live="polite">
                     {flagged[lastAssistant.text] === 'sent'
                       ? t('report_reply_done')
@@ -522,6 +603,25 @@ function ScenePicker({ onPick }: { onPick: (s: Scene) => void }) {
   return (
     <section class="picker">
       <h1>{t('pick_scene')}</h1>
+      {/* The whole app in one line, and each step is a way to get there. */}
+      <ol class="steps" aria-label={t('steps_label')}>
+        <li class="here">
+          <span class="num">1</span>
+          {t('step_rehearse')}
+        </li>
+        <li>
+          <a href="#/card">
+            <span class="num">2</span>
+            {t('step_card')}
+          </a>
+        </li>
+        <li>
+          <a href="#/places">
+            <span class="num">3</span>
+            {t('step_go')}
+          </a>
+        </li>
+      </ol>
       {last && <ul class="scenes">{card(last, true)}</ul>}
       {groups.map((g) => (
         <div class="scene-group">

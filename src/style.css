@@ -136,6 +136,10 @@ main .scene-card, main .venue, main .choice, main .kid-card { border-color: var(
 /* "A new version is ready." One line above the home bar, until it is tapped. */
 .update-bar { position: fixed; left: 16px; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); max-width: 688px; margin: 0 auto; display: flex; gap: 12px; align-items: center; justify-content: space-between; background: var(--paper-2); border: 1px solid var(--edge); border-radius: var(--r); padding: 10px 12px; z-index: 20; }
 .top { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 14px 0 6px; }
+.top-actions { display: flex; gap: 6px; align-items: center; }
+/* Small, quiet controls in the header: the language, and what this is. */
+.chip-btn { display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-height: 36px; min-width: 36px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 18px; background: var(--paper); color: var(--ink-2); font-size: 14px; text-decoration: none; }
+.chip-btn:hover { border-color: var(--ink); color: var(--ink); }
 .brand { font-size: 24px; text-decoration: none; color: var(--ink); display: inline-flex; align-items: center; gap: 8px; }
 /* The mark: two circles, one per language, overlapping where the conversation happens. */
 .mark { width: 22px; height: 22px; flex: none; }
@@ -185,7 +189,24 @@ main { outline: none; }
 .scene-card .tag { font-size: 12px; padding: 1px 7px; border-radius: 3px; background: var(--paper); color: var(--ink-2); border: 1px solid var(--line); }
 .scene-card .tag.last { background: var(--en-soft); color: var(--en); border-color: transparent; }
 
+/* The loop in one line: where you are, and where it goes next. */
+.steps { list-style: none; padding: 0; margin: 0 0 14px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; font-size: 13px; line-height: 1.25; }
+.steps li { display: flex; }
+.steps li.here, .steps a { display: flex; flex: 1; align-items: center; gap: 8px; padding: 8px 10px; border: 1px solid var(--line); border-radius: var(--r); color: var(--ink-2); text-decoration: none; }
+.steps li.here { background: var(--es-soft); border-color: var(--es); color: var(--ink); font-weight: 600; }
+.steps a:hover { border-color: var(--ink); color: var(--ink); }
+.steps .num { flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--paper); border: 1px solid var(--line); display: grid; place-items: center; font-family: var(--disp); font-weight: 700; font-size: 13px; color: var(--ink); }
+.steps li.here .num { background: var(--es); border-color: var(--es); color: var(--paper); }
+
 /* learn: the scene */
+/* The goal, phrases and level fold into one line once the talking starts. */
+.brief > summary { cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 44px; padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--r); font-weight: 600; list-style: none; }
+.brief > summary::-webkit-details-marker { display: none; }
+.brief > summary::before { content: '▸'; color: var(--ink-2); margin-right: -4px; }
+.brief[open] > summary::before { content: '▾'; }
+.brief > summary > span:first-of-type { flex: 1; }
+.brief .progress { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; font-weight: 400; color: var(--go-ink); background: var(--go-soft); padding: 2px 8px; border-radius: 3px; }
+.brief[open] > summary { margin-bottom: 10px; }
 .scene-head { padding-bottom: 12px; border-bottom: 1px solid var(--line); margin-bottom: 14px; }
 .scene-head .place { color: var(--es); font-weight: 600; margin: -6px 0 10px; }
 .levels-label { margin: 12px 0 0; }
@@ -226,6 +247,12 @@ main { outline: none; }
 .talk { background: var(--es-soft); color: var(--es); border-color: var(--es); font-weight: 600; font-size: 17px; min-height: 52px; border-radius: 26px; touch-action: manipulation; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 .talk:hover:not(:disabled) { border-color: var(--es); background: var(--es-soft); }
 .talk.on { background: var(--es); color: var(--paper); border-color: var(--es); }
+/* What the last clip sounded like: one line, amber when there is something to change, green when not. */
+.coach { display: grid; gap: 2px; font-size: 14px; margin: 6px 0 8px; padding: 8px 10px; border-radius: var(--r); background: var(--es-soft); color: var(--es); }
+.coach.ok { background: var(--go-soft); color: var(--go-ink); }
+.voice-toggle { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--ink-2); margin: 4px 0; min-height: 36px; cursor: pointer; }
+.voice-toggle input { width: 20px; height: 20px; margin: 0; padding: 0; flex: none; accent-color: var(--go); }
+.chat button.speaking { background: var(--es-soft); border-color: var(--es); color: var(--es); }
 /* The level meter: the learner sees the phone hearing them. */
 .meter { height: 10px; border-radius: 5px; background: var(--paper-2); overflow: hidden; margin: 6px 0; }
 .meter i { display: block; height: 100%; width: 0; background: var(--es); transition: width 80ms linear; }
@@ -250,6 +277,8 @@ main { outline: none; }
   .learn { display: grid; grid-template-columns: 320px minmax(0, 1fr); column-gap: 40px; align-items: start; }
   .learn > * { grid-column: 2; }
   .learn > .scene-head { grid-column: 1; grid-row: 1 / span 40; position: sticky; top: 16px; border-bottom: 0; border-right: 1px solid var(--line); padding-right: 24px; margin: 0; }
+  /* Beside the conversation there is room for the brief, so it is not a toggle here. */
+  .brief > summary { display: none; }
   .map { height: 420px; }
 }
 

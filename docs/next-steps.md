@@ -52,6 +52,14 @@ with every finding re-verified against the code before it was fixed.
 - Scripted-mode distractors are plausible learner errors (false cognates, word order, register) with tips that say why, instead of "Where is the milk?".
 - The Python validator derives its rules from the schema and runs in CI.
 
+**Voice and coaching** (2026-10-05)
+
+- The partner speaks with a neural voice (Aura-2, then MeloTTS once the day's allowance is spent, then the phone's own voice). Verified end to end in Chrome with a recorded sentence as the microphone: transcript, reply, and audio actually playing.
+- Android phones get a device voice again (Chrome there reports every system voice as "remote", which the old filter dropped).
+- After each spoken turn: closer or farther from the microphone, slower or faster, or "good distance and good pace"; the distance advice also shows live while the mic is open. Quiet clips are boosted before they are sent.
+- Navigation: tabs in the order of the loop (Rehearse, Go Card, Places), language and About chips in the header, a three-step strip on the picker, the goal and phrases fold away once the conversation starts, every page opens at its top.
+- Run `scripts/deploy.ps1` again to put this live; it now writes files without a byte-order mark.
+
 **Design** (2026-10-03)
 
 - A visual identity without a single fetched font: a book-serif voice for titles and lines to say, the two-circle mark, a bottom tab bar on phones, icon scene cards in a grid, numbered phrases that tick off, a one-piece level picker, a mic that is the biggest thing on the page, a Go Card that looks like a card, awnings on the kid storefronts, and a two-column scene page on laptops.
@@ -92,7 +100,12 @@ Only you can do these; none of them is code.
 7. **Film the video** per the storyboard in `docs/submission.md` (names on
    camera, one code shot, tools and languages said aloud, 1 to 3 minutes,
    public on YouTube or Vimeo).
-8. **ANTHROPIC_API_KEY**, only if you want Claude behind the partner:
+8. **The voice budget.** `DAILY_TTS_PREMIUM = "40"` in `worker/wrangler.toml`
+   is how many replies a day the natural (Aura-2) voice reads before the
+   cheap one takes over, so the free tier's neurons last. On a paid Workers
+   plan raise it; and try `TTS_SPEAKER_ES = "estrella"` (or another Aura
+   Mexican voice) by ear before judging day.
+9. **ANTHROPIC_API_KEY**, only if you want Claude behind the partner:
    `npx wrangler secret put ANTHROPIC_API_KEY --config worker/wrangler.toml`
    after setting a spend limit. Not required; the live partner is gpt-oss-120b.
 

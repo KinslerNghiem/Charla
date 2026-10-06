@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'preact/hooks'
+import { useEffect, useRef, useState } from 'preact/hooks'
 import { useRoute } from './router'
 import { get, set } from './storage'
-import { clearNative, hasNative, setNative, t, useLangTick } from './i18n/lang'
+import { clearNative, hasNative, lang, setNative, t, useLangTick } from './i18n/lang'
 // BirthGate.tsx, not Gate.tsx: a file named Gate.tsx beside gate.ts collides on
 // a case-insensitive disk (Windows, macOS) and TypeScript resolves the wrong one.
 import { BirthGate } from './gate/BirthGate'
@@ -39,6 +39,35 @@ export function App() {
   const [mode, setMode] = useState<Mode | null>(() => get<Mode | null>('mode', null))
   const [picked, setPicked] = useState(hasNative)
   const pages = usePages(mode !== null && mode !== 'kid')
+
+  // A new page starts at its top, with its name in the tab title and focus on
+  // its content. The hash router changes none of that by itself: picking the
+  // twelfth scene used to open it scrolled halfway down.
+  const scene = route.params.get('scene')
+  const first = useRef(true)
+  useEffect(() => {
+    const names: Record<string, string> = {
+      '/places': t('nav_places'),
+      '/card': t('nav_card'),
+      '/table': t('nav_table'),
+      '/ninos': t('nav_kids'),
+      '/privacy': t('nav_privacy'),
+      '/about': t('nav_about'),
+    }
+    const name = names[route.path] ?? t('nav_learn')
+    document.title = `${name} · Charla`
+    if (first.current) {
+      first.current = false
+      return
+    }
+    window.scrollTo(0, 0)
+    document.getElementById('main')?.focus({ preventScroll: true })
+  }, [route.path, scene])
+
+  function changeLanguage() {
+    clearNative()
+    setPicked(false)
+  }
 
   // About is linked from the very first screen, before any question has been
   // answered, so it gets a bare shell of its own until the gate is done.
@@ -98,10 +127,11 @@ export function App() {
     )
   }
 
+  // In the order of the loop: rehearse, take the card, go to the place.
   const links: [string, string, string][] = [
     ['/learn', t('nav_learn'), '💬'],
-    ['/places', t('nav_places'), '📍'],
     ['/card', t('nav_card'), '🪪'],
+    ['/places', t('nav_places'), '📍'],
     ['/table', t('nav_table'), '☕'],
     ['/ninos', t('nav_kids'), '⭐'],
   ]
@@ -156,6 +186,15 @@ export function App() {
           <svg class="mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="7.5" fill="var(--en)" /><circle cx="15" cy="12" r="7.5" fill="var(--es)" fill-opacity="0.85" /></svg>
           {t('app_name')}
         </a>
+        {/* The two things people go looking for, where they look: top right. */}
+        <div class="top-actions">
+          <button type="button" class="chip-btn" onClick={changeLanguage} aria-label={t('change_language')} title={t('change_language')}>
+            🌐 {lang() === 'es' ? 'Español' : 'English'}
+          </button>
+          <a class="chip-btn" href="#/about" aria-label={t('nav_about')} title={t('nav_about')}>
+            ?
+          </a>
+        </div>
       </header>
       <nav class="tabs" aria-label="Sections">
         {links.map(([path, label, ico]) => (
@@ -180,10 +219,7 @@ export function App() {
         <button
           type="button"
           class="link"
-          onClick={() => {
-            clearNative()
-            setPicked(false)
-          }}
+          onClick={changeLanguage}
         >
           {t('change_language')}
         </button>

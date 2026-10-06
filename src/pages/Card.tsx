@@ -1,7 +1,7 @@
 import { sceneById } from '../content/scenes'
 import { learning, native, t } from '../i18n/lang'
 import { get } from '../storage'
-import { speak } from '../speech/output'
+import { say, unlockVoice } from '../speech/voice'
 
 interface LastCard {
   scene_id: string
@@ -58,7 +58,10 @@ export function Card() {
                   <b lang={target}>{p[target]}</b>
                   <i>{p[nat]}</i>
                 </span>
-                <button type="button" class="ghost small listen" onClick={() => speak(p[target], target)} aria-label={`${t('listen')}: ${p[target]}`}>
+                <button type="button" class="ghost small listen" onClick={() => {
+                    unlockVoice()
+                    void say(p[target], target)
+                  }} aria-label={`${t('listen')}: ${p[target]}`}>
                   🔊
                 </button>
               </li>

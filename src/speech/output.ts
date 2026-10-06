@@ -9,6 +9,12 @@ import type { Lang } from '../i18n/strings'
 // match es-US first. Kid mode uses this file and promises that nothing leaves
 // the device, so a remote voice is not an option there or anywhere else.
 //
+// Android is the exception to the localService rule. Chrome there hands the
+// text to the system text-to-speech engine and reports every voice as
+// non-local, so the filter left Android with no voice at all: Listen did
+// nothing on most of the phones this app is for. The system engine is the
+// phone's own voice, which is exactly what the rule is trying to keep.
+//
 // On iOS the first speak() must come from a tap; unlock() handles that, and
 // every Listen button is a tap anyway.
 
@@ -24,10 +30,19 @@ export function available(): boolean {
   return typeof window !== 'undefined' && 'speechSynthesis' in window
 }
 
+function isAndroid(): boolean {
+  return typeof navigator !== 'undefined' && /Android/i.test(navigator.userAgent)
+}
+
+/** Which voices may read a line, given the full list. Exported for tests. */
+export function usableVoices<V extends { name: string; localService?: boolean }>(all: V[], android: boolean): V[] {
+  return all.filter((v) => !NOVELTY.test(v.name) && (android || v.localService !== false))
+}
+
 /** On-device voices only. A remote voice would send the text off the phone. */
 export function localVoices(): SpeechSynthesisVoice[] {
   if (!available()) return []
-  return speechSynthesis.getVoices().filter((v) => !NOVELTY.test(v.name) && v.localService !== false)
+  return usableVoices(speechSynthesis.getVoices(), isAndroid())
 }
 
 export function pickVoice(lang: Lang): SpeechSynthesisVoice | null {
@@ -52,7 +67,11 @@ export function unlock(): void {
   try {
     speechSynthesis.getVoices()
     speechSynthesis.addEventListener?.('voiceschanged', () => speechSynthesis.getVoices(), { once: true })
-    speechSynthesis.speak(new SpeechSynthesisUtterance(''))
+    // A space at zero volume, not an empty string: Safari drops an empty
+    // utterance without counting it as the gesture that unlocks speech.
+    const prime = new SpeechSynthesisUtterance(' ')
+    prime.volume = 0
+    speechSynthesis.speak(prime)
     unlocked = true
   } catch {}
 }
@@ -65,13 +84,23 @@ export function hush(): void {
   } catch {}
 }
 
-function say(text: string, lang: Lang, rate: number, voice: SpeechSynthesisVoice): void {
+function say(text: string, lang: Lang, rate: number, voice: SpeechSynthesisVoice, onEnd?: () => void): void {
   const u = new SpeechSynthesisUtterance(text)
   u.lang = lang === 'es' ? 'es-US' : 'en-US'
   u.voice = voice
   u.rate = rate
-  speechSynthesis.cancel()
-  speechSynthesis.speak(u)
+  if (onEnd) {
+    u.onend = onEnd
+    u.onerror = onEnd
+  }
+  // Chrome on Android swallows an utterance queued in the same tick as a
+  // cancel(), so when something is being read, stop it and speak a beat later.
+  if (speechSynthesis.speaking || speechSynthesis.pending) {
+    speechSynthesis.cancel()
+    setTimeout(() => speechSynthesis.speak(u), 80)
+  } else {
+    speechSynthesis.speak(u)
+  }
 }
 
 /**
@@ -79,11 +108,11 @@ function say(text: string, lang: Lang, rate: number, voice: SpeechSynthesisVoice
  * can say so: a laptop with no Spanish voice pack is common, and a silent
  * Listen button looks broken.
  */
-export function speak(text: string, lang: Lang, rate = 1): boolean {
+export function speak(text: string, lang: Lang, rate = 1, onEnd?: () => void): boolean {
   if (!available() || !text) return false
   const voice = pickVoice(lang)
   if (voice) {
-    say(text, lang, rate, voice)
+    say(text, lang, rate, voice, onEnd)
     return true
   }
   // No local voice, no speaking. Letting the platform choose could hand the
@@ -94,7 +123,8 @@ export function speak(text: string, lang: Lang, rate = 1): boolean {
       'voiceschanged',
       () => {
         const late = pickVoice(lang)
-        if (late) say(text, lang, rate, late)
+        if (late) say(text, lang, rate, late, onEnd)
+        else onEnd?.()
       },
       { once: true },
     )

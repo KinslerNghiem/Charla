@@ -1,11 +1,12 @@
 import { errName, json, log, runAi, sha256, today, type Env } from './env'
-import { bump, ipKey, underCap, underIpCap, underIpSttCap, underSttCap } from './caps'
+import { bump, ipKey, underCap, underIpCap, underIpSttCap, underIpTtsCap, underSttCap, underTtsCap } from './caps'
 import { runHelp, runTurn, type TurnInput } from './tutor'
-import { meta } from './safety'
+import { blocked, meta } from './safety'
+import { DEFAULT_TTS_BUDGET_MODEL, DEFAULT_TTS_MODEL, isShippedLine, MAX_TTS_CHARS, synthesize, ttsModel } from './tts'
 import { sceneById } from '../../src/content/scenes'
 import venuesText from '../../public/venues.geojson'
 
-// One Worker, every secret, seven routes. Nothing here stores who a learner is.
+// One Worker, every secret, eight routes. Nothing here stores who a learner is.
 
 const YEAR = 365 * 86400000
 const MONTH = 30 * 86400000
@@ -272,6 +273,47 @@ async function route(req: Request, env: Env, url: URL): Promise<Response> {
     const lang = url.searchParams.get('lang') === 'es' ? 'es' : 'en'
     const out = await transcribe(env.AI, bytes, lang)
     return out === null ? json({ error: 'speech unavailable' }, 503) : json({ text: out })
+  }
+
+  if (path === '/api/tts' && req.method === 'POST') {
+    // The partner's line in, a spoken clip out. See tts.ts for the model and
+    // for why only lines that ship with the app are ever cached.
+    if (!env.AI) return json({ error: 'voice not enabled' }, 503)
+    const body = await readBody<{ text?: string; lang?: string; device?: string }>(req)
+    if (body === TOO_LARGE) return json({ error: 'too large' }, 413)
+    if (!body?.device || typeof body.text !== 'string') return json({ error: 'bad request' }, 400)
+    const text = body.text.replace(/\s+/g, ' ').trim().slice(0, MAX_TTS_CHARS)
+    if (!text || blocked(text)) return json({ error: 'bad request' }, 400)
+    const lang = body.lang === 'es' ? 'es' : 'en'
+
+    const edge = typeof caches !== 'undefined' ? (caches as unknown as { default?: Cache }).default : undefined
+    const fixed = isShippedLine(text)
+    const key = fixed && edge ? new Request(`${url.origin}/__tts/${await sha256(lang + '|' + text)}`) : null
+    if (key && edge) {
+      const hit = await edge.match(key)
+      if (hit) return hit
+    }
+
+    if (!(await underIpTtsCap(env, await ipKey(req)))) return json({ error: 'slow down' }, 429)
+    if (!(await underTtsCap(env, await sha256(body.device)))) return json({ error: 'daily cap reached' }, 429)
+    // The natural voice while the day's allowance lasts, the cheap one after,
+    // and the cheap one also when the natural one fails.
+    const premium = ttsModel(env.TTS_MODEL, DEFAULT_TTS_MODEL, lang)
+    const budget = ttsModel(env.TTS_BUDGET_MODEL, DEFAULT_TTS_BUDGET_MODEL, lang)
+    const speaker = lang === 'es' ? env.TTS_SPEAKER_ES : env.TTS_SPEAKER_EN
+    let model = premium
+    let speech = (await bump(env, 'ttsall', Number(env.DAILY_TTS_PREMIUM || '40'))) ? await synthesize(env.AI, premium, text, lang, speaker) : null
+    if (!speech && budget !== premium) {
+      model = budget
+      speech = await synthesize(env.AI, budget, text, lang)
+    }
+    log({ route: 'tts', model, chars: text.length, bytes: speech?.bytes.byteLength ?? 0, fixed })
+    if (!speech) return json({ error: 'voice unavailable' }, 503)
+    const res = new Response(speech.bytes, {
+      headers: { 'content-type': speech.type, 'cache-control': fixed ? 'public, max-age=2592000' : 'no-store' },
+    })
+    if (key && edge) await edge.put(key, res.clone())
+    return res
   }
 
   return json({ error: 'not found' }, 404)

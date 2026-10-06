@@ -50,6 +50,16 @@ export function underIpSttCap(env: Env, ipHash: string): Promise<boolean> {
   return bump(env, 'ipstt:' + ipHash, 600)
 }
 
+// The voice is the cheapest call of the three, and a learner may replay a line
+// several times, so its allowance is wider than the turn cap.
+export function underTtsCap(env: Env, deviceHash: string): Promise<boolean> {
+  return bump(env, 'tts:' + deviceHash, Number(env.DAILY_TTS_CAP || '200'))
+}
+
+export function underIpTtsCap(env: Env, ipHash: string): Promise<boolean> {
+  return bump(env, 'iptts:' + ipHash, 2000)
+}
+
 export function clientIp(req: Request): string {
   return req.headers.get('cf-connecting-ip') ?? 'unknown'
 }

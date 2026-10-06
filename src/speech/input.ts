@@ -36,6 +36,99 @@ const METER_INTERVAL_MS = 80
 
 const HALLUCINATION = /^(thank you|thanks for watching|gracias|subt[ií]tulos.*)[.!]?$/i
 
+// Coaching. The mic is opened with automatic gain control off, so the level it
+// reports is the level that reached it and "you are too far" means something.
+// (iOS ignores that request; there the advice simply fires less often.) The
+// thresholds are RMS over the loud part of the clip, 0..1.
+/** Below this the words are there but thin: closer, or louder. */
+const QUIET_RMS = 0.015
+/** Above this the mic is being shouted into. */
+const LOUD_RMS = 0.3
+/** More than this share of samples pinned at full scale is audible distortion. */
+const CLIP_FRACTION = 0.003
+/** Sound that never reached the speech threshold but was not silence either. */
+const FAINT_PEAK = 0.012
+const FAINT_MS = 600
+/** A clip quieter than this at its peak is boosted before it is sent, since nothing else will. */
+const NORMALIZE_BELOW = 0.5
+const NORMALIZE_TO = 0.9
+const NORMALIZE_MAX_GAIN = 10
+// Pace is syllables per second over the spoken span, not words per minute: one
+// short sentence said normally runs well past 200 words a minute, and Spanish
+// words are longer than English ones. A relaxed speaker makes four to five and
+// a half syllables a second; Spanish runs about one faster.
+const FAST_SPS: Record<Lang, number> = { en: 6, es: 7.2 }
+const SLOW_SPS = 2
+/** Too few syllables or too short a clip says nothing reliable about pace. */
+const PACE_MIN_SYLLABLES = 6
+const PACE_MIN_MS = 1200
+
+export interface ClipStats {
+  /** RMS of the loud part of the clip. */
+  rms: number
+  /** Share of loud samples at full scale. */
+  clipped: number
+  /** From the first loud moment to the last, pauses included. */
+  speechMs: number
+  /** There was sound, but too faint to count as speech. */
+  faint?: boolean
+}
+
+export type Distance = 'closer' | 'farther' | null
+export type Pace = 'slower' | 'faster' | null
+
+/** Too far, too close, or fine. */
+export function distanceAdvice(s: Pick<ClipStats, 'rms' | 'clipped' | 'faint'>): Distance {
+  if (s.faint) return 'closer'
+  if (s.clipped > CLIP_FRACTION || s.rms > LOUD_RMS) return 'farther'
+  if (s.rms > 0 && s.rms < QUIET_RMS) return 'closer'
+  return null
+}
+
+/**
+ * A syllable estimate good enough to tell rushed from relaxed: one per run of
+ * vowels in each word, at least one a word. English drops a silent final "e"
+ * ("name", "date"); a number counts one per digit.
+ */
+export function syllables(text: string, lang: Lang): number {
+  let n = 0
+  for (const raw of text.toLowerCase().split(/[^\p{L}\p{N}]+/u)) {
+    if (!raw) continue
+    if (/^\p{N}+$/u.test(raw)) {
+      n += raw.length
+      continue
+    }
+    let runs = (raw.match(/[aeiouyáéíóúü]+/g) ?? []).length
+    if (lang === 'en' && runs > 1 && /[^aeiouyl]e$/.test(raw)) runs--
+    n += Math.max(1, runs)
+  }
+  return n
+}
+
+/** Too fast for a counter, slow enough to speed up, or fine. */
+export function paceAdvice(text: string, speechMs: number, lang: Lang): Pace {
+  const count = syllables(text, lang)
+  if (count < PACE_MIN_SYLLABLES || speechMs < PACE_MIN_MS) return null
+  const perSecond = (count * 1000) / speechMs
+  if (perSecond > FAST_SPS[lang]) return 'slower'
+  if (perSecond < SLOW_SPS) return 'faster'
+  return null
+}
+
+/** Scales a quiet clip up towards full scale; a healthy one comes back as it was. */
+export function normalize(samples: Float32Array): Float32Array {
+  let max = 0
+  for (let i = 0; i < samples.length; i++) {
+    const a = Math.abs(samples[i])
+    if (a > max) max = a
+  }
+  if (max === 0 || max >= NORMALIZE_BELOW) return samples
+  const gain = Math.min(NORMALIZE_MAX_GAIN, NORMALIZE_TO / max)
+  const out = new Float32Array(samples.length)
+  for (let i = 0; i < samples.length; i++) out[i] = samples[i] * gain
+  return out
+}
+
 // The subset of the Web Speech API this file uses; the lib.dom typings do not
 // ship it, and Safari only has the prefixed constructor.
 interface SpeechRecognitionLike {
@@ -108,6 +201,10 @@ export interface ListenOptions {
   onOpen?: () => void
   /** Called when the clip has been sent and we are waiting for the transcript. */
   onWorking?: () => void
+  /** Called once per clip, when the mic closes, with how loud and how long the speech was. */
+  onStats?: (stats: ClipStats) => void
+  /** Called while recording when the advice about distance changes. */
+  onHint?: (hint: Distance) => void
 }
 
 function bcp47(lang: Lang): string {
@@ -245,7 +342,13 @@ export function startRecorderListener(lang: Lang, opts: ListenOptions = {}): Lis
   const chunks: Float32Array[] = []
   let peak = 0
   let loudMs = 0
+  let faintMs = 0
   let lastLevel = 0
+  // Running totals over the loud buffers, for the coaching.
+  let loudSumSq = 0
+  let loudSamples = 0
+  let clippedSamples = 0
+  let hint: Distance = null
   // Two flags on purpose. `cancelled` is set by the buttons and is read while
   // the mic is still being opened (getUserMedia, ctx.resume take real time);
   // `stopped` belongs to stopFn and only exists once there is a stream to stop.
@@ -255,7 +358,7 @@ export function startRecorderListener(lang: Lang, opts: ListenOptions = {}): Lis
 
   const result = new Promise<string>((resolve, reject) => {
     navigator.mediaDevices
-      .getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } })
+      .getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: false } })
       .then(async (stream) => {
         const release = () => {
           stream.getTracks().forEach((t) => t.stop())
@@ -293,10 +396,15 @@ export function startRecorderListener(lang: Lang, opts: ListenOptions = {}): Lis
           const d = e.inputBuffer.getChannelData(0)
           chunks.push(new Float32Array(d))
           let sum = 0
-          for (let i = 0; i < d.length; i++) sum += d[i] * d[i]
+          let pinned = 0
+          for (let i = 0; i < d.length; i++) {
+            sum += d[i] * d[i]
+            if (d[i] >= 0.98 || d[i] <= -0.98) pinned++
+          }
           const lvl = Math.min(1, Math.sqrt(sum / d.length) * LEVEL_GAIN)
           if (lvl > peak) peak = lvl
           const now = performance.now()
+          const bufferMs = (d.length * 1000) / ctx.sampleRate
           if (lvl > SILENCE_PEAK) {
             if (!spokeAt) {
               spokeAt = now
@@ -304,14 +412,30 @@ export function startRecorderListener(lang: Lang, opts: ListenOptions = {}): Lis
             }
             lastLoud = now
             lastLoudSample = seen + d.length
-            loudMs += (d.length * 1000) / ctx.sampleRate
-          } else if (spokeAt && now - spokeAt > MIN_SPEECH_MS && now - lastLoud > SILENCE_MS) {
-            stopFn(true)
+            loudMs += bufferMs
+            loudSumSq += sum
+            loudSamples += d.length
+            clippedSamples += pinned
+          } else {
+            if (lvl > FAINT_PEAK) faintMs += bufferMs
+            if (spokeAt && now - spokeAt > MIN_SPEECH_MS && now - lastLoud > SILENCE_MS) stopFn(true)
           }
           seen += d.length
           if (now - lastLevel > METER_INTERVAL_MS) {
             lastLevel = now
             opts.onLevel?.(lvl)
+            // Advice while the learner is still talking, once there is enough
+            // speech to judge and only when it changes.
+            const next: Distance =
+              loudMs >= FAINT_MS
+                ? distanceAdvice({ rms: Math.sqrt(loudSumSq / loudSamples), clipped: clippedSamples / loudSamples })
+                : !spokeAt && faintMs >= FAINT_MS
+                  ? 'closer'
+                  : null
+            if (next !== hint) {
+              hint = next
+              opts.onHint?.(hint)
+            }
           }
         }
         src.connect(proc)
@@ -334,10 +458,19 @@ export function startRecorderListener(lang: Lang, opts: ListenOptions = {}): Lis
           opts.onLevel?.(0)
           // A tap, a cough, or silence: nothing to send. Whisper, given
           // silence, likes to answer "Thank you.", so silence is decided here.
-          if (!post || loudMs < MIN_SPEECH_MS || peak < SILENCE_PEAK) return resolve('')
+          if (!post || loudMs < MIN_SPEECH_MS || peak < SILENCE_PEAK) {
+            // Someone was talking, just not where the mic could hear them.
+            if (post && faintMs >= FAINT_MS) opts.onStats?.({ rms: 0, clipped: 0, speechMs: 0, faint: true })
+            return resolve('')
+          }
+          opts.onStats?.({
+            rms: loudSamples ? Math.sqrt(loudSumSq / loudSamples) : 0,
+            clipped: loudSamples ? clippedSamples / loudSamples : 0,
+            speechMs: ((lastLoudSample - firstLoudSample) * 1000) / rate,
+          })
           opts.onWorking?.()
           try {
-            const speech = trimSilence(downsample(chunks, rate, rate), rate, firstLoudSample, lastLoudSample)
+            const speech = normalize(trimSilence(downsample(chunks, rate, rate), rate, firstLoudSample, lastLoudSample))
             const wav = encodeWav(downsample([speech], rate, TARGET_RATE), TARGET_RATE)
             const text = (await transcribe(wav, lang)).trim()
             // "Thank you" is a real learner line too, so the phrase alone never

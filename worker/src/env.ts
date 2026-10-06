@@ -9,6 +9,17 @@ export interface Env {
   DAILY_IP_CAP: string
   /** Spoken turns have their own cap: a transcription is cheaper than a model turn. */
   DAILY_STT_CAP?: string
+  /** The natural voice on Workers AI; "{lang}" becomes en or es. See tts.ts. */
+  TTS_MODEL?: string
+  /** The cheap voice that takes over once the day's premium clips are spent. */
+  TTS_BUDGET_MODEL?: string
+  /** How many clips a day, across everyone, the natural voice may read. */
+  DAILY_TTS_PREMIUM?: string
+  /** Optional speaker names for the natural voice, per language. */
+  TTS_SPEAKER_EN?: string
+  TTS_SPEAKER_ES?: string
+  /** Replies read aloud per device per day. */
+  DAILY_TTS_CAP?: string
   ALLOWED_ORIGIN: string
   DB: D1Database
   /** The Workers AI binding: speech-to-text, and the partner when there is no key. */
@@ -47,8 +58,8 @@ export function yesterday(): string {
 }
 
 // The one loose cast onto the Workers AI binding. The binding's generated model
-// types change between workers-types releases, and we make three calls in all
-// (Whisper, the partner, Table-mode help), so each caller types its own result.
+// types change between workers-types releases, and we make four calls in all
+// (Whisper, the partner, Table-mode help, the voice), so each caller types its own result.
 export function runAi(ai: Ai, model: string, input: unknown): Promise<unknown> {
   const run = (ai as unknown as { run: (model: string, input: unknown) => Promise<unknown> }).run
   return run.call(ai, model, input)

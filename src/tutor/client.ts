@@ -10,6 +10,9 @@ const BASE = (import.meta.env.VITE_API_BASE as string | undefined) ?? ''
 
 // Whisper on the free tier can take a while; past this it is not coming.
 const STT_TIMEOUT_MS = 15_000
+// The voice normally answers in two to three seconds. Past this the device
+// voice reads the line instead: late audio is worse than plainer audio.
+const TTS_TIMEOUT_MS = 7_000
 
 /** Carries the status so callers can tell "you are offline" from "that is all for today". */
 export class ApiError extends Error {
@@ -90,6 +93,24 @@ export async function transcribe(clip: Blob, lang: Lang): Promise<string> {
     if (!res.ok) throw new ApiError(res.status, `/api/stt ${res.status}`)
     const json = (await res.json()) as { text?: string }
     return json.text ?? ''
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
+/** The partner's line as a spoken clip. Nothing is kept on the server. */
+export async function fetchSpeech(text: string, lang: Lang): Promise<Blob> {
+  const ctl = new AbortController()
+  const timer = setTimeout(() => ctl.abort(), TTS_TIMEOUT_MS)
+  try {
+    const res = await fetch(`${BASE}/api/tts`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ text, lang, device: deviceId() }),
+      signal: ctl.signal,
+    })
+    if (!res.ok) throw new ApiError(res.status, `/api/tts ${res.status}`)
+    return await res.blob()
   } finally {
     clearTimeout(timer)
   }

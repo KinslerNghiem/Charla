@@ -27,6 +27,13 @@ kept from day one and pasted into the submission form.
   transcription and the transcript is sent directly to the partner as the
   learner's turn. On a 503 the app falls back to the browser's own speech
   recognition where it exists, and typing always works.
+- **The partner's voice** (`/api/tts`, `worker/src/tts.ts`): the reply is
+  read aloud by a neural text-to-speech model on Workers AI, **Deepgram
+  Aura-2** for the first clips of each day and **MeloTTS** after that, and the
+  audio is sent back to the caller. Nothing is kept; only lines that ship with
+  the app are cached. When the route says no, the phone's own voice reads the
+  line instead. The mic coaching (closer, farther, slower, faster) is plain
+  arithmetic on the recorded clip, not a model.
 - No AI in kid mode. No AI in the map, the reports, or the Go Card.
 
 ## AI-assisted coding
@@ -45,6 +52,7 @@ kept from day one and pasted into the submission form.
 | 2026-10-01 | Fourteen-lens audit of the whole app with adversarial verification of every finding (each claimed bug reproduced or dropped) | Claude Code |
 | 2026-10-02 | The fixes from that audit, in six parallel passes: partner quality guards (level retry, fragments, whose-line, language, meta-instructions in history, 503 instead of a canned reply); speech lifecycle (one tap per turn, 15 s timeout, mic released on navigation, TTS hushed first, browser recognition only after a 503); Places data hygiene (team notes out of the GeoJSON, online groups marked, selection flies the map) and the offline map state; About page; PWA caching (map and places runtime-cached, update prompt); content fixes and three scenes (parent-teacher conference, electric-bill call, classroom help); docs; Worker, storage, language and router tests | Claude Code |
 
+| 2026-10-05 | Neural voice for the partner (/api/tts on Workers AI: Aura-2 then MeloTTS, device voice fallback, edge cache for shipped lines); Android device-voice fix; mic coaching on distance and pace; navigation: tabs in loop order, header language and About chips, three-step strip, folding brief, scroll-to-top on route change; end-to-end voice check script | Claude Code |
 | 2026-10-03 | Visual design pass: serif display voice, brand mark, bottom tab bar on phones, icon scene cards in a grid, numbered phrases, segmented level picker, mic-first composer, Go Card laid out as a card, storefront awnings in kid mode, two-column scene page on laptops | Claude Code |
 
 Add a row whenever an AI tool writes or substantially rewrites code, content or

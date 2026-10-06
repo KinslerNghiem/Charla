@@ -112,6 +112,7 @@ npx wrangler login                   # wrangler is a devDependency; no global in
 npm run worker:db                    # creates the tables in a local D1
 echo "ALLOWED_ORIGIN=http://localhost:5173" > worker/.dev.vars   # the Worker refuses other origins
 # optional: echo "ANTHROPIC_API_KEY=sk-ant-..." >> worker/.dev.vars
+# optional: echo "TTS_SPEAKER_ES=estrella" >> worker/.dev.vars        # try an Aura voice by ear
 
 # every time
 npm run worker:dev                   # API on http://localhost:8787; vite proxies /api to it
@@ -132,6 +133,30 @@ chosen at runtime: the recorder above wherever Web Audio exists; the browser's
 own SpeechRecognition only as a fallback after `/api/stt` answers 503; typing,
 always. The read-aloud voice is hushed before recording starts, a 15 s timeout
 covers a stalled upload, and leaving the page releases the microphone.
+
+The partner's voice: the reply is read by a neural voice from `/api/tts`
+(`worker/src/tts.ts`), played through one audio element that a tap unlocks,
+with the phone's own voice as the fallback when there is no connection, the
+day's allowance is spent, or the browser refuses. Deepgram's Aura-2 reads the
+first `DAILY_TTS_PREMIUM` clips of the day across everyone (the natural voice,
+about 130 neurons a clip), MeloTTS the rest (about one neuron); lines that ship
+with the app are cached at the edge, replies a learner shaped never are. Both
+knobs and an optional `TTS_SPEAKER_ES` (Aura's Mexican-accent voices, e.g.
+`estrella`) are in `worker/wrangler.toml`. Kid mode never loads this path; it
+speaks through the device alone.
+
+Coaching: the mic is opened with automatic gain control off, so the level is
+honest, and the clip is boosted in the app before it is sent. After each spoken
+turn one line says whether to move closer or farther from the microphone
+(RMS and clipping of the loud part of the clip) and whether to slow down or
+speed up (syllables per second over the spoken span; the thresholds and the
+reasoning are in `src/speech/input.ts`). While the mic is open the same advice
+about distance shows live.
+
+```bash
+node scripts/voicecheck.mjs path/to/sentence.wav   # the whole spoken loop in a real Chrome,
+                                                   # with that WAV as the microphone
+```
 
 Deploy, once, from PowerShell after `npx wrangler login`:
 
