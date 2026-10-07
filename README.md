@@ -142,8 +142,10 @@ first `DAILY_TTS_PREMIUM` clips of the day across everyone (the natural voice,
 about 130 neurons a clip), MeloTTS the rest (about one neuron); lines that ship
 with the app are cached at the edge, replies a learner shaped never are. Both
 knobs and an optional `TTS_SPEAKER_ES` (Aura's Mexican-accent voices, e.g.
-`estrella`) are in `worker/wrangler.toml`. Kid mode never loads this path; it
-speaks through the device alone.
+`estrella`) are in `worker/wrangler.toml`. The same voice reads the brief's
+phrases, the scripted scene and the Go Card (`src/speech/voice.ts` is the one
+door). Kid mode never loads this path; it speaks through the device alone, and
+`OfflineScene` takes its voice as a prop so that stays true.
 
 Coaching: the mic is opened with automatic gain control off, so the level is
 honest, and the clip is boosted in the app before it is sent. After each spoken

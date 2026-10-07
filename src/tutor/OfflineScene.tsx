@@ -1,4 +1,4 @@
-import { useState } from 'preact/hooks'
+import { useEffect, useRef, useState } from 'preact/hooks'
 import type { Scene, ScriptChoice } from '../content/scene.schema'
 import type { Lang } from '../i18n/strings'
 import { t } from '../i18n/lang'
@@ -7,18 +7,32 @@ import { speak } from '../speech/output'
 // The scripted version of a scene: the partner's line, two or three choices,
 // a gentle retry on a wrong one. Used when the API is unreachable, and it is
 // the whole of kid mode. No network. No free text.
+//
+// Who reads the line aloud is handed in: Learn passes the neural voice, kid
+// mode passes nothing and gets the phone's own, so this file never imports
+// anything that could reach the network.
+
+/** Says the line; resolves true once something is speaking it. */
+export type Voice = (text: string, lang: Lang) => Promise<boolean> | boolean
+
+const deviceVoice: Voice = (text, lang) => speak(text, lang)
 
 export function OfflineScene({
   scene,
   learning,
   native,
   pictures = false,
+  voice = deviceVoice,
+  readAloud = false,
   onDone,
 }: {
   scene: Scene
   learning: Lang
   native: Lang
   pictures?: boolean
+  voice?: Voice
+  /** Read each new partner line as it appears (after the tap that brought it). */
+  readAloud?: boolean
   onDone: () => void
 }) {
   const [nodeId, setNodeId] = useState(scene.offline_script.start)
@@ -27,6 +41,18 @@ export function OfflineScene({
   // Shown once, the first time Listen has nothing to say with.
   const [noVoice, setNoVoice] = useState(false)
   const node = scene.offline_script.nodes[nodeId]
+  // Once the learner has heard a line, or asked for replies aloud, each new
+  // line is read as it appears. Never on mount: no tap has unlocked audio yet.
+  const [heard, setHeard] = useState(false)
+  const mounted = useRef(false)
+  useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true
+      return
+    }
+    if (!(readAloud || heard)) return
+    void Promise.resolve(voice(node.partner[learning], learning)).then((ok) => ok || setNoVoice(true))
+  }, [nodeId])
 
   function choose(c: ScriptChoice) {
     if (c.best) {
@@ -43,7 +69,8 @@ export function OfflineScene({
   }
 
   function listen() {
-    if (!speak(node.partner[learning], learning)) setNoVoice(true)
+    setHeard(true)
+    void Promise.resolve(voice(node.partner[learning], learning)).then((ok) => ok || setNoVoice(true))
   }
 
   return (

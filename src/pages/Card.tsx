@@ -1,7 +1,8 @@
+import { useEffect, useState } from 'preact/hooks'
 import { sceneById } from '../content/scenes'
 import { learning, native, t } from '../i18n/lang'
 import { get } from '../storage'
-import { say, unlockVoice } from '../speech/voice'
+import { hushVoice, say, unlockVoice } from '../speech/voice'
 
 interface LastCard {
   scene_id: string
@@ -18,6 +19,30 @@ export function Card() {
   const scene = sceneById(card?.scene_id)
   const target = learning()
   const nat = native()
+  const [speaking, setSpeaking] = useState<string | null>(null)
+  useEffect(() => () => hushVoice(), [])
+  function listen(text: string) {
+    if (speaking === text) {
+      hushVoice()
+      setSpeaking(null)
+      return
+    }
+    unlockVoice()
+    setSpeaking(text)
+    void say(text, target, { onEnd: () => setSpeaking((s) => (s === text ? null : s)) }).then((how) => {
+      if (how === 'none' || how === 'superseded') setSpeaking((s) => (s === text ? null : s))
+    })
+  }
+  const listenButton = (text: string) => (
+    <button
+      type="button"
+      class={'ghost small listen' + (speaking === text ? ' speaking' : '')}
+      onClick={() => listen(text)}
+      aria-label={`${speaking === text ? t('stop_voice') : t('listen')}: ${text}`}
+    >
+      {speaking === text ? '⏹' : '🔊'}
+    </button>
+  )
   if (!card || !scene) {
     return (
       <section class="card">
@@ -58,20 +83,16 @@ export function Card() {
                   <b lang={target}>{p[target]}</b>
                   <i>{p[nat]}</i>
                 </span>
-                <button type="button" class="ghost small listen" onClick={() => {
-                    unlockVoice()
-                    void say(p[target], target)
-                  }} aria-label={`${t('listen')}: ${p[target]}`}>
-                  🔊
-                </button>
+                {listenButton(p[target])}
               </li>
             ))}
           </ol>
           {expect ? (
             <>
               <h2>{t('expected')}</h2>
-              <p class="expect" lang={target}>
-                {expect[target]}
+              <p class="expect with-voice">
+                <span lang={target}>{expect[target]}</span>
+                {listenButton(expect[target])}
               </p>
               <p class="gloss">{expect[nat]}</p>
               <h2>{t('card_how_it_ends')}</h2>
@@ -86,8 +107,9 @@ export function Card() {
             </>
           )}
           <h2>{t('staff_line')}</h2>
-          <p class="staff-line" lang={target}>
-            {scene.show_staff_line[target]}
+          <p class="staff-line with-voice">
+            <span lang={target}>{scene.show_staff_line[target]}</span>
+            {listenButton(scene.show_staff_line[target])}
           </p>
         </div>
       </article>

@@ -58,6 +58,8 @@ with every finding re-verified against the code before it was fixed.
 - Android phones get a device voice again (Chrome there reports every system voice as "remote", which the old filter dropped).
 - After each spoken turn: closer or farther from the microphone, slower or faster, or "good distance and good pace"; the distance advice also shows live while the mic is open. Quiet clips are boosted before they are sent.
 - Navigation: tabs in the order of the loop (Rehearse, Go Card, Places), language and About chips in the header, a three-step strip on the picker, the goal and phrases fold away once the conversation starts, every page opens at its top.
+- The same voice reads everything else a learner can tap to hear: the brief's phrases, the scripted scene (and its next line after each choice when replies are read aloud), and every line on the Go Card. Kid mode keeps the phone's own voice, so it stays off the network.
+- Under the composer: one row (simpler, another way, the voice switch), and reporting is a link in its own note. The footer no longer repeats the language switch that lives in the header.
 - Run `scripts/deploy.ps1` again to put this live; it now writes files without a byte-order mark.
 
 **Design** (2026-10-03)

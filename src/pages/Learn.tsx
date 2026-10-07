@@ -363,6 +363,14 @@ export function Learn({ params }: { params: URLSearchParams }) {
                 <span lang={target}>{p[target]}</span>
                 <i>{p[nat]}</i>
               </span>
+              <button
+                type="button"
+                class={'ghost small listen' + (speaking === p[target] ? ' speaking' : '')}
+                onClick={() => listen(p[target])}
+                aria-label={`${speaking === p[target] ? t('stop_voice') : t('listen')}: ${p[target]}`}
+              >
+                {speaking === p[target] ? '⏹' : '🔊'}
+              </button>
             </li>
           ))}
         </ol>
@@ -397,7 +405,17 @@ export function Learn({ params }: { params: URLSearchParams }) {
               </button>
             </p>
           )}
-          <OfflineScene scene={scene} learning={target} native={nat} onDone={finish} />
+          <OfflineScene
+            scene={scene}
+            learning={target}
+            native={nat}
+            voice={(text, lang) => {
+              unlockVoice()
+              return say(text, lang, { rate: levelRef.current === 'A1' ? 0.9 : 1 }).then((how) => how !== 'none')
+            }}
+            readAloud={voiceOn}
+            onDone={finish}
+          />
           {done && doneBlock}
         </>
       ) : (
@@ -513,39 +531,43 @@ export function Learn({ params }: { params: URLSearchParams }) {
               )}
               {lastAssistant && (
                 <>
-                  <div class="row">
+                  {/* One row: the two ways to get a different reply, and the voice switch at the far end. */}
+                  <div class="row after-reply">
                     <button type="button" class="ghost" disabled={busy || level === 'A1'} onClick={() => send('', 'simpler')}>
                       {t('simpler')}
                     </button>
                     <button type="button" class="ghost" disabled={busy} onClick={() => send('', 'another_way')}>
                       {t('another_way')}
                     </button>
-                    <button type="button" class="ghost small" disabled={flagged[lastAssistant.text] === 'sent'} onClick={() => report(lastAssistant.text)}>
-                      {t('report_reply')}
-                    </button>
+                    <label class="voice-toggle">
+                      <input
+                        type="checkbox"
+                        checked={voiceOn}
+                        onChange={(e) => {
+                          const on = (e.currentTarget as HTMLInputElement).checked
+                          setVoiceOn(on)
+                          set('voice', on)
+                          if (!on) {
+                            hushVoice()
+                            setSpeaking(null)
+                          }
+                        }}
+                      />
+                      🔊 {t('voice_label')}
+                    </label>
                   </div>
-                  <label class="voice-toggle">
-                    <input
-                      type="checkbox"
-                      checked={voiceOn}
-                      onChange={(e) => {
-                        const on = (e.currentTarget as HTMLInputElement).checked
-                        setVoiceOn(on)
-                        set('voice', on)
-                        if (!on) {
-                          hushVoice()
-                          setSpeaking(null)
-                        }
-                      }}
-                    />
-                    {t('voice_label')}
-                  </label>
-                  <p class="note" aria-live="polite">
-                    {flagged[lastAssistant.text] === 'sent'
-                      ? t('report_reply_done')
-                      : flagged[lastAssistant.text] === 'failed'
-                        ? t('report_reply_failed')
-                        : t('report_reply_note')}
+                  {/* Reporting is a quiet link in its own explanation, not a third button. */}
+                  <p class="note report" aria-live="polite">
+                    {flagged[lastAssistant.text] === 'sent' ? (
+                      t('report_reply_done')
+                    ) : (
+                      <>
+                        {flagged[lastAssistant.text] === 'failed' ? t('report_reply_failed') : t('report_reply_note')}{' '}
+                        <button type="button" class="link" onClick={() => report(lastAssistant.text)}>
+                          {t('report_reply')}
+                        </button>
+                      </>
+                    )}
                   </p>
                 </>
               )}

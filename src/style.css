@@ -211,7 +211,9 @@ main { outline: none; }
 .scene-head .place { color: var(--es); font-weight: 600; margin: -6px 0 10px; }
 .levels-label { margin: 12px 0 0; }
 .must { list-style: none; padding: 0; margin: 10px 0 4px; display: grid; gap: 6px; }
-.must li { display: grid; grid-template-columns: 26px 1fr; column-gap: 10px; align-items: start; padding: 8px 10px; background: var(--en-soft); color: var(--en); border-radius: var(--r); }
+.must li { display: grid; grid-template-columns: 26px 1fr auto; column-gap: 10px; align-items: start; padding: 8px 10px; background: var(--en-soft); color: var(--en); border-radius: var(--r); }
+.must .listen { min-width: 40px; min-height: 36px; padding: 2px 8px; margin: -2px -4px 0 0; color: inherit; border-color: transparent; }
+.must .listen:hover:not(:disabled) { border-color: currentColor; background: transparent; }
 .must .num { width: 24px; height: 24px; border-radius: 50%; background: var(--paper); color: var(--en); font-family: var(--disp); font-weight: 700; font-size: 14px; display: grid; place-items: center; margin-top: 1px; }
 .must span[lang] { font-family: var(--disp); font-size: 17px; line-height: 1.3; }
 .must i { display: block; color: var(--ink-2); font-style: normal; font-size: 14px; }
@@ -250,9 +252,14 @@ main { outline: none; }
 /* What the last clip sounded like: one line, amber when there is something to change, green when not. */
 .coach { display: grid; gap: 2px; font-size: 14px; margin: 6px 0 8px; padding: 8px 10px; border-radius: var(--r); background: var(--es-soft); color: var(--es); }
 .coach.ok { background: var(--go-soft); color: var(--go-ink); }
-.voice-toggle { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--ink-2); margin: 4px 0; min-height: 36px; cursor: pointer; }
+.voice-toggle { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--ink-2); min-height: 44px; cursor: pointer; }
+/* With room beside the buttons the switch sits at the far end; wrapped, it starts the line. */
+@media (min-width: 560px) { .voice-toggle { margin-left: auto; } }
 .voice-toggle input { width: 20px; height: 20px; margin: 0; padding: 0; flex: none; accent-color: var(--go); }
-.chat button.speaking { background: var(--es-soft); border-color: var(--es); color: var(--es); }
+.after-reply { margin: 10px 0 2px; }
+.note.report { margin: 0 0 8px; }
+.note.report .link { color: var(--ink-2); }
+button.speaking, .must .listen.speaking { background: var(--es-soft); border-color: var(--es); color: var(--es); }
 /* The level meter: the learner sees the phone hearing them. */
 .meter { height: 10px; border-radius: 5px; background: var(--paper-2); overflow: hidden; margin: 6px 0; }
 .meter i { display: block; height: 100%; width: 0; background: var(--es); transition: width 80ms linear; }
@@ -348,6 +355,9 @@ main { outline: none; }
 .phrases b { display: block; font-family: var(--disp); font-size: 19px; line-height: 1.3; }
 .phrases i { display: block; color: var(--ink-2); font-style: normal; font-size: 14px; }
 .phrases .listen { flex: none; min-height: 40px; min-width: 44px; }
+/* A line with its own speaker button beside it. */
+.with-voice { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
+.with-voice .listen { min-height: 40px; min-width: 44px; }
 .gocard .expect { font-family: var(--disp); font-size: 18px; margin: 0; }
 .staff-line { font-family: var(--disp); font-size: 24px; line-height: 1.3; border: 2px dashed var(--ink); padding: 16px; border-radius: var(--r); text-align: center; background: var(--paper-2); margin: 0; }
 @media print {

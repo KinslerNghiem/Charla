@@ -216,13 +216,6 @@ export function App() {
         <a href="#/about" aria-current={route.path === '/about' ? 'page' : undefined}>
           {t('nav_about')}
         </a>
-        <button
-          type="button"
-          class="link"
-          onClick={changeLanguage}
-        >
-          {t('change_language')}
-        </button>
       </footer>
     </div>
   )
