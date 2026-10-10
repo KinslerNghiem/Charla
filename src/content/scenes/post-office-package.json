@@ -1,0 +1,247 @@
+{
+  "id": "post-office-package",
+  "place_type": "post_office",
+  "channel": "counter",
+  "title": {
+    "en": "Mail a package",
+    "es": "Enviar un paquete"
+  },
+  "roles": {
+    "partner": {
+      "en": "postal clerk",
+      "es": "empleado o empleada del correo"
+    },
+    "learner": {
+      "en": "customer sending a box to family",
+      "es": "cliente que manda una caja a su familia"
+    }
+  },
+  "goal": {
+    "en": "Mail a package to your family, pick the cheapest option, and ask when it will arrive.",
+    "es": "Enviar un paquete a tu familia, elegir la opción más barata y preguntar cuándo llega."
+  },
+  "must_use": [
+    {
+      "en": "I need to send this package to Mexico.",
+      "es": "Necesito enviar este paquete a México."
+    },
+    {
+      "en": "How much is the cheapest option?",
+      "es": "¿Cuánto cuesta la opción más barata?"
+    },
+    {
+      "en": "When will it arrive?",
+      "es": "¿Cuándo llega?"
+    }
+  ],
+  "expect": {
+    "en": "Anything fragile, liquid, perishable, or hazardous?",
+    "es": "¿Contiene algo frágil, líquido, perecedero o peligroso?"
+  },
+  "success": {
+    "en": "The clerk weighs the box, you pick a price you can pay, and you leave with a receipt and a tracking number.",
+    "es": "Pesan la caja, eliges un precio que puedes pagar y te vas con un recibo y un número de rastreo."
+  },
+  "show_staff_line": {
+    "en": "I'm practicing my English. Thank you for your patience.",
+    "es": "Estoy practicando mi español. Gracias por su paciencia."
+  },
+  "offline_script": {
+    "start": "s1",
+    "nodes": {
+      "s1": {
+        "partner": {
+          "en": "Next, please. What can I do for you?",
+          "es": "El siguiente, por favor. ¿Qué necesita?"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "I need to send this package to Mexico.",
+              "es": "Necesito enviar este paquete a México."
+            },
+            "picture": "📦",
+            "best": true,
+            "next": "s2"
+          },
+          {
+            "text": {
+              "en": "I need to mandate this package to Mexico.",
+              "es": "Necesito mandatar este paquete a México."
+            },
+            "picture": "📜",
+            "tip": {
+              "en": "\"Mandate\" is an order from above. For mandar say \"send\" or \"mail\": \"I need to send this package to Mexico.\"",
+              "es": "«Mandate» es una orden oficial. Para mandar di «send» o «mail»: \"I need to send this package to Mexico.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "This goes to Mexico.",
+              "es": "Esto va a México."
+            },
+            "picture": "💬",
+            "tip": {
+              "en": "A good start, but say what you want done: \"I need to send this package to Mexico.\"",
+              "es": "Buen comienzo, pero di qué quieres que hagan: \"I need to send this package to Mexico.\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s2": {
+        "partner": {
+          "en": "Anything fragile, liquid, perishable, or hazardous inside?",
+          "es": "¿Contiene algo frágil, líquido, perecedero o peligroso?"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Nothing. Clothes and toys of my children.",
+              "es": "Nada. Ropa y juguetes de mis hijos."
+            },
+            "picture": "👕",
+            "tip": {
+              "en": "In English the owner goes first, with 's: \"my children's clothes and toys\". Or simply: \"No, just clothes and some toys.\"",
+              "es": "En inglés el dueño va primero, con 's: «my children's clothes and toys». O más simple: \"No, just clothes and some toys.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "No, just clothes and some toys.",
+              "es": "No, solo ropa y algunos juguetes."
+            },
+            "picture": "🧸",
+            "best": true,
+            "next": "s3"
+          },
+          {
+            "text": {
+              "en": "Yes, it is fragile? No.",
+              "es": "¿Sí, es frágil? No."
+            },
+            "picture": "❓",
+            "tip": {
+              "en": "Answer the question with one word first, then explain: \"No, just clothes and some toys.\"",
+              "es": "Contesta primero con una palabra y luego explica: \"No, just clothes and some toys.\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s3": {
+        "partner": {
+          "en": "Okay. Priority gets there in six to ten days; First-Class is slower but cheaper.",
+          "es": "Bien. Priority llega en seis a diez días; First-Class es más lento pero más barato."
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "How much costs the cheap one?",
+              "es": "¿Cuánto cuesta el barato?"
+            },
+            "picture": "💸",
+            "tip": {
+              "en": "The English question goes \"How much is...\" or \"How much does... cost\": \"How much is the cheapest option?\"",
+              "es": "En inglés la pregunta va «How much is...» o «How much does... cost»: \"How much is the cheapest option?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "How much is the cheapest option?",
+              "es": "¿Cuánto cuesta la opción más barata?"
+            },
+            "picture": "💵",
+            "best": true,
+            "next": "s4"
+          },
+          {
+            "text": {
+              "en": "The economic one.",
+              "es": "El económico."
+            },
+            "picture": "📉",
+            "tip": {
+              "en": "\"Economic\" is about the economy. For barato say \"cheap\", and ask the price: \"How much is the cheapest option?\"",
+              "es": "«Economic» se refiere a la economía. Para barato di «cheap», y pregunta el precio: \"How much is the cheapest option?\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s4": {
+        "partner": {
+          "en": "First-Class is twenty-four fifty. Would you like tracking?",
+          "es": "First-Class cuesta veinticuatro cincuenta. ¿Quiere rastreo?"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Yes, please. When will it arrive?",
+              "es": "Sí, por favor. ¿Cuándo llega?"
+            },
+            "picture": "📍",
+            "best": true,
+            "next": "s5"
+          },
+          {
+            "text": {
+              "en": "Yes. When it arrives?",
+              "es": "Sí. ¿Cuándo llega eso?"
+            },
+            "picture": "🔁",
+            "tip": {
+              "en": "Questions about the future use \"will\" before the subject: \"When will it arrive?\"",
+              "es": "Las preguntas sobre el futuro llevan «will» antes del sujeto: \"When will it arrive?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "When arrive?",
+              "es": "¿Cuándo llegar?"
+            },
+            "picture": "💬",
+            "tip": {
+              "en": "The verb needs \"will it\": \"When will it arrive?\"",
+              "es": "El verbo necesita «will it»: \"When will it arrive?\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s5": {
+        "partner": {
+          "en": "About two to three weeks. Here's your receipt with the tracking number.",
+          "es": "Unas dos o tres semanas. Aquí tiene su recibo con el número de rastreo."
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Thank you very much. Have a good day.",
+              "es": "Muchas gracias. Que tenga buen día."
+            },
+            "picture": "🙏",
+            "best": true,
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Thanks. Have a good day you too.",
+              "es": "Gracias. Que tenga buen día usted también."
+            },
+            "picture": "👋",
+            "tip": {
+              "en": "\"You too\" answers a wish; to give the wish, say \"Have a good day.\"",
+              "es": "«You too» responde a un deseo; para desearlo tú, di \"Have a good day.\""
+            },
+            "next": null
+          }
+        ]
+      }
+    }
+  }
+}

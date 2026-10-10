@@ -12,6 +12,16 @@ import classroom from './classroom-help.json'
 import landlord from './landlord-repair.json'
 import sick from './call-in-sick.json'
 import electricBill from './electric-bill-call.json'
+import urgentCare from './urgent-care-symptoms.json'
+import bank from './bank-open-account.json'
+import postOffice from './post-office-package.json'
+import parkDistrict from './park-district-signup.json'
+import job from './job-application.json'
+import college from './college-language-classes.json'
+import bus from './bus-ride.json'
+import playground from './playground-new-friend.json'
+import doctorCall from './doctor-appointment-call.json'
+import absenceCall from './school-absence-call.json'
 
 // Add a scene: drop a JSON file next to these, import it here, run `npm test`
 // (or `python scripts/check_scenes.py` without Node). The test suite checks
@@ -28,9 +38,19 @@ export const SCENES: Scene[] = [
   grocery as Scene,
   iceCream as Scene,
   classroom as Scene,
+  urgentCare as Scene,
+  bank as Scene,
+  postOffice as Scene,
+  parkDistrict as Scene,
+  job as Scene,
+  college as Scene,
+  bus as Scene,
+  playground as Scene,
   landlord as Scene,
   sick as Scene,
   electricBill as Scene,
+  doctorCall as Scene,
+  absenceCall as Scene,
 ]
 
 export function sceneById(id: string | null | undefined): Scene | undefined {

@@ -1,0 +1,216 @@
+{
+  "id": "bus-ride",
+  "place_type": "transit",
+  "kid": true,
+  "channel": "counter",
+  "title": {
+    "en": "Ride the bus",
+    "es": "Viajar en autobús"
+  },
+  "roles": {
+    "partner": {
+      "en": "bus driver",
+      "es": "chofer del autobús"
+    },
+    "learner": {
+      "en": "kid riding with a grown-up and talking to the driver",
+      "es": "niño o niña que viaja con un adulto y habla con el chofer"
+    }
+  },
+  "goal": {
+    "en": "Ask if this bus goes to the library, ask how much it costs, and thank the driver when you get off.",
+    "es": "Preguntar si este autobús va a la biblioteca, preguntar cuánto cuesta y darle las gracias al chofer al bajar."
+  },
+  "must_use": [
+    {
+      "en": "Does this bus go to the library?",
+      "es": "¿Este autobús va a la biblioteca?"
+    },
+    {
+      "en": "How much is it?",
+      "es": "¿Cuánto cuesta?"
+    },
+    {
+      "en": "Thank you, driver!",
+      "es": "¡Gracias, chofer!"
+    }
+  ],
+  "expect": {
+    "en": "Where are you headed?",
+    "es": "¿Adónde vas?"
+  },
+  "success": {
+    "en": "You get to the library, and the driver smiles because you said thank you.",
+    "es": "Llegas a la biblioteca, y el chofer sonríe porque diste las gracias."
+  },
+  "show_staff_line": {
+    "en": "I'm practicing my English. Thank you for your patience.",
+    "es": "Estoy practicando mi español. Gracias por su paciencia."
+  },
+  "offline_script": {
+    "start": "s1",
+    "nodes": {
+      "s1": {
+        "partner": {
+          "en": "Hop on! Where are you headed?",
+          "es": "¡Sube! ¿Adónde vas?"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Does this bus go to the library?",
+              "es": "¿Este autobús va a la biblioteca?"
+            },
+            "picture": "🚌",
+            "best": true,
+            "next": "s2"
+          },
+          {
+            "text": {
+              "en": "Library.",
+              "es": "Biblioteca."
+            },
+            "picture": "💬",
+            "tip": {
+              "en": "Ask the whole question: \"Does this bus go to the library?\"",
+              "es": "Haz la pregunta completa: \"Does this bus go to the library?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Does this train go to the library?",
+              "es": "¿Este tren va a la biblioteca?"
+            },
+            "picture": "🚆",
+            "tip": {
+              "en": "This is a bus! Say \"Does this bus go to the library?\"",
+              "es": "¡Es un autobús! Di \"Does this bus go to the library?\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s2": {
+        "partner": {
+          "en": "It does. Three more stops.",
+          "es": "Sí. Tres paradas más."
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "How much is it?",
+              "es": "¿Cuánto cuesta?"
+            },
+            "picture": "💵",
+            "best": true,
+            "next": "s3"
+          },
+          {
+            "text": {
+              "en": "How much it is?",
+              "es": "¿Cuánto es que cuesta?"
+            },
+            "picture": "❓",
+            "tip": {
+              "en": "In a question, \"is\" goes before \"it\": \"How much is it?\"",
+              "es": "En una pregunta, «is» va antes de «it»: \"How much is it?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "I don't want to pay.",
+              "es": "No quiero pagar."
+            },
+            "picture": "😬",
+            "tip": {
+              "en": "Everyone pays on the bus. Ask \"How much is it?\"",
+              "es": "En el autobús todos pagan. Pregunta \"How much is it?\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s3": {
+        "partner": {
+          "en": "Kids ride free with a grown-up. Have a seat!",
+          "es": "Los niños viajan gratis con un adulto. ¡Siéntate!"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Okay! Thank you.",
+              "es": "¡Bien! Gracias."
+            },
+            "picture": "🪑",
+            "best": true,
+            "next": "s4"
+          },
+          {
+            "text": {
+              "en": "Okay. Can you tell me when to get off?",
+              "es": "Bien. ¿Me avisa cuándo bajar?"
+            },
+            "picture": "🙋",
+            "best": true,
+            "next": "s4"
+          },
+          {
+            "text": {
+              "en": "I stand.",
+              "es": "Yo parado."
+            },
+            "picture": "🧍",
+            "tip": {
+              "en": "The driver asked you to sit. Say \"Okay! Thank you.\"",
+              "es": "El chofer te pidió sentarte. Di \"Okay! Thank you.\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s4": {
+        "partner": {
+          "en": "This is your stop. The library is right there.",
+          "es": "Esta es tu parada. La biblioteca está justo ahí."
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Thank you, driver!",
+              "es": "¡Gracias, chofer!"
+            },
+            "picture": "🙏",
+            "best": true,
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Bye.",
+              "es": "Adiós."
+            },
+            "picture": "👋",
+            "tip": {
+              "en": "Say thank you first: \"Thank you, driver!\"",
+              "es": "Primero da las gracias: \"Thank you, driver!\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Where is the library?",
+              "es": "¿Dónde está la biblioteca?"
+            },
+            "picture": "🤔",
+            "tip": {
+              "en": "The driver just told you: right there. Say \"Thank you, driver!\"",
+              "es": "El chofer te acaba de decir: justo ahí. Di \"Thank you, driver!\""
+            },
+            "next": null
+          }
+        ]
+      }
+    }
+  }
+}

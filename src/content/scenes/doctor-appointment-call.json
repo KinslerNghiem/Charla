@@ -1,0 +1,244 @@
+{
+  "id": "doctor-appointment-call",
+  "place_type": "clinic",
+  "channel": "phone",
+  "title": {
+    "en": "Call to make a doctor's appointment",
+    "es": "Llamar para hacer una cita con el doctor"
+  },
+  "roles": {
+    "partner": {
+      "en": "clinic receptionist on the phone",
+      "es": "recepcionista de la clínica al teléfono"
+    },
+    "learner": {
+      "en": "patient calling for a check-up",
+      "es": "paciente que llama para un chequeo"
+    }
+  },
+  "goal": {
+    "en": "Make an appointment for a check-up, say when you can come, and ask what to bring.",
+    "es": "Hacer una cita para un chequeo, decir cuándo puedes ir y preguntar qué llevar."
+  },
+  "must_use": [
+    {
+      "en": "I'd like to make an appointment for a check-up.",
+      "es": "Quisiera hacer una cita para un chequeo."
+    },
+    {
+      "en": "Mornings are better for me.",
+      "es": "Las mañanas me quedan mejor."
+    },
+    {
+      "en": "What should I bring?",
+      "es": "¿Qué debo llevar?"
+    }
+  ],
+  "expect": {
+    "en": "Are you a new patient?",
+    "es": "¿Es paciente nuevo?"
+  },
+  "success": {
+    "en": "You have a day and a time, and you know what to bring.",
+    "es": "Tienes día y hora, y sabes qué llevar."
+  },
+  "show_staff_line": {
+    "en": "I'm practicing my English. Thank you for your patience.",
+    "es": "Estoy practicando mi español. Gracias por su paciencia."
+  },
+  "offline_script": {
+    "start": "s1",
+    "nodes": {
+      "s1": {
+        "partner": {
+          "en": "Fox Valley Clinic, this is Rosa. How can I help you?",
+          "es": "Clínica Fox Valley, habla Rosa. ¿En qué le puedo ayudar?"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Hello. I'd like to make an appointment for a check-up.",
+              "es": "Hola. Quisiera hacer una cita para un chequeo."
+            },
+            "picture": "📞",
+            "best": true,
+            "next": "s2"
+          },
+          {
+            "text": {
+              "en": "Hello. I want a cite with the doctor.",
+              "es": "Hola. Quiero una cita con el doctor."
+            },
+            "picture": "📝",
+            "tip": {
+              "en": "\"Cite\" is to quote someone. A cita is \"an appointment\": \"I'd like to make an appointment for a check-up.\"",
+              "es": "«Cite» es citar a alguien. Una cita médica es «an appointment»: \"I'd like to make an appointment for a check-up.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Hello. Is the doctor there?",
+              "es": "Hola. ¿Está el doctor?"
+            },
+            "picture": "🤔",
+            "tip": {
+              "en": "On the phone, say what you need right away: \"I'd like to make an appointment for a check-up.\"",
+              "es": "Por teléfono, di de una vez qué necesitas: \"I'd like to make an appointment for a check-up.\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s2": {
+        "partner": {
+          "en": "Of course. Are you a new patient?",
+          "es": "Claro. ¿Es paciente nuevo?"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Yes, it's my first time.",
+              "es": "Sí, es mi primera vez."
+            },
+            "picture": "🆕",
+            "best": true,
+            "next": "s3"
+          },
+          {
+            "text": {
+              "en": "No, I've been there before.",
+              "es": "No, ya he ido antes."
+            },
+            "picture": "🔁",
+            "best": true,
+            "next": "s3"
+          },
+          {
+            "text": {
+              "en": "Yes, I am new patient.",
+              "es": "Sí, soy paciente nuevo yo."
+            },
+            "picture": "❓",
+            "tip": {
+              "en": "English needs \"a\" before a job or a role: \"I'm a new patient.\" Or: \"Yes, it's my first time.\"",
+              "es": "El inglés necesita «a» antes de un rol: \"I'm a new patient.\" O: \"Yes, it's my first time.\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s3": {
+        "partner": {
+          "en": "Okay. We have Tuesday at 8:30 in the morning or Thursday at 4.",
+          "es": "Bien. Tenemos el martes a las 8:30 de la mañana o el jueves a las 4."
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "The mornings are more good for me.",
+              "es": "Las mañanas son más buenas para mí."
+            },
+            "picture": "🌅",
+            "tip": {
+              "en": "\"Better\", not \"more good\": \"Mornings are better for me.\"",
+              "es": "«Better», no «more good»: \"Mornings are better for me.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Mornings are better for me. Tuesday at 8:30 works.",
+              "es": "Las mañanas me quedan mejor. El martes a las 8:30 está bien."
+            },
+            "picture": "📅",
+            "best": true,
+            "next": "s4"
+          },
+          {
+            "text": {
+              "en": "Tuesday.",
+              "es": "Martes."
+            },
+            "picture": "💬",
+            "tip": {
+              "en": "Say the time too so nothing gets mixed up: \"Tuesday at 8:30 works.\"",
+              "es": "Di también la hora para que no haya confusión: \"Tuesday at 8:30 works.\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s4": {
+        "partner": {
+          "en": "You're set for Tuesday at 8:30. Please arrive ten minutes early.",
+          "es": "Queda para el martes a las 8:30. Por favor llegue diez minutos antes."
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Thank you. What should I bring?",
+              "es": "Gracias. ¿Qué debo llevar?"
+            },
+            "picture": "🎒",
+            "best": true,
+            "next": "s5"
+          },
+          {
+            "text": {
+              "en": "Thank you. What I bring?",
+              "es": "Gracias. ¿Qué traigo yo?"
+            },
+            "picture": "❓",
+            "tip": {
+              "en": "The question needs \"should\": \"What should I bring?\"",
+              "es": "La pregunta necesita «should»: \"What should I bring?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Okay, bye.",
+              "es": "Bueno, adiós."
+            },
+            "picture": "👋",
+            "tip": {
+              "en": "Before you hang up, ask: \"What should I bring?\"",
+              "es": "Antes de colgar, pregunta: \"What should I bring?\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s5": {
+        "partner": {
+          "en": "Your ID, your insurance card if you have one, and a list of your medicines.",
+          "es": "Su identificación, su tarjeta del seguro si tiene, y una lista de sus medicinas."
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Perfect. Thank you, Rosa. See you Tuesday.",
+              "es": "Perfecto. Gracias, Rosa. Hasta el martes."
+            },
+            "picture": "🙏",
+            "best": true,
+            "next": null
+          },
+          {
+            "text": {
+              "en": "I don't have insurance. Then I can't come?",
+              "es": "No tengo seguro. ¿Entonces no puedo ir?"
+            },
+            "picture": "😟",
+            "tip": {
+              "en": "You can still come. Say \"I don't have insurance. Is that okay?\", ask about the self-pay price, and then thank her.",
+              "es": "Sí puedes ir. Di \"I don't have insurance. Is that okay?\", pregunta el precio sin seguro, y luego dale las gracias."
+            },
+            "next": null
+          }
+        ]
+      }
+    }
+  }
+}

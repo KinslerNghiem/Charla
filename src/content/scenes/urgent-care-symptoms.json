@@ -1,0 +1,206 @@
+{
+  "id": "urgent-care-symptoms",
+  "place_type": "clinic",
+  "channel": "counter",
+  "title": {
+    "en": "Tell the nurse what hurts",
+    "es": "Decirle a la enfermera qué te duele"
+  },
+  "roles": {
+    "partner": {
+      "en": "nurse at urgent care",
+      "es": "enfermero o enfermera de urgencias"
+    },
+    "learner": {
+      "en": "patient who has been sick for a few days",
+      "es": "paciente que lleva unos días enfermo"
+    }
+  },
+  "goal": {
+    "en": "Say what hurts and since when, name your allergy, and ask if you can keep taking your usual medicine.",
+    "es": "Decir qué te duele y desde cuándo, decir tu alergia y preguntar si puedes seguir tomando tu medicina de siempre."
+  },
+  "must_use": [
+    {
+      "en": "I've had a sore throat and a fever since Monday.",
+      "es": "Tengo dolor de garganta y fiebre desde el lunes."
+    },
+    {
+      "en": "I'm allergic to penicillin.",
+      "es": "Tengo alergia a la penicilina."
+    },
+    {
+      "en": "Can I keep taking my blood pressure medicine?",
+      "es": "¿Puedo seguir tomando mi medicina para la presión?"
+    }
+  ],
+  "expect": {
+    "en": "What brings you in today?",
+    "es": "¿Qué le trae por aquí hoy?"
+  },
+  "success": {
+    "en": "The nurse has your symptoms, your allergy and your medicines written down, and the doctor is on the way.",
+    "es": "La enfermera tiene anotados tus síntomas, tu alergia y tus medicinas, y el doctor ya viene."
+  },
+  "show_staff_line": {
+    "en": "I'm practicing my English. Thank you for your patience.",
+    "es": "Estoy practicando mi español. Gracias por su paciencia."
+  },
+  "offline_script": {
+    "start": "s1",
+    "nodes": {
+      "s1": {
+        "partner": {
+          "en": "Come on in. What brings you in today?",
+          "es": "Pase. ¿Qué le trae por aquí hoy?"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "I've had a sore throat and a fever since Monday.",
+              "es": "Tengo dolor de garganta y fiebre desde el lunes."
+            },
+            "picture": "🤒",
+            "best": true,
+            "next": "s2"
+          },
+          {
+            "text": {
+              "en": "I have sore throat and fever since Monday.",
+              "es": "Tengo dolor de garganta y fiebre desde lunes."
+            },
+            "picture": "📅",
+            "tip": {
+              "en": "Something that started in the past and is still going uses \"I've had\": \"I've had a sore throat and a fever since Monday.\"",
+              "es": "Algo que empezó en el pasado y sigue se dice con «I've had»: \"I've had a sore throat and a fever since Monday.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "I am constipated and I have fever.",
+              "es": "Estoy constipado y tengo fiebre."
+            },
+            "picture": "🤧",
+            "tip": {
+              "en": "\"Constipated\" means estreñido, not constipado. A cold is \"a cold\"; say \"I've had a sore throat and a fever since Monday.\"",
+              "es": "«Constipated» significa estreñido, no constipado. Un resfriado es «a cold»; di \"I've had a sore throat and a fever since Monday.\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s2": {
+        "partner": {
+          "en": "Any allergies to medications?",
+          "es": "¿Alguna alergia a medicamentos?"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Yes, the penicillin makes me bad.",
+              "es": "Sí, la penicilina me hace mal."
+            },
+            "picture": "💊",
+            "tip": {
+              "en": "\"Makes me sick\" would work, but the clear word is \"allergic\": \"I'm allergic to penicillin.\"",
+              "es": "«Makes me sick» funcionaría, pero la palabra clara es «allergic»: \"I'm allergic to penicillin.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Yes. I'm allergic to penicillin.",
+              "es": "Sí. Tengo alergia a la penicilina."
+            },
+            "picture": "⚠️",
+            "best": true,
+            "next": "s3"
+          },
+          {
+            "text": {
+              "en": "No, I don't think.",
+              "es": "No, no creo."
+            },
+            "picture": "🤷",
+            "tip": {
+              "en": "If you have one, say it: \"I'm allergic to penicillin.\" If you don't: \"No, I don't think so.\"",
+              "es": "Si tienes una, dila: \"I'm allergic to penicillin.\" Si no: \"No, I don't think so.\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s3": {
+        "partner": {
+          "en": "Noted. Are you taking any medicine right now?",
+          "es": "Anotado. ¿Está tomando alguna medicina ahora?"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Yes, one pill every morning. Can I keep taking my blood pressure medicine?",
+              "es": "Sí, una pastilla cada mañana. ¿Puedo seguir tomando mi medicina para la presión?"
+            },
+            "picture": "🩺",
+            "best": true,
+            "next": "s4"
+          },
+          {
+            "text": {
+              "en": "Yes, for the pressure. I can continue taking it?",
+              "es": "Sí, para la presión. ¿Puedo seguir tomándola, o no?"
+            },
+            "picture": "🔁",
+            "tip": {
+              "en": "The question starts with \"Can I\": \"Can I keep taking my blood pressure medicine?\"",
+              "es": "La pregunta empieza con «Can I»: \"Can I keep taking my blood pressure medicine?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Yes, but I stopped since I'm sick.",
+              "es": "Sí, pero la dejé porque estoy enfermo."
+            },
+            "picture": "🛑",
+            "tip": {
+              "en": "Don't stop on your own; ask first: \"Can I keep taking my blood pressure medicine?\"",
+              "es": "No la dejes por tu cuenta; pregunta primero: \"Can I keep taking my blood pressure medicine?\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s4": {
+        "partner": {
+          "en": "Yes, keep taking it. The doctor will see you in a few minutes.",
+          "es": "Sí, siga tomándola. El doctor lo atiende en unos minutos."
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Okay. Thank you very much.",
+              "es": "Está bien. Muchas gracias."
+            },
+            "picture": "🙏",
+            "best": true,
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Okay. How much time I wait?",
+              "es": "Bien. ¿Cuánto tiempo espero yo?"
+            },
+            "picture": "⏱️",
+            "tip": {
+              "en": "Fine to ask, with the English shape: \"How long is the wait?\" Then: \"Thank you very much.\"",
+              "es": "Se puede preguntar, con la forma del inglés: \"How long is the wait?\" Luego: \"Thank you very much.\""
+            },
+            "next": null
+          }
+        ]
+      }
+    }
+  }
+}

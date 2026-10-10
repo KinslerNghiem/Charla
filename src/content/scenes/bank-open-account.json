@@ -1,0 +1,218 @@
+{
+  "id": "bank-open-account",
+  "place_type": "bank",
+  "channel": "counter",
+  "title": {
+    "en": "Open a bank account",
+    "es": "Abrir una cuenta bancaria"
+  },
+  "roles": {
+    "partner": {
+      "en": "banker at the desk",
+      "es": "empleado o empleada del banco"
+    },
+    "learner": {
+      "en": "customer opening a first checking account",
+      "es": "cliente que abre su primera cuenta de cheques"
+    }
+  },
+  "goal": {
+    "en": "Open a checking account, ask about the monthly fee, and ask what documents you need.",
+    "es": "Abrir una cuenta de cheques, preguntar por la cuota mensual y preguntar qué documentos necesitas."
+  },
+  "must_use": [
+    {
+      "en": "I'd like to open a checking account.",
+      "es": "Me gustaría abrir una cuenta de cheques."
+    },
+    {
+      "en": "What documents do I need?",
+      "es": "¿Qué documentos necesito?"
+    },
+    {
+      "en": "Is there a monthly fee?",
+      "es": "¿Tiene una cuota mensual?"
+    }
+  ],
+  "expect": {
+    "en": "Do you have two forms of ID?",
+    "es": "¿Tiene dos identificaciones?"
+  },
+  "success": {
+    "en": "The banker explains the fee, tells you which documents work, and starts your account.",
+    "es": "Le explican la cuota, le dicen qué documentos sirven y empiezan a abrir su cuenta."
+  },
+  "show_staff_line": {
+    "en": "I'm practicing my English. Thank you for your patience.",
+    "es": "Estoy practicando mi español. Gracias por su paciencia."
+  },
+  "offline_script": {
+    "start": "s1",
+    "nodes": {
+      "s1": {
+        "partner": {
+          "en": "Good morning. How can I help you?",
+          "es": "Buenos días. ¿En qué le puedo ayudar?"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "I'd like to open a checking account.",
+              "es": "Me gustaría abrir una cuenta de cheques."
+            },
+            "picture": "🏦",
+            "best": true,
+            "next": "s2"
+          },
+          {
+            "text": {
+              "en": "I want to open a count.",
+              "es": "Quiero abrir un conteo."
+            },
+            "picture": "🔢",
+            "tip": {
+              "en": "\"Count\" means contar. The bank word is \"account\": \"I'd like to open a checking account.\"",
+              "es": "«Count» significa contar. La palabra del banco es «account»: \"I'd like to open a checking account.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Open account, please.",
+              "es": "Abrir cuenta, por favor."
+            },
+            "picture": "💬",
+            "tip": {
+              "en": "Say who wants it and the whole name of the thing: \"I'd like to open a checking account.\"",
+              "es": "Di quién lo quiere y el nombre completo de la cosa: \"I'd like to open a checking account.\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s2": {
+        "partner": {
+          "en": "Sure. Do you have two forms of ID?",
+          "es": "Claro. ¿Tiene dos identificaciones?"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "I have my passport and my carnet.",
+              "es": "Tengo mi pasaporte y mi carnet."
+            },
+            "picture": "🪪",
+            "tip": {
+              "en": "\"Carnet\" is not an English word. Say \"ID card\" or \"consular ID\", or ask: \"What documents do I need?\"",
+              "es": "«Carnet» no existe en inglés. Di «ID card» o «consular ID», o pregunta: \"What documents do I need?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "I have my passport. What documents do I need?",
+              "es": "Tengo mi pasaporte. ¿Qué documentos necesito?"
+            },
+            "picture": "📄",
+            "best": true,
+            "next": "s3"
+          },
+          {
+            "text": {
+              "en": "Yes.",
+              "es": "Sí."
+            },
+            "picture": "❓",
+            "tip": {
+              "en": "\"Yes\" alone leaves them waiting. Show what you have, then ask: \"What documents do I need?\"",
+              "es": "Un «Yes» solo los deja esperando. Muestra lo que tienes y pregunta: \"What documents do I need?\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s3": {
+        "partner": {
+          "en": "A passport works, plus something with your address, like a utility bill. This account has no minimum balance.",
+          "es": "El pasaporte sirve, más algo con su dirección, como un recibo de luz. Esta cuenta no tiene saldo mínimo."
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Has a monthly fee?",
+              "es": "¿Tiene cuota mensual?"
+            },
+            "picture": "🧾",
+            "tip": {
+              "en": "English questions need a subject. Start with \"Is there\": \"Is there a monthly fee?\"",
+              "es": "Las preguntas en inglés necesitan sujeto. Empieza con «Is there»: \"Is there a monthly fee?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Is there a monthly fee?",
+              "es": "¿Tiene una cuota mensual?"
+            },
+            "picture": "💵",
+            "best": true,
+            "next": "s4"
+          },
+          {
+            "text": {
+              "en": "How much is the quota?",
+              "es": "¿Cuánto es el cupo?"
+            },
+            "picture": "📊",
+            "tip": {
+              "en": "A \"quota\" is a limit, not a payment. A regular payment is a \"fee\": \"Is there a monthly fee?\"",
+              "es": "«Quota» es un límite, no un pago. Un pago regular es «fee»: \"Is there a monthly fee?\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s4": {
+        "partner": {
+          "en": "No fee if you set up direct deposit; otherwise it's five dollars a month. Shall we get started?",
+          "es": "Sin cuota si configura el depósito directo; si no, son cinco dólares al mes. ¿Empezamos?"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Yes, please. Thank you for explaining.",
+              "es": "Sí, por favor. Gracias por explicarme."
+            },
+            "picture": "✅",
+            "best": true,
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Yes, I have direct deposit in my job.",
+              "es": "Sí, tengo depósito directo en mi trabajo."
+            },
+            "picture": "💼",
+            "tip": {
+              "en": "Good thing to say! In English it is \"at work\" or \"at my job\", not \"in my job\": \"Yes, I get direct deposit at work.\"",
+              "es": "¡Es bueno decirlo! En inglés es «at work» o «at my job», no «in my job»: \"Yes, I get direct deposit at work.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "I'll think.",
+              "es": "Lo pensaré."
+            },
+            "picture": "🤔",
+            "tip": {
+              "en": "It is fine to wait, but finish the sentence: \"I'd like to think about it. Thank you.\"",
+              "es": "Está bien esperar, pero termina la frase: \"I'd like to think about it. Thank you.\""
+            },
+            "next": null
+          }
+        ]
+      }
+    }
+  }
+}

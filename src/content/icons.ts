@@ -15,6 +15,10 @@ export const PLACE_ICON: Record<PlaceType, string> = {
   home: '🏠',
   work: '🏢',
   college: '🎓',
+  bank: '🏦',
+  post_office: '📮',
+  transit: '🚌',
+  park: '🛝',
 }
 
 export function placeIcon(type: string): string {

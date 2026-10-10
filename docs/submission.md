@@ -236,7 +236,7 @@ level set to B1 so the drop to A2 is visible.
 ## Checklist before submitting
 
 - [ ] Every team member registered in the portal, district confirmed by ZIP+4
-- [ ] Deployed build matches `main`: open the link, count 13 scenes, tap the microphone
+- [ ] Deployed build matches `main`: open the link, count 23 scenes, tap the microphone
 - [ ] About page shows the team's names
 - [ ] Contact email filled in `src/contact.ts` and showing on the Places tab
 - [ ] Video public (YouTube or Vimeo), 1 to 3 minutes, names and tools said on camera, no copyrighted music

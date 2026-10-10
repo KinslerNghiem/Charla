@@ -12,7 +12,7 @@ phrases and the first question the staff will ask, then open a map of real
 places nearby that said they would be patient with you. After the visit, one
 tap makes the map better for the next person.
 
-- **Rehearse**: thirteen scenes (counter and phone), an AI partner, corrections
+- **Rehearse**: twenty-three scenes (counter and phone), an AI partner, corrections
   inside the reply, a Simpler button, typing always works. Speaking is one tap:
   tap, talk, pause, and the words go straight to the partner.
 - **Go Card**: your phrases, the staff's first question, the reply to expect,

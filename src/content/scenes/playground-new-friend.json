@@ -1,0 +1,245 @@
+{
+  "id": "playground-new-friend",
+  "place_type": "park",
+  "kid": true,
+  "channel": "counter",
+  "title": {
+    "en": "Make a friend at the playground",
+    "es": "Hacer un amigo en el parque"
+  },
+  "roles": {
+    "partner": {
+      "en": "a kid on the swings",
+      "es": "un niño en los columpios"
+    },
+    "learner": {
+      "en": "kid who wants to play",
+      "es": "niño o niña que quiere jugar"
+    }
+  },
+  "goal": {
+    "en": "Say hi, ask the other kid to play, let them go first, and say your name.",
+    "es": "Saludar, invitar a jugar al otro niño, dejarlo ir primero y decir tu nombre."
+  },
+  "must_use": [
+    {
+      "en": "Hi! Do you want to play?",
+      "es": "¡Hola! ¿Quieres jugar?"
+    },
+    {
+      "en": "You go first!",
+      "es": "¡Tú primero!"
+    },
+    {
+      "en": "My name is Sofi. What's your name?",
+      "es": "Me llamo Sofi. ¿Cómo te llamas?"
+    }
+  ],
+  "expect": {
+    "en": "What do you want to play?",
+    "es": "¿A qué quieres jugar?"
+  },
+  "success": {
+    "en": "You have a new friend named Leo, and you are playing tag.",
+    "es": "Tienes un amigo nuevo que se llama Leo, y están jugando a las traes."
+  },
+  "show_staff_line": {
+    "en": "I'm practicing my English. Thank you for your patience.",
+    "es": "Estoy practicando mi español. Gracias por su paciencia."
+  },
+  "offline_script": {
+    "start": "s1",
+    "nodes": {
+      "s1": {
+        "partner": {
+          "en": "Hi! I like your shoes.",
+          "es": "¡Hola! Me gustan tus zapatos."
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Hi! Do you want to play?",
+              "es": "¡Hola! ¿Quieres jugar?"
+            },
+            "picture": "🤝",
+            "best": true,
+            "next": "s2"
+          },
+          {
+            "text": {
+              "en": "Play?",
+              "es": "¿Jugar?"
+            },
+            "picture": "💬",
+            "tip": {
+              "en": "Say hi and ask the whole question: \"Hi! Do you want to play?\"",
+              "es": "Saluda y haz la pregunta completa: \"Hi! Do you want to play?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Give me the swing.",
+              "es": "Dame el columpio."
+            },
+            "picture": "😠",
+            "tip": {
+              "en": "That sounds bossy. Try \"Hi! Do you want to play?\"",
+              "es": "Eso suena mandón. Prueba \"Hi! Do you want to play?\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s2": {
+        "partner": {
+          "en": "Sure! What do you want to play?",
+          "es": "¡Sí! ¿A qué quieres jugar?"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Let's play tag!",
+              "es": "¡Juguemos a las traes!"
+            },
+            "picture": "🏃",
+            "best": true,
+            "next": "s3"
+          },
+          {
+            "text": {
+              "en": "Let's go on the slide!",
+              "es": "¡Vamos a la resbaladilla!"
+            },
+            "picture": "🛝",
+            "best": true,
+            "next": "s3"
+          },
+          {
+            "text": {
+              "en": "I don't know.",
+              "es": "No sé."
+            },
+            "picture": "🤷",
+            "tip": {
+              "en": "Pick a game so the fun can start: \"Let's play tag!\"",
+              "es": "Elige un juego para que empiece la diversión: \"Let's play tag!\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s3": {
+        "partner": {
+          "en": "Okay! Who goes first?",
+          "es": "¡Va! ¿Quién empieza?"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "You go first!",
+              "es": "¡Tú primero!"
+            },
+            "picture": "👉",
+            "best": true,
+            "next": "s4"
+          },
+          {
+            "text": {
+              "en": "Me, me, me!",
+              "es": "¡Yo, yo, yo!"
+            },
+            "picture": "😤",
+            "tip": {
+              "en": "Letting your new friend go first is a nice way to start: \"You go first!\"",
+              "es": "Dejar que tu nuevo amigo empiece es una forma amable de comenzar: \"You go first!\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "First you.",
+              "es": "Primero tú."
+            },
+            "picture": "🔁",
+            "tip": {
+              "en": "Almost! The English order is \"You go first!\"",
+              "es": "¡Casi! El orden en inglés es \"You go first!\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s4": {
+        "partner": {
+          "en": "Thanks! Hey, what's your name?",
+          "es": "¡Gracias! Oye, ¿cómo te llamas?"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "My name is Sofi. What's your name?",
+              "es": "Me llamo Sofi. ¿Cómo te llamas?"
+            },
+            "picture": "🙂",
+            "best": true,
+            "next": "s5"
+          },
+          {
+            "text": {
+              "en": "I call myself Sofi.",
+              "es": "Yo me llamo a mí misma Sofi."
+            },
+            "picture": "🪞",
+            "tip": {
+              "en": "\"I call myself\" is the Spanish shape. In English: \"My name is Sofi. What's your name?\"",
+              "es": "«I call myself» es la forma del español. En inglés: \"My name is Sofi. What's your name?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Sofi.",
+              "es": "Sofi."
+            },
+            "picture": "💬",
+            "tip": {
+              "en": "Ask their name back: \"My name is Sofi. What's your name?\"",
+              "es": "Pregunta su nombre también: \"My name is Sofi. What's your name?\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s5": {
+        "partner": {
+          "en": "I'm Leo. Ready? Run!",
+          "es": "Soy Leo. ¿Listo? ¡Corre!"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Ready! Let's go!",
+              "es": "¡Listo! ¡Vamos!"
+            },
+            "picture": "🎉",
+            "best": true,
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Wait, I'm tired.",
+              "es": "Espera, estoy cansado."
+            },
+            "picture": "😮‍💨",
+            "tip": {
+              "en": "You just started! Say \"Ready! Let's go!\"",
+              "es": "¡Apenas empiezas! Di \"Ready! Let's go!\""
+            },
+            "next": null
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,247 @@
+{
+  "id": "park-district-signup",
+  "place_type": "park",
+  "channel": "counter",
+  "title": {
+    "en": "Sign up for swimming lessons",
+    "es": "Inscribir a tu hija en natación"
+  },
+  "roles": {
+    "partner": {
+      "en": "park district front desk",
+      "es": "recepción del distrito de parques"
+    },
+    "learner": {
+      "en": "parent signing a child up for a class",
+      "es": "madre o padre que inscribe a su hija en una clase"
+    }
+  },
+  "goal": {
+    "en": "Sign your daughter up for swimming lessons, ask the price, and ask if residents get a discount.",
+    "es": "Inscribir a tu hija en clases de natación, preguntar el precio y preguntar si hay descuento para residentes."
+  },
+  "must_use": [
+    {
+      "en": "I want to sign up my daughter for swimming lessons.",
+      "es": "Quiero inscribir a mi hija en clases de natación."
+    },
+    {
+      "en": "How much does it cost?",
+      "es": "¿Cuánto cuesta?"
+    },
+    {
+      "en": "Is there a discount for residents?",
+      "es": "¿Hay descuento para residentes?"
+    }
+  ],
+  "expect": {
+    "en": "How old is she?",
+    "es": "¿Cuántos años tiene?"
+  },
+  "success": {
+    "en": "Your daughter is in the Saturday class, you know the resident price, and you know what proof of address to bring.",
+    "es": "Tu hija queda en la clase del sábado, sabes el precio para residentes y sabes qué comprobante de domicilio llevar."
+  },
+  "show_staff_line": {
+    "en": "I'm practicing my English. Thank you for your patience.",
+    "es": "Estoy practicando mi español. Gracias por su paciencia."
+  },
+  "offline_script": {
+    "start": "s1",
+    "nodes": {
+      "s1": {
+        "partner": {
+          "en": "Hi there. What can I help you with?",
+          "es": "Hola. ¿En qué le puedo ayudar?"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "I want to sign up my daughter for swimming lessons.",
+              "es": "Quiero inscribir a mi hija en clases de natación."
+            },
+            "picture": "🏊",
+            "best": true,
+            "next": "s2"
+          },
+          {
+            "text": {
+              "en": "I want to inscribe my daughter in swimming classes.",
+              "es": "Quiero inscribir a mi hija en clases de nadar."
+            },
+            "picture": "✍️",
+            "tip": {
+              "en": "\"Inscribe\" means to engrave. For inscribir say \"sign up\" or \"register\": \"I want to sign up my daughter for swimming lessons.\"",
+              "es": "«Inscribe» es grabar en piedra. Para inscribir di «sign up» o «register»: \"I want to sign up my daughter for swimming lessons.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Swimming for my daughter.",
+              "es": "Natación para mi hija."
+            },
+            "picture": "💬",
+            "tip": {
+              "en": "Say what you want to do with the whole sentence: \"I want to sign up my daughter for swimming lessons.\"",
+              "es": "Di qué quieres hacer con la frase completa: \"I want to sign up my daughter for swimming lessons.\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s2": {
+        "partner": {
+          "en": "Great. How old is she?",
+          "es": "Muy bien. ¿Cuántos años tiene?"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "She has seven years.",
+              "es": "Ella tiene siete años."
+            },
+            "picture": "7️⃣",
+            "tip": {
+              "en": "Age in English uses \"is\", not \"has\": \"She's seven.\"",
+              "es": "La edad en inglés se dice con «is», no con «has»: \"She's seven.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "She's seven. She's a beginner.",
+              "es": "Tiene siete años. Es principiante."
+            },
+            "picture": "👧",
+            "best": true,
+            "next": "s3"
+          },
+          {
+            "text": {
+              "en": "Seven. She knows swim a little.",
+              "es": "Siete. Ella sabe nadar un poquito."
+            },
+            "picture": "🌊",
+            "tip": {
+              "en": "After \"know\" you need \"how to\": \"She knows how to swim a little.\" Or: \"She's seven. She's a beginner.\"",
+              "es": "Después de «know» va «how to»: \"She knows how to swim a little.\" O: \"She's seven. She's a beginner.\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s3": {
+        "partner": {
+          "en": "Perfect. Level one meets Saturdays at ten. The session is eight weeks.",
+          "es": "Perfecto. El nivel uno es los sábados a las diez. La sesión dura ocho semanas."
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "How much it costs?",
+              "es": "¿Cuánto es que cuesta?"
+            },
+            "picture": "❓",
+            "tip": {
+              "en": "Questions in English use \"does\": \"How much does it cost?\"",
+              "es": "Las preguntas en inglés usan «does»: \"How much does it cost?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "How much does it cost?",
+              "es": "¿Cuánto cuesta?"
+            },
+            "picture": "💵",
+            "best": true,
+            "next": "s4"
+          },
+          {
+            "text": {
+              "en": "What is the price of the classes of swimming?",
+              "es": "¿Cuál es el precio de las clases de natación?"
+            },
+            "picture": "📋",
+            "tip": {
+              "en": "Long and Spanish-shaped. The short, natural way: \"How much does it cost?\"",
+              "es": "Largo y con forma de español. La forma corta y natural: \"How much does it cost?\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s4": {
+        "partner": {
+          "en": "It's ninety-five dollars for the session.",
+          "es": "Son noventa y cinco dólares por la sesión."
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Is there a discount for residents?",
+              "es": "¿Hay descuento para residentes?"
+            },
+            "picture": "🏡",
+            "best": true,
+            "next": "s5"
+          },
+          {
+            "text": {
+              "en": "There is a discount for residents?",
+              "es": "¿Hay un descuento para residentes, o no?"
+            },
+            "picture": "🔁",
+            "tip": {
+              "en": "A statement with a question mark is the Spanish pattern. Start with the verb: \"Is there a discount for residents?\"",
+              "es": "Una afirmación con signo de interrogación es patrón del español. Empieza con el verbo: \"Is there a discount for residents?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "That's a lot. Can you lower it?",
+              "es": "Es mucho. ¿Me lo puede bajar?"
+            },
+            "picture": "😬",
+            "tip": {
+              "en": "Park district prices are fixed, but there is usually a resident rate. Ask: \"Is there a discount for residents?\"",
+              "es": "Los precios del distrito de parques son fijos, pero casi siempre hay tarifa para residentes. Pregunta: \"Is there a discount for residents?\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s5": {
+        "partner": {
+          "en": "Yes. With proof of address it's seventy. Do you have something with your address?",
+          "es": "Sí. Con comprobante de domicilio son setenta. ¿Tiene algo con su dirección?"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Yes, I have my electric bill. Thank you.",
+              "es": "Sí, tengo mi recibo de luz. Gracias."
+            },
+            "picture": "💡",
+            "best": true,
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Yes, I have my recipe of the light.",
+              "es": "Sí, tengo mi receta de la luz."
+            },
+            "picture": "🍳",
+            "tip": {
+              "en": "A \"recipe\" is for cooking. A recibo is a \"bill\": \"I have my electric bill.\"",
+              "es": "«Recipe» es para cocinar. Un recibo es «bill»: \"I have my electric bill.\""
+            },
+            "next": null
+          }
+        ]
+      }
+    }
+  }
+}

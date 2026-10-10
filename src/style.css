@@ -188,6 +188,8 @@ main { outline: none; }
 .scene-card .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
 .scene-card .tag { font-size: 12px; padding: 1px 7px; border-radius: 3px; background: var(--paper); color: var(--ink-2); border: 1px solid var(--line); }
 .scene-card .tag.last { background: var(--en-soft); color: var(--en); border-color: transparent; }
+.scene-card .tag.done { background: var(--go-soft); color: var(--go-ink); border-color: transparent; }
+.done button.ghost { background: var(--paper); }
 
 /* The loop in one line: where you are, and where it goes next. */
 .steps { list-style: none; padding: 0; margin: 0 0 14px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; font-size: 13px; line-height: 1.25; }

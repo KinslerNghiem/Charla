@@ -52,6 +52,13 @@ with every finding re-verified against the code before it was fixed.
 - Scripted-mode distractors are plausible learner errors (false cognates, word order, register) with tips that say why, instead of "Where is the milk?".
 - The Python validator derives its rules from the schema and runs in CI.
 
+**Content and the loop** (2026-10-09)
+
+- 23 scenes (was 13). New: open a bank account, mail a package, tell the urgent-care nurse what hurts, ask about a job opening, sign a child up for swimming lessons, ask about language classes at the community college; on the phone, make a doctor's appointment and call the school about an absence; for kids, ride the bus and make a friend at the playground.
+- Four new place types (bank, post office, bus or train, park district) with labels in both languages and icons; the Places map shows the "no place of this kind has said yes yet" note for them until a row is added.
+- The picker groups scenes by what they are for (Health, School and family, Errands around town, Work and money, On the phone) instead of one long "At a counter" list.
+- Scenes you finish get a green "Rehearsed" tick on their card, and the end of a scene offers the next one in the same theme that you have not done yet.
+
 **Voice and coaching** (2026-10-05)
 
 - The partner speaks with a neural voice (Aura-2, then MeloTTS once the day's allowance is spent, then the phone's own voice). Verified end to end in Chrome with a recorded sentence as the microphone: transcript, reply, and audio actually playing.
@@ -84,7 +91,7 @@ Only you can do these; none of them is code.
    powershell -ExecutionPolicy Bypass -File scripts\deploy.ps1
    ```
 
-   Then open https://charla-naperville.pages.dev on a phone, count 13 scenes,
+   Then open https://charla-naperville.pages.dev on a phone, count 23 scenes,
    tap the microphone, and write the date and commit into the README Status
    paragraph ("deployed YYYY-MM-DD from commit ...").
 2. **Fill `src/contact.ts`**: `CONTACT_EMAIL` (shown on Places and the

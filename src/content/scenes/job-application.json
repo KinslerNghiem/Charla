@@ -1,0 +1,244 @@
+{
+  "id": "job-application",
+  "place_type": "work",
+  "channel": "counter",
+  "title": {
+    "en": "Ask about a job opening",
+    "es": "Preguntar por un trabajo"
+  },
+  "roles": {
+    "partner": {
+      "en": "store manager",
+      "es": "gerente de la tienda"
+    },
+    "learner": {
+      "en": "person asking about a part-time job",
+      "es": "persona que pregunta por un trabajo de medio tiempo"
+    }
+  },
+  "goal": {
+    "en": "Ask if they are hiring, say when you can work, and ask how to apply.",
+    "es": "Preguntar si están contratando, decir cuándo puedes trabajar y preguntar cómo solicitar el puesto."
+  },
+  "must_use": [
+    {
+      "en": "Are you hiring right now?",
+      "es": "¿Están contratando ahora?"
+    },
+    {
+      "en": "I can work evenings and weekends.",
+      "es": "Puedo trabajar por las tardes y los fines de semana."
+    },
+    {
+      "en": "How do I apply?",
+      "es": "¿Cómo puedo solicitar el puesto?"
+    }
+  ],
+  "expect": {
+    "en": "Have you worked in a store before?",
+    "es": "¿Ha trabajado en una tienda antes?"
+  },
+  "success": {
+    "en": "The manager knows your hours, tells you how to apply, and gives you a name to put on the application.",
+    "es": "La gerente sabe tus horarios, te dice cómo solicitar el puesto y te da un nombre para poner en la solicitud."
+  },
+  "show_staff_line": {
+    "en": "I'm practicing my English. Thank you for your patience.",
+    "es": "Estoy practicando mi español. Gracias por su paciencia."
+  },
+  "offline_script": {
+    "start": "s1",
+    "nodes": {
+      "s1": {
+        "partner": {
+          "en": "Hi, can I help you find something?",
+          "es": "Hola, ¿le ayudo a encontrar algo?"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Hi. Are you hiring right now?",
+              "es": "Hola. ¿Están contratando ahora?"
+            },
+            "picture": "📋",
+            "best": true,
+            "next": "s2"
+          },
+          {
+            "text": {
+              "en": "Hi. Do you have work?",
+              "es": "Hola. ¿Tiene trabajo?"
+            },
+            "picture": "🔨",
+            "tip": {
+              "en": "\"Do you have work?\" asks about a task to do. For a job, ask \"Are you hiring right now?\"",
+              "es": "«Do you have work?» pregunta por una tarea. Para un empleo, pregunta \"Are you hiring right now?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "I need a job.",
+              "es": "Necesito un trabajo."
+            },
+            "picture": "😟",
+            "tip": {
+              "en": "True, but it puts the manager on the spot. The usual question is \"Are you hiring right now?\"",
+              "es": "Es cierto, pero pone a la gerente en un aprieto. La pregunta normal es \"Are you hiring right now?\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s2": {
+        "partner": {
+          "en": "We are, for part-time cashiers. Have you worked in a store before?",
+          "es": "Sí, cajeros de medio tiempo. ¿Ha trabajado en una tienda antes?"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Yes, two years at a grocery store.",
+              "es": "Sí, dos años en un supermercado."
+            },
+            "picture": "🛒",
+            "best": true,
+            "next": "s3"
+          },
+          {
+            "text": {
+              "en": "Not yet, but I learn fast.",
+              "es": "Todavía no, pero aprendo rápido."
+            },
+            "picture": "🌱",
+            "best": true,
+            "next": "s3"
+          },
+          {
+            "text": {
+              "en": "Yes, I have two years working in a grocery.",
+              "es": "Sí, tengo dos años trabajando en un súper."
+            },
+            "picture": "🔁",
+            "tip": {
+              "en": "\"I have two years working\" is the Spanish shape. Say \"I worked two years at a grocery store.\"",
+              "es": "«I have two years working» es la forma del español. Di \"I worked two years at a grocery store.\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s3": {
+        "partner": {
+          "en": "Good. What hours are you available?",
+          "es": "Bien. ¿Qué horarios tiene disponibles?"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "I can work in the afternoons and in the ends of week.",
+              "es": "Puedo trabajar en las tardes y en los finales de semana."
+            },
+            "picture": "📆",
+            "tip": {
+              "en": "\"Weekends\" is one word, and no \"in the\" before evenings: \"I can work evenings and weekends.\"",
+              "es": "«Weekends» es una sola palabra, y no lleva «in the» antes de evenings: \"I can work evenings and weekends.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "I can work evenings and weekends.",
+              "es": "Puedo trabajar por las tardes y los fines de semana."
+            },
+            "picture": "🌙",
+            "best": true,
+            "next": "s4"
+          },
+          {
+            "text": {
+              "en": "Whatever you want.",
+              "es": "Lo que usted quiera."
+            },
+            "picture": "🤷",
+            "tip": {
+              "en": "Managers need real hours to plan a schedule. Say when you can: \"I can work evenings and weekends.\"",
+              "es": "Los gerentes necesitan horas reales para armar el horario. Di cuándo puedes: \"I can work evenings and weekends.\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s4": {
+        "partner": {
+          "en": "That works for us. The application is online.",
+          "es": "Eso nos sirve. La solicitud es en línea."
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "How I apply?",
+              "es": "¿Cómo yo solicito?"
+            },
+            "picture": "❓",
+            "tip": {
+              "en": "Questions need \"do\": \"How do I apply?\"",
+              "es": "Las preguntas necesitan «do»: \"How do I apply?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "How do I apply?",
+              "es": "¿Cómo puedo solicitar el puesto?"
+            },
+            "picture": "💻",
+            "best": true,
+            "next": "s5"
+          },
+          {
+            "text": {
+              "en": "Can you give me the job now?",
+              "es": "¿Me puede dar el trabajo ahora?"
+            },
+            "picture": "😅",
+            "tip": {
+              "en": "Hiring goes through the application, even when the manager likes you. Ask \"How do I apply?\"",
+              "es": "La contratación pasa por la solicitud, aunque le caigas bien a la gerente. Pregunta \"How do I apply?\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s5": {
+        "partner": {
+          "en": "Go to our website, click Careers, and put my name, Dana, as the referral.",
+          "es": "Entre a nuestro sitio web, haga clic en Careers y ponga mi nombre, Dana, como referencia."
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Thank you, Dana. I'll apply tonight.",
+              "es": "Gracias, Dana. Lo solicito esta noche."
+            },
+            "picture": "🙏",
+            "best": true,
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Thank you. I apply this night.",
+              "es": "Gracias. Yo solicito esta noche."
+            },
+            "picture": "🌃",
+            "tip": {
+              "en": "\"Tonight\" is one word, and a plan takes \"I'll\": \"I'll apply tonight.\"",
+              "es": "«Tonight» es una sola palabra, y un plan lleva «I'll»: \"I'll apply tonight.\""
+            },
+            "next": null
+          }
+        ]
+      }
+    }
+  }
+}

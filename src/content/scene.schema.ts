@@ -44,6 +44,10 @@ export const PLACE_TYPES = [
   'home',
   'work',
   'college',
+  'bank',
+  'post_office',
+  'transit',
+  'park',
 ] as const
 
 export type PlaceType = (typeof PLACE_TYPES)[number]

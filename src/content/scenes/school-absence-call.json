@@ -1,0 +1,244 @@
+{
+  "id": "school-absence-call",
+  "place_type": "school",
+  "channel": "phone",
+  "title": {
+    "en": "Call the school about an absence",
+    "es": "Llamar a la escuela por una ausencia"
+  },
+  "roles": {
+    "partner": {
+      "en": "school office secretary on the phone",
+      "es": "secretaria de la oficina escolar al teléfono"
+    },
+    "learner": {
+      "en": "parent whose child is home sick",
+      "es": "madre o padre cuyo hijo está enfermo en casa"
+    }
+  },
+  "goal": {
+    "en": "Report that your son is sick, give his name, grade and teacher, and ask about his homework.",
+    "es": "Avisar que tu hijo está enfermo, dar su nombre, grado y maestra, y preguntar por su tarea."
+  },
+  "must_use": [
+    {
+      "en": "I'm calling to report an absence.",
+      "es": "Llamo para reportar una ausencia."
+    },
+    {
+      "en": "My son, Mateo Ruiz, is in second grade.",
+      "es": "Mi hijo, Mateo Ruiz, está en segundo grado."
+    },
+    {
+      "en": "Can he get his homework from today?",
+      "es": "¿Puede recibir la tarea de hoy?"
+    }
+  ],
+  "expect": {
+    "en": "What's your child's name and teacher?",
+    "es": "¿Cómo se llama su hijo y quién es su maestra?"
+  },
+  "success": {
+    "en": "The school has Mateo marked absent and excused, and you know how to get his homework.",
+    "es": "La escuela tiene a Mateo con falta justificada, y sabes cómo recibir su tarea."
+  },
+  "show_staff_line": {
+    "en": "I'm practicing my English. Thank you for your patience.",
+    "es": "Estoy practicando mi español. Gracias por su paciencia."
+  },
+  "offline_script": {
+    "start": "s1",
+    "nodes": {
+      "s1": {
+        "partner": {
+          "en": "Brookdale Elementary, good morning.",
+          "es": "Primaria Brookdale, buenos días."
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Good morning. I'm calling to report an absence. My son is sick.",
+              "es": "Buenos días. Llamo para reportar una ausencia. Mi hijo está enfermo."
+            },
+            "picture": "📞",
+            "best": true,
+            "next": "s2"
+          },
+          {
+            "text": {
+              "en": "Good morning. My son doesn't go today.",
+              "es": "Buenos días. Mi hijo no va hoy."
+            },
+            "picture": "🏠",
+            "tip": {
+              "en": "Say \"isn't going today\", or better, the school's own phrase: \"I'm calling to report an absence.\"",
+              "es": "Di «isn't going today», o mejor, la frase que usa la escuela: \"I'm calling to report an absence.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Good morning. I call for an absence.",
+              "es": "Buenos días. Yo llamo por una ausencia."
+            },
+            "picture": "🔁",
+            "tip": {
+              "en": "Something happening right now uses \"I'm calling\": \"I'm calling to report an absence.\"",
+              "es": "Algo que pasa ahora mismo se dice con «I'm calling»: \"I'm calling to report an absence.\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s2": {
+        "partner": {
+          "en": "I'm sorry to hear that. What's your child's name and teacher?",
+          "es": "Lamento escucharlo. ¿Cómo se llama su hijo y quién es su maestra?"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "My son, Mateo Ruiz, is in second grade. His teacher is Ms. Patel.",
+              "es": "Mi hijo, Mateo Ruiz, está en segundo grado. Su maestra es la señora Patel."
+            },
+            "picture": "🧒",
+            "best": true,
+            "next": "s3"
+          },
+          {
+            "text": {
+              "en": "Mateo Ruiz. He is in the second degree.",
+              "es": "Mateo Ruiz. Está en el segundo título."
+            },
+            "picture": "🌡️",
+            "tip": {
+              "en": "A \"degree\" is temperature or a diploma. School years are \"grades\": \"He is in second grade.\"",
+              "es": "«Degree» es temperatura o un título universitario. Los años escolares son «grades»: \"He is in second grade.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Mateo.",
+              "es": "Mateo."
+            },
+            "picture": "💬",
+            "tip": {
+              "en": "The office needs the last name, the grade and the teacher: \"My son, Mateo Ruiz, is in second grade. His teacher is Ms. Patel.\"",
+              "es": "La oficina necesita el apellido, el grado y la maestra: \"My son, Mateo Ruiz, is in second grade. His teacher is Ms. Patel.\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s3": {
+        "partner": {
+          "en": "Got it. Is it a fever, or something else?",
+          "es": "Anotado. ¿Es fiebre, o algo más?"
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "He has a fever and a cough.",
+              "es": "Tiene fiebre y tos."
+            },
+            "picture": "🤒",
+            "best": true,
+            "next": "s4"
+          },
+          {
+            "text": {
+              "en": "His stomach hurts.",
+              "es": "Le duele el estómago."
+            },
+            "picture": "🤢",
+            "best": true,
+            "next": "s4"
+          },
+          {
+            "text": {
+              "en": "He has fever and he's constipated.",
+              "es": "Tiene fiebre y está constipado."
+            },
+            "picture": "🤧",
+            "tip": {
+              "en": "\"Constipated\" means estreñido. For a cold say \"a cold\"; say \"He has a fever and a cough.\"",
+              "es": "«Constipated» significa estreñido. Para un resfriado di «a cold»; di \"He has a fever and a cough.\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s4": {
+        "partner": {
+          "en": "Okay. He needs to be fever-free for 24 hours before he comes back.",
+          "es": "Bien. Debe estar 24 horas sin fiebre antes de regresar."
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Understood. Can he get his homework from today?",
+              "es": "Entendido. ¿Puede recibir la tarea de hoy?"
+            },
+            "picture": "📚",
+            "best": true,
+            "next": "s5"
+          },
+          {
+            "text": {
+              "en": "Okay. He can have the homework?",
+              "es": "Bien. ¿Él puede tener la tarea?"
+            },
+            "picture": "🔁",
+            "tip": {
+              "en": "The question starts with \"Can he\": \"Can he get his homework from today?\"",
+              "es": "La pregunta empieza con «Can he»: \"Can he get his homework from today?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Okay, bye.",
+              "es": "Bueno, adiós."
+            },
+            "picture": "👋",
+            "tip": {
+              "en": "Before you hang up, ask about the work he is missing: \"Can he get his homework from today?\"",
+              "es": "Antes de colgar, pregunta por el trabajo que se pierde: \"Can he get his homework from today?\""
+            },
+            "next": null
+          }
+        ]
+      },
+      "s5": {
+        "partner": {
+          "en": "Yes. His teacher will send it home with his sister, or you can pick it up after three.",
+          "es": "Sí. Su maestra la manda con su hermana, o usted puede pasar por ella después de las tres."
+        },
+        "choices": [
+          {
+            "text": {
+              "en": "Thank you. I'll pick it up after three.",
+              "es": "Gracias. Paso por ella después de las tres."
+            },
+            "picture": "🙏",
+            "best": true,
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Thank you. I pick up after the three.",
+              "es": "Gracias. Yo recojo después de las tres en punto."
+            },
+            "picture": "🕒",
+            "tip": {
+              "en": "No \"the\" before a time, and a plan takes \"I'll\": \"I'll pick it up after three.\"",
+              "es": "No va «the» antes de la hora, y un plan lleva «I'll»: \"I'll pick it up after three.\""
+            },
+            "next": null
+          }
+        ]
+      }
+    }
+  }
+}

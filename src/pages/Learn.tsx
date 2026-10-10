@@ -10,6 +10,7 @@ import { hushVoice, say, unlockVoice } from '../speech/voice'
 import { get, set } from '../storage'
 import { go } from '../router'
 import { placeIcon } from '../content/icons'
+import { THEMES, themeOf } from '../content/themes'
 
 interface Msg {
   role: 'user' | 'assistant'
@@ -140,7 +141,18 @@ export function Learn({ params }: { params: URLSearchParams }) {
   function finish() {
     if (!scene) return
     saveCard(scene)
+    const had = get<string[]>('rehearsed', [])
+    if (!had.includes(scene.id)) set('rehearsed', [...had, scene.id])
     setDone(true)
+  }
+
+  // The next scene to try: same theme and not yet rehearsed, else anything
+  // not yet rehearsed, else nothing (the loop is complete, go have one for real).
+  function nextScene(): Scene | undefined {
+    if (!scene) return undefined
+    const had = new Set([...get<string[]>('rehearsed', []), scene.id])
+    const fresh = SCENES.filter((s) => !s.kid && !had.has(s.id))
+    return fresh.find((s) => themeOf(s) === themeOf(scene)) ?? fresh[0]
   }
 
   // Beginners get the line a little slower; the voice keeps its pitch.
@@ -322,12 +334,18 @@ export function Learn({ params }: { params: URLSearchParams }) {
   const noVoiceNote = noVoice && <p class="note">{t(target === 'es' ? 'no_voice_es' : 'no_voice_en')}</p>
 
   // Shown in both branches: finishing the scripted scene earns the card too.
+  const upNext = done ? nextScene() : undefined
   const doneBlock = (
     <div class="done">
       <p class="big">{t('goal_reached')}</p>
       <a class="primary" href="#/card">
         {t('see_card')}
       </a>
+      {upNext && (
+        <button type="button" class="ghost" onClick={() => go('/learn', { scene: upNext.id })}>
+          {t('next_scene')}: <span lang={target}>{upNext.title[target]}</span>
+        </button>
+      )}
     </div>
   )
 
@@ -594,9 +612,11 @@ function ScenePicker({ onPick }: { onPick: (s: Scene) => void }) {
   const nat = native()
   const lastId = get<string>('lastScene', '')
   const last = SCENES.find((s) => s.id === lastId)
+  const rehearsed = new Set(get<string[]>('rehearsed', []))
   const rest = SCENES.filter((s) => s !== last)
+  const counter = rest.filter((s) => channelOf(s) === 'counter')
   const groups = [
-    { key: 'group_counter' as const, scenes: rest.filter((s) => channelOf(s) === 'counter') },
+    ...THEMES.map((th) => ({ key: `group_${th}` as 'group_health', scenes: counter.filter((s) => themeOf(s) === th) })),
     { key: 'group_phone' as const, scenes: rest.filter((s) => channelOf(s) === 'phone') },
   ].filter((g) => g.scenes.length > 0)
 
@@ -611,9 +631,10 @@ function ScenePicker({ onPick }: { onPick: (s: Scene) => void }) {
           {s.title[target]}
         </span>
         <span class="sub">{s.title[nat]}</span>
-        {(isLast || s.kid || channelOf(s) === 'phone') && (
+        {(isLast || s.kid || channelOf(s) === 'phone' || rehearsed.has(s.id)) && (
           <span class="tags">
-            {isLast && <span class="tag last">{t('last_used')}</span>}
+            {rehearsed.has(s.id) && <span class="tag done">✓ {t('rehearsed')}</span>}
+            {isLast && !rehearsed.has(s.id) && <span class="tag last">{t('last_used')}</span>}
             {channelOf(s) === 'phone' && <span class="tag">📞 {t('phone_call')}</span>}
             {s.kid && <span class="tag">{t('kid_friendly')}</span>}
           </span>
