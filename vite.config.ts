@@ -21,8 +21,8 @@ export default defineConfig({
         lang: 'es',
         start_url: '/',
         display: 'standalone',
-        background_color: '#F7F6F1',
-        theme_color: '#24476B',
+        background_color: '#EEF1F4',
+        theme_color: '#1E5FAE',
         categories: ['education'],
         icons: [
           { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png' },
@@ -55,7 +55,7 @@ export default defineConfig({
       workbox: {
         // Cache the shell, scenes, strings and the venue file so practice, the Go Card
         // and kid mode open with no signal. Speaking needs internet; typing does not.
-        globPatterns: ['**/*.{js,css,html,svg,png,json,geojson,webmanifest}'],
+        globPatterns: ['**/*.{js,css,html,svg,png,woff2,json,geojson,webmanifest}'],
         // The MapLibre chunk is 1 MB and only the Places tab needs it: it is
         // cached the first time it is actually fetched (runtimeCaching below),
         // not up front, so kid mode never downloads it. The store screenshots

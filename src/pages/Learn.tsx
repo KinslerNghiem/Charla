@@ -9,7 +9,7 @@ import { classify, detectTier, distanceAdvice, paceAdvice, startListener, type C
 import { hushVoice, say, unlockVoice } from '../speech/voice'
 import { get, set } from '../storage'
 import { go } from '../router'
-import { placeIcon } from '../content/icons'
+import { Icon } from '../ui/Icon'
 import { THEMES, themeOf } from '../content/themes'
 
 interface Msg {
@@ -26,6 +26,13 @@ const BREAK_AFTER_MS = 30 * 60 * 1000
 const HISTORY_TURNS = 10
 /** After this many learner lines the Go Card is earned whether or not the model noticed. */
 const CARD_AFTER_TURNS = 6
+/**
+ * The Worker reads this much of a turn and no more (MAX_USER_CHARS in
+ * worker/src/tutor.ts). Clamped here too: a pasted paragraph would otherwise
+ * ride along in the history of the next ten turns and push the request over
+ * the Worker's body limit, which reads as "no connection".
+ */
+const MAX_USER_CHARS = 600
 
 // The session starts when the app does, not when a scene mounts: Learn is
 // keyed on the scene id, so a per-component clock would reset on every pick.
@@ -171,6 +178,9 @@ export function Learn({ params }: { params: URLSearchParams }) {
   async function send(text: string, command?: 'simpler' | 'another_way') {
     if (!scene || busyRef.current) return
     unlockVoice()
+    // A mic message ("allow the microphone", "didn't catch that") is about the
+    // last tap; once a turn goes out another way it has nothing left to say.
+    setTalkState((s) => (s === 'opening' || s === 'listening' || s === 'working' ? s : 'idle'))
     const prev = msgsRef.current
     const history: HistoryItem[] = prev.slice(-HISTORY_TURNS).map((m) => ({ role: m.role, content: m.text }))
     const shown = command ? prev : [...prev, { role: 'user' as const, text }]
@@ -248,8 +258,10 @@ export function Learn({ params }: { params: URLSearchParams }) {
     const fail = (err: unknown) => {
       setListening(false)
       const kind = classify(err)
-      if (kind === 'capped') setCapped(true)
-      else if (kind === 'offline') setOffline('net')
+      // Speech has its own daily counter on the Worker, so a 429 here says
+      // nothing about the typed turns: the status line says so and the
+      // composer stays. Only a dead network switches to the scripted scene.
+      if (kind === 'offline') setOffline('net')
       setTalkState(kind)
     }
     try {
@@ -322,7 +334,7 @@ export function Learn({ params }: { params: URLSearchParams }) {
     denied: t('talk_denied'),
     unavailable: t('talk_unavailable'),
     failed: t('talk_nothing'),
-    capped: t('daily_cap'),
+    capped: t('talk_capped'),
     offline: t('talk_offline'),
   }
   const working = talkState === 'working'
@@ -353,7 +365,8 @@ export function Learn({ params }: { params: URLSearchParams }) {
     <section class="learn">
       <header class="scene-head">
         <button type="button" class="back" onClick={() => go('/learn')}>
-          ← {t('back')}
+          <Icon name="back" size={18} />
+          {t('back')}
         </button>
         <h1 lang={target}>{scene.title[target]}</h1>
         {placeName && <p class="place">{placeName}</p>}
@@ -361,7 +374,7 @@ export function Learn({ params }: { params: URLSearchParams }) {
           <summary>
             <span>{t('brief_label')}</span>
             <span class="progress">
-              {used.filter(Boolean).length}/{scene.must_use.length} ✓
+              {used.filter(Boolean).length}/{scene.must_use.length} <Icon name="check" size={14} />
             </span>
           </summary>
         <p>
@@ -374,7 +387,7 @@ export function Learn({ params }: { params: URLSearchParams }) {
           {scene.must_use.map((p, i) => (
             <li class={used[i] ? 'done' : ''}>
               <span class="num" aria-hidden="true">
-                {used[i] ? '✓' : i + 1}
+                {used[i] ? <Icon name="check" size={14} /> : i + 1}
               </span>
               <span>
                 {used[i] && <span class="sr-only">✓ </span>}
@@ -387,7 +400,7 @@ export function Learn({ params }: { params: URLSearchParams }) {
                 onClick={() => listen(p[target])}
                 aria-label={`${speaking === p[target] ? t('stop_voice') : t('listen')}: ${p[target]}`}
               >
-                {speaking === p[target] ? '⏹' : '🔊'}
+                <Icon name={speaking === p[target] ? 'stop' : 'speaker'} size={18} />
               </button>
             </li>
           ))}
@@ -447,7 +460,7 @@ export function Learn({ params }: { params: URLSearchParams }) {
                 </p>
                 {m.role === 'assistant' && (
                   <button type="button" class={'ghost small' + (speaking === m.text ? ' speaking' : '')} onClick={() => listen(m.text)}>
-                    {speaking === m.text ? '⏹ ' + t('stop_voice') : '🔊 ' + t('listen')}
+                    <Icon name={speaking === m.text ? 'stop' : 'speaker'} size={16} /> {speaking === m.text ? t('stop_voice') : t('listen')}
                   </button>
                 )}
                 {m.kept && <p class="kept">{t('kept_at_level')}</p>}
@@ -487,24 +500,28 @@ export function Learn({ params }: { params: URLSearchParams }) {
             doneBlock
           ) : (
             <form
-              class="composer"
+              // Before the first line the brief is open above and nothing is below,
+              // so the composer sits in the flow; pinning it to the bottom then only
+              // covered the end of the brief. It sticks once the chat has begun.
+              class={'composer' + (msgs.length === 0 ? ' start' : '')}
               onSubmit={(e) => {
                 e.preventDefault()
                 const text = input.trim()
-                if (text && !listening) send(text)
+                if (text && !listening && !working) send(text)
               }}
             >
               <textarea
                 value={input}
                 placeholder={msgs.length === 0 ? `${scene.roles.partner[target]}: …` : t('type_here')}
                 onInput={(e) => setInput((e.target as HTMLTextAreaElement).value)}
+                maxLength={MAX_USER_CHARS}
                 onKeyDown={(e) => {
                   // Enter sends, like every chat box; Shift+Enter keeps the newline.
                   // While the mic is open the transcript is about to arrive, so Enter waits.
                   if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
                     e.preventDefault()
                     const text = input.trim()
-                    if (text && !busy && !listening) send(text)
+                    if (text && !busy && !listening && !working) send(text)
                   }
                 }}
                 rows={2}
@@ -512,12 +529,14 @@ export function Learn({ params }: { params: URLSearchParams }) {
               <div class="actions">
                 {tier !== 'typed' ? (
                   <button type="button" class={'talk' + (listening ? ' on' : '')} onClick={toggleTalk} disabled={busy || working} aria-pressed={listening}>
-                    {listening ? '⏹ ' + t('talk_stop') : '🎤 ' + t('talk_tap')}
+                    <Icon name={listening ? 'stop' : 'mic'} size={20} />
+                    {listening ? t('talk_stop') : t('talk_tap')}
                   </button>
                 ) : (
                   <span class="note">{t('talk_unavailable')}</span>
                 )}
-                <button type="submit" class="primary" disabled={busy || listening || !input.trim()}>
+                {/* While a clip is being transcribed its words are about to arrive as the turn, so Send waits too. */}
+                <button type="submit" class="primary" disabled={busy || listening || working || !input.trim()}>
                   {t('send')}
                 </button>
               </div>
@@ -533,11 +552,15 @@ export function Learn({ params }: { params: URLSearchParams }) {
               )}
               {coach && !listening && (
                 <p class={'coach' + (coach.distance || coach.pace ? '' : ' ok')} aria-live="polite">
-                  {coach.distance === 'closer' && <span>📏 {t('coach_closer')}</span>}
-                  {coach.distance === 'farther' && <span>📏 {t('coach_farther')}</span>}
-                  {coach.pace === 'slower' && <span>🐢 {t('coach_slower')}</span>}
-                  {coach.pace === 'faster' && <span>🐇 {t('coach_faster')}</span>}
-                  {!coach.distance && !coach.pace && <span>✓ {t('coach_good')}</span>}
+                  {coach.distance === 'closer' && <span>{t('coach_closer')}</span>}
+                  {coach.distance === 'farther' && <span>{t('coach_farther')}</span>}
+                  {coach.pace === 'slower' && <span>{t('coach_slower')}</span>}
+                  {coach.pace === 'faster' && <span>{t('coach_faster')}</span>}
+                  {!coach.distance && !coach.pace && (
+                    <span>
+                      <Icon name="check" size={16} /> {t('coach_good')}
+                    </span>
+                  )}
                 </p>
               )}
               {earned && (
@@ -571,7 +594,7 @@ export function Learn({ params }: { params: URLSearchParams }) {
                           }
                         }}
                       />
-                      🔊 {t('voice_label')}
+                      <Icon name="speaker" size={16} /> {t('voice_label')}
                     </label>
                   </div>
                   {/* Reporting is a quiet link in its own explanation, not a third button. */}
@@ -623,22 +646,30 @@ function ScenePicker({ onPick }: { onPick: (s: Scene) => void }) {
   const card = (s: Scene, isLast = false) => (
     <li>
       <button type="button" class="scene-card" onClick={() => onPick(s)}>
-        <span class="ico" aria-hidden="true">
-          {placeIcon(s.place_type)}
+        {/* The band: the card's edge in the language it is for, with the place drawn on it. */}
+        <span class="band">
+          <Icon name={s.place_type} size={20} />
+          {channelOf(s) === 'phone' && <Icon name="phone" size={16} />}
         </span>
-        <span class="type">{t(`type_${s.place_type}` as 'type_pharmacy')}</span>
-        <span class="title" lang={target}>
-          {s.title[target]}
-        </span>
-        <span class="sub">{s.title[nat]}</span>
-        {(isLast || s.kid || channelOf(s) === 'phone' || rehearsed.has(s.id)) && (
-          <span class="tags">
-            {rehearsed.has(s.id) && <span class="tag done">✓ {t('rehearsed')}</span>}
-            {isLast && !rehearsed.has(s.id) && <span class="tag last">{t('last_used')}</span>}
-            {channelOf(s) === 'phone' && <span class="tag">📞 {t('phone_call')}</span>}
-            {s.kid && <span class="tag">{t('kid_friendly')}</span>}
+        <span class="body">
+          <span class="title" lang={target}>
+            {s.title[target]}
           </span>
-        )}
+          <span class="sub">{s.title[nat]}</span>
+          {(isLast || s.kid || channelOf(s) === 'phone' || rehearsed.has(s.id)) && (
+            <span class="tags">
+              {rehearsed.has(s.id) && (
+                <span class="tag done">
+                  <Icon name="check" size={12} />
+                  {t('rehearsed')}
+                </span>
+              )}
+              {isLast && !rehearsed.has(s.id) && <span class="tag last">{t('last_used')}</span>}
+              {channelOf(s) === 'phone' && <span class="tag">{t('phone_call')}</span>}
+              {s.kid && <span class="tag">{t('kid_friendly')}</span>}
+            </span>
+          )}
+        </span>
       </button>
     </li>
   )

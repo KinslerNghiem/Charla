@@ -9,6 +9,7 @@ import { addStreak, get, set, streakThisWeek } from '../storage'
 import { CONTACT_EMAIL, PARTNERS_URL } from '../contact'
 import { go } from '../router'
 import { isTeen } from '../gate/gate'
+import { Icon } from '../ui/Icon'
 
 interface VenueProps {
   id: string
@@ -278,7 +279,10 @@ export function Places({ params }: { params: URLSearchParams }) {
       )}
       {sel && (
         <article class="venue" ref={cardEl}>
-          <h2>{sel.properties.name}</h2>
+          <header>
+            <h2>{sel.properties.name}</h2>
+          </header>
+          <div class="body">
           <p class="addr">{sel.properties.address}</p>
           <p class={'badge ' + sel.properties.status}>{t(`badge_${sel.properties.status}` as 'badge_unknown')}</p>
           {sel.properties.roles && (
@@ -296,7 +300,7 @@ export function Places({ params }: { params: URLSearchParams }) {
               <b>{t('club_label')}:</b> {sel.properties.club_schedule}
             </p>
           )}
-          {sel.properties.meet_ok === 'yes' && !isTeen() && <p class="meet">☕ {t('meet_ok')}</p>}
+          {sel.properties.meet_ok === 'yes' && !isTeen() && <p class="meet"><Icon name="table" size={16} /> {t('meet_ok')}</p>}
           <div class="row">
             {sel.properties.scene_id && (
               <button
@@ -350,6 +354,7 @@ export function Places({ params }: { params: URLSearchParams }) {
               </>
             )}
           </p>
+          </div>
         </article>
       )}
       <p class="legend">

@@ -3,6 +3,7 @@ import { sceneById } from '../content/scenes'
 import { learning, native, t } from '../i18n/lang'
 import { get } from '../storage'
 import { hushVoice, say, unlockVoice } from '../speech/voice'
+import { Icon } from '../ui/Icon'
 
 interface LastCard {
   scene_id: string
@@ -40,7 +41,7 @@ export function Card() {
       onClick={() => listen(text)}
       aria-label={`${speaking === text ? t('stop_voice') : t('listen')}: ${text}`}
     >
-      {speaking === text ? '⏹' : '🔊'}
+      <Icon name={speaking === text ? 'stop' : 'speaker'} size={18} />
     </button>
   )
   if (!card || !scene) {
@@ -48,7 +49,7 @@ export function Card() {
       <section class="card">
         <div class="empty-state">
           <span class="glyph" aria-hidden="true">
-            🪪
+            <Icon name="card" size={56} />
           </span>
           <p>{t('card_empty')}</p>
           <a class="primary" href="#/learn">
@@ -61,6 +62,9 @@ export function Card() {
   // `expect` is the staff's first real question. A scene without one shows
   // only how the visit ends.
   const expect = scene.expect
+  // A call to the landlord or the boss happens at home or at work, which the
+  // map cannot list, so those cards open every place rather than an empty filter.
+  const placesHref = scene.place_type === 'home' || scene.place_type === 'work' ? '#/places' : `#/places?type=${encodeURIComponent(scene.place_type)}`
   return (
     <section class="card">
       <article class="gocard">
@@ -114,7 +118,7 @@ export function Card() {
         </div>
       </article>
       <p class="gocard-actions">
-        <a class="primary" href={`#/places?type=${encodeURIComponent(scene.place_type)}`}>
+        <a class="primary" href={placesHref}>
           {t('where_real')}
         </a>
       </p>

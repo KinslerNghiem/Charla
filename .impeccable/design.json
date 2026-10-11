@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-11T18:10:00-05:00",
+  "title": "Design System: Charla",
+  "extensions": {
+    "colorMeta": {
+      "counter": { "role": "neutral", "displayName": "Counter", "canonical": "#eef1f4", "tonalRamp": ["#0f1316", "#1a2026", "#2f373f", "#5b6470", "#9aa3ad", "#d7dce2", "#eef1f4", "#f8f9fb"] },
+      "card": { "role": "neutral", "displayName": "Card", "canonical": "#ffffff", "tonalRamp": ["#1a2026", "#232a31", "#3a424b", "#6b7580", "#a6b0ba", "#d7dce2", "#f3f5f8", "#ffffff"] },
+      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#1a1d21", "tonalRamp": ["#0b0d0f", "#1a1d21", "#2b2f35", "#3f444c", "#5b6470", "#8a929c", "#b9c0c8", "#eef1f4"] },
+      "ink-soft": { "role": "neutral", "displayName": "Ink Soft", "canonical": "#5b6470", "tonalRamp": ["#1a1d21", "#2f353d", "#454c56", "#5b6470", "#7a838e", "#a6b0ba", "#cbd2d9", "#eef1f4"] },
+      "river-blue": { "role": "primary", "displayName": "River Blue", "canonical": "#1e5fae", "tonalRamp": ["#0d2a50", "#143f78", "#1e5fae", "#2a74cc", "#4f92dd", "#7fb3f2", "#b6d1f3", "#e3ecf8"] },
+      "card-red": { "role": "primary", "displayName": "Card Red", "canonical": "#c8102e", "tonalRamp": ["#4a0812", "#7c0d1f", "#a51a30", "#c8102e", "#de4a5e", "#f28c9a", "#f7bcc4", "#fbe4e7"] },
+      "go-green": { "role": "secondary", "displayName": "Go Green", "canonical": "#2e7d32", "tonalRamp": ["#0f2a11", "#1d3020", "#245f27", "#2e7d32", "#4f9c53", "#86cc90", "#b9e2bd", "#e3f1e4"] },
+      "amber": { "role": "secondary", "displayName": "Amber", "canonical": "#a04a00", "tonalRamp": ["#352816", "#5a2a00", "#7f3a00", "#a04a00", "#c46a1a", "#e6ad5c", "#f3d2a4", "#fbeedc"] },
+      "stop-red": { "role": "secondary", "displayName": "Stop Red", "canonical": "#b3261e", "tonalRamp": ["#3b1f1c", "#6e1612", "#8f1d17", "#b3261e", "#d3534b", "#f09088", "#f6bfba", "#f9e1df"] },
+      "program-teal": { "role": "secondary", "displayName": "Program Teal", "canonical": "#0e7c86", "tonalRamp": ["#052e32", "#094f55", "#0e7c86", "#1a9aa5", "#3cb6c0", "#5fc3cc", "#a3dde2", "#e0f3f5"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Page titles, semi-condensed." },
+      "headline": { "displayName": "Headline", "purpose": "Section headings, scene card titles, the partner's line." },
+      "spoken": { "displayName": "Spoken", "purpose": "Every line the learner reads aloud: phrases, the staff line, the scripted partner." },
+      "body": { "displayName": "Body", "purpose": "Prose, the learner's bubble, controls." },
+      "label": { "displayName": "Label", "purpose": "Glosses in secondary ink, tags, tab labels, card field labels." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "ease-state", "value": "150ms ease", "purpose": "Background, border and colour changes on controls." },
+      { "name": "ease-chevron", "value": "transform 150ms ease", "purpose": "The brief's disclosure chevron turning." },
+      { "name": "meter", "value": "width 80ms linear", "purpose": "The microphone level meter." }
+    ],
+    "breakpoints": [
+      { "name": "phone-nav", "value": "639px", "purpose": "Below this the tabs become a fixed bottom bar." },
+      { "name": "two-up", "value": "560px", "purpose": "Scene cards go two across." },
+      { "name": "laptop", "value": "900px", "purpose": "1040px shell, three cards across, two-column scene page." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The darkest print on the card: ink on counter.",
+      "html": "<button class=\"ds-btn-primary\">Crear mi tarjeta</button>",
+      "css": ".ds-btn-primary { font: 600 16px/24px 'Archivo', system-ui, sans-serif; background: #1a1d21; color: #eef1f4; border: 1px solid #1a1d21; border-radius: 8px; padding: 10px 18px; min-height: 44px; cursor: pointer; transition: background-color 150ms ease, border-color 150ms ease; } .ds-btn-primary:hover { background: #5b6470; border-color: #5b6470; } .ds-btn-primary:focus-visible { outline: 3px solid #1e5fae; outline-offset: 2px; } .ds-btn-primary:disabled { opacity: 0.45; cursor: default; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "White with a hairline edge, for the second action.",
+      "html": "<button class=\"ds-btn-secondary\">Dilo de otra forma</button>",
+      "css": ".ds-btn-secondary { font: 400 16px/24px 'Archivo', system-ui, sans-serif; background: #ffffff; color: #1a1d21; border: 1px solid #d7dce2; border-radius: 8px; padding: 10px 16px; min-height: 44px; cursor: pointer; transition: border-color 150ms ease; } .ds-btn-secondary:hover { border-color: #5b6470; } .ds-btn-secondary:focus-visible { outline: 3px solid #1e5fae; outline-offset: 2px; }"
+    },
+    {
+      "name": "Mic Button",
+      "kind": "button",
+      "refersTo": "button-talk",
+      "description": "The widest control on the scene page; fills with the accent while listening.",
+      "html": "<button class=\"ds-talk\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M9 4a3 3 0 0 1 6 0v7a3 3 0 0 1-6 0z\"/><path d=\"M5 11a7 7 0 0 0 14 0\"/><path d=\"M12 18v3M9 21h6\"/></svg>Toca y habla</button>",
+      "css": ".ds-talk { display: inline-flex; align-items: center; gap: 8px; font: 600 17px/24px 'Archivo', system-ui, sans-serif; background: #ffffff; color: #1e5fae; border: 2px solid #1e5fae; border-radius: 26px; padding: 10px 24px; min-height: 52px; cursor: pointer; transition: background-color 150ms ease; } .ds-talk:hover { background: #e3ecf8; } .ds-talk.on, .ds-talk:active { background: #1e5fae; color: #ffffff; } .ds-talk:focus-visible { outline: 3px solid #1e5fae; outline-offset: 2px; }"
+    },
+    {
+      "name": "Scene Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "A laminated card with its language band and the place's line icon.",
+      "html": "<button class=\"ds-scene\"><span class=\"ds-band\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 4h16v16H4z\"/><path d=\"M12 8v8M8 12h8\"/></svg></span><span class=\"ds-body\"><span class=\"ds-title\">Pick up a prescription</span><span class=\"ds-sub\">Recoger una receta</span></span></button>",
+      "css": ".ds-scene { width: 100%; max-width: 360px; text-align: left; display: grid; grid-template-rows: 32px 1fr; padding: 0; border: 0; border-radius: 12px; background: #ffffff; color: #1a1d21; overflow: hidden; cursor: pointer; font-family: 'Archivo', system-ui, sans-serif; } .ds-scene:hover { background: #f3f5f8; } .ds-scene .ds-band { display: flex; align-items: center; padding: 0 12px; height: 32px; background: #1e5fae; color: #ffffff; } .ds-scene .ds-body { display: grid; gap: 2px; padding: 12px 14px 14px; } .ds-scene .ds-title { font-size: 20px; line-height: 1.2; font-weight: 600; font-stretch: 87.5%; letter-spacing: -0.01em; } .ds-scene .ds-sub { color: #5b6470; font-size: 14px; } .ds-scene:focus-visible { outline: 3px solid #1e5fae; outline-offset: 2px; }"
+    },
+    {
+      "name": "Filter Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "A white pill; selected is the accent on its tint.",
+      "html": "<button class=\"ds-chip\">Biblioteca</button> <button class=\"ds-chip on\">Todos</button>",
+      "css": ".ds-chip { font: 400 14px/20px 'Archivo', system-ui, sans-serif; background: #ffffff; color: #5b6470; border: 1px solid transparent; border-radius: 18px; padding: 6px 12px; min-height: 36px; cursor: pointer; } .ds-chip:hover { color: #1a1d21; } .ds-chip.on { background: #e3ecf8; color: #1e5fae; border-color: #1e5fae; } .ds-chip:focus-visible { outline: 3px solid #1e5fae; outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "16px so phones do not zoom; the accent takes the border on focus.",
+      "html": "<input class=\"ds-input\" placeholder=\"Escribe lo que dirías…\">",
+      "css": ".ds-input { font: 400 16px/24px 'Archivo', system-ui, sans-serif; width: 100%; max-width: 360px; padding: 10px 12px; border: 1px solid #d7dce2; border-radius: 8px; background: #ffffff; color: #1a1d21; caret-color: #1e5fae; } .ds-input::placeholder { color: #5b6470; opacity: 1; } .ds-input:focus-visible { outline: 2px solid #1e5fae; outline-offset: 0; border-color: #1e5fae; }"
+    },
+    {
+      "name": "Tab Bar",
+      "kind": "nav",
+      "refersTo": "card",
+      "description": "Five icon-over-label tabs on a white bar; the active one in the accent.",
+      "html": "<nav class=\"ds-tabs\"><a class=\"on\" href=\"#\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 5h16v10H9l-5 4z\"/></svg><span>Ensayar</span></a><a href=\"#\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 5h18v14H3z\"/><path d=\"M3 9h18\"/><path d=\"M7 13h6\"/></svg><span>Tarjeta</span></a><a href=\"#\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 21s6-5.5 6-11a6 6 0 0 0-12 0c0 5.5 6 11 6 11z\"/><path d=\"M10 10a2 2 0 1 0 4 0a2 2 0 1 0-4 0\"/></svg><span>Lugares</span></a></nav>",
+      "css": ".ds-tabs { display: grid; grid-template-columns: repeat(3, 1fr); max-width: 360px; background: #ffffff; border-top: 1px solid #d7dce2; font-family: 'Archivo', system-ui, sans-serif; } .ds-tabs a { position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 2px 6px; min-height: 60px; font-size: 11px; color: #5b6470; text-decoration: none; } .ds-tabs a.on { color: #1e5fae; } .ds-tabs a.on::before { content: ''; position: absolute; top: 0; left: 50%; width: 28px; height: 3px; margin-left: -14px; background: #1e5fae; border-radius: 0 0 3px 3px; }"
+    },
+    {
+      "name": "Go Card",
+      "kind": "custom",
+      "refersTo": "card-band",
+      "description": "The card the learner hands over: a titled band, numbered phrases, each with its gloss.",
+      "html": "<article class=\"ds-gocard\"><header><h1>Tu tarjeta</h1><p>Pick up a prescription</p></header><div class=\"ds-gc-body\"><h2>Tus frases</h2><ol><li><span class=\"ds-num\">1</span><span><b>I'm here to pick up a prescription for my mother.</b><i>Vengo a recoger una receta para mi mamá.</i></span></li><li><span class=\"ds-num\">2</span><span><b>Should she take it with food?</b><i>¿Debe tomarlo con comida?</i></span></li></ol></div></article>",
+      "css": ".ds-gocard { max-width: 420px; border-radius: 12px; overflow: hidden; background: #ffffff; color: #1a1d21; font-family: 'Archivo', system-ui, sans-serif; } .ds-gocard header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; background: #1e5fae; color: #ffffff; padding: 16px 18px 14px; } .ds-gocard header h1 { margin: 0; font-size: 22px; font-weight: 600; font-stretch: 87.5%; letter-spacing: -0.01em; } .ds-gocard header p { margin: 0; font-size: 15px; opacity: 0.9; } .ds-gc-body { padding: 2px 18px 18px; } .ds-gc-body h2 { font-size: 13px; font-weight: 600; color: #5b6470; margin: 14px 0 6px; } .ds-gc-body ol { list-style: none; padding: 0; margin: 0; } .ds-gc-body li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: center; padding: 10px 0; } .ds-gc-body li + li { border-top: 1px solid #d7dce2; } .ds-num { width: 24px; height: 24px; border-radius: 6px; background: #e3ecf8; color: #1e5fae; font-weight: 600; font-size: 13px; display: grid; place-items: center; } .ds-gc-body b { display: block; font-size: 19px; line-height: 1.3; font-weight: 600; font-stretch: 87.5%; letter-spacing: -0.01em; } .ds-gc-body i { display: block; color: #5b6470; font-style: normal; font-size: 14px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Laminated Counter Card",
+    "overview": "Charla is the card a learner hands across a counter, so the screen is a counter with laminated bilingual cards laid on it. The ground is a cool, slightly blue grey; every card is flat white and known by its edge against that ground, never by a shadow or a border. Each card wears a band in the colour of the language it is for: river blue for English, card red for Spanish. The language the learner is practicing becomes the accent for every live state, so the whole app quietly turns blue or red with the direction the learner chose.\n\nOne typeface carries everything. Archivo, self-hosted and precached, set semi-condensed and bold for titles and for every line meant to be said aloud, the way a card prints them, and at full width for body, labels and controls. The learner's own language always sits directly under the line it glosses, smaller and in secondary ink. Icons are a single drawn stroke set; emoji appear only as scene pictures in kid mode, where they are content.",
+    "keyCharacteristics": [
+      "Flat white cards on a cool counter ground; no shadows, no card borders.",
+      "A language band on every card; the accent follows the language being practiced.",
+      "One face, Archivo: semi-condensed bold for what is read aloud, regular for the rest.",
+      "Drawn line icons at one stroke weight; emoji only as kid-mode pictures.",
+      "Two-language pairs everywhere, the gloss always smaller and under."
+    ],
+    "rules": [
+      { "name": "The Band Rule", "body": "Every card that stands for a language wears that language's colour as a band on its top edge. The band is the only place the language colour fills a region.", "section": "colors" },
+      { "name": "The One Accent Rule", "body": "Live states use the accent of the language being practiced and nothing else. Green, amber, stop red and teal appear only as the meaning they carry; never as decoration.", "section": "colors" },
+      { "name": "The Gloss Rule", "body": "The learner's own language sits directly under the target-language line, in Label size and secondary ink, never beside it and never larger.", "section": "typography" },
+      { "name": "The Lettering Rule", "body": "Semi-condensed bold marks what is said aloud or what names a thing. Body prose, buttons and labels stay at full width; no uppercase labels anywhere.", "section": "typography" },
+      { "name": "The No-Shadow Rule", "body": "A card is known by its edge against the counter. Never add a shadow, a glow or a card border to make one stand out; use the band or the accent tint.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do give every language-specific card its band, and let the accent follow data-learning on the shell.",
+      "Do set anything read aloud in semi-condensed 600 at 18px or more, with its gloss under it at 14px in Ink Soft.",
+      "Do keep controls standard: buttons, tabs, inputs, selects, with 44px targets and a visible accent focus ring.",
+      "Do keep state colours to their meaning: green for done or confirmed, amber for a notice or a single report, stop red for crisis and destruction, teal for a listed program.",
+      "Do respect prefers-reduced-motion (all transitions off) and both colour schemes."
+    ],
+    "donts": [
+      "Don't add shadows, card borders or gradients; a card is flat on the counter.",
+      "Don't use emoji as interface icons; they belong only to kid-mode scene pictures.",
+      "Don't set labels in uppercase or add a label above a heading that already names its content.",
+      "Don't fetch a font or an image at runtime; Archivo ships in public/fonts and is precached.",
+      "Don't let any treatment from kid mode (awnings, stickers, pictures) into the adult app."
+    ]
+  }
+}

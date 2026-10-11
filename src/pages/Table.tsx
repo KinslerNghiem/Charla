@@ -6,6 +6,7 @@ import { isTeen } from '../gate/gate'
 import { askHelp } from '../tutor/client'
 import type { Help } from '../tutor/turn'
 import { go } from '../router'
+import { Icon } from '../ui/Icon'
 
 export function Table({ params }: { params: URLSearchParams }) {
   const scene = sceneById(params.get('scene')) ?? SCENES[0]
@@ -91,7 +92,7 @@ export function Table({ params }: { params: URLSearchParams }) {
     <section class="table">
       <h1>{t('table_title')}</h1>
       <p class="intro">{t('table_intro')}</p>
-      <p class="not-recorded">🔒 {t('table_not_recorded')}</p>
+      <p class="not-recorded"><Icon name="lock" size={16} />{t('table_not_recorded')}</p>
       {/* Announces the phase title when the phase changes, and nothing else.
           The timer itself is silent: a live region ticking every second talks
           over the two people it is supposed to help. */}
@@ -122,7 +123,7 @@ export function Table({ params }: { params: URLSearchParams }) {
           <p class="timer" role="timer">
             {Math.floor(at.remaining / 60)}:{String(at.remaining % 60).padStart(2, '0')}
           </p>
-          <h2>{phase.id === 'switch' ? '⇄ ' : ''}{phase.title[ui]}</h2>
+          <h2>{phase.id === 'switch' && <Icon name="swap" size={22} />}{phase.title[ui]}</h2>
           <p class="lang-tag">{phase.lang === 'en' ? 'English' : 'Español'}</p>
           <ul class="prompts" lang={phase.lang}>
             {phase.prompts.map((p) => (

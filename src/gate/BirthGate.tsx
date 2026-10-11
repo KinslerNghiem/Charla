@@ -1,6 +1,7 @@
 import { useState } from 'preact/hooks'
 import { t } from '../i18n/lang'
 import { modeFor, validBirth, type Mode } from './gate'
+import { Mark } from '../ui/Icon'
 
 // Neutral by design (this is what the FTC's COPPA guidance asks for):
 // month and year only, no default value, no "13+" hint before the question,
@@ -15,7 +16,10 @@ export function BirthGate({ onDone }: { onDone: (mode: Mode) => void }) {
 
   return (
     <main class="gate">
-      <h1><svg class="mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="7.5" fill="var(--en)" /><circle cx="15" cy="12" r="7.5" fill="var(--es)" fill-opacity="0.85" /></svg>{t('app_name')}</h1>
+      <h1>
+        <Mark size={36} />
+        {t('app_name')}
+      </h1>
       <p class="tagline">{t('tagline')}</p>
       <form
         onSubmit={(e) => {

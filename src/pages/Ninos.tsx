@@ -6,6 +6,7 @@ import { clearNative, learning, native, t, tIn } from '../i18n/lang'
 import { clearAll, get, set } from '../storage'
 import { speak } from '../speech/output'
 import { placeIcon } from '../content/icons'
+import { Icon } from '../ui/Icon'
 
 // Charlita. This file and everything it imports must never touch the network:
 // no requests to the Worker, no map tiles, no microphone, no location.
@@ -145,7 +146,8 @@ export function Ninos() {
   return (
     <section class="ninos">
       <button type="button" class="back" onClick={() => setScene(null)}>
-        ← {t('back')}
+        <Icon name="back" size={18} />
+        {t('back')}
       </button>
       <h1>
         {placeIcon(scene.place_type)} <span lang={target}>{scene.title[target]}</span>
@@ -155,7 +157,7 @@ export function Ninos() {
         <div class="done">
           <p class="big">⭐ {t('kids_sticker')}</p>
           <button type="button" class="ghost" onClick={() => speak(scene.show_staff_line[target], target, 0.8)}>
-            🔊 {t('kids_say_it')}
+            <Icon name="speaker" size={16} /> {t('kids_say_it')}
           </button>
           <button type="button" class="primary" onClick={() => setScene(null)}>
             {t('back')}

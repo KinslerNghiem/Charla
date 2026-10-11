@@ -1,6 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-  <rect width="128" height="128" rx="24" fill="#24476B"/>
-  <path d="M28 40h72a10 10 0 0 1 10 10v30a10 10 0 0 1-10 10H60l-18 16v-16H28a10 10 0 0 1-10-10V50a10 10 0 0 1 10-10z" fill="#F7F6F1"/>
-  <text x="64" y="76" text-anchor="middle" font-family="Georgia, serif" font-size="30" font-weight="700" fill="#24476B">Ch</text>
-  <circle cx="100" cy="30" r="10" fill="#E8B24C"/>
+  <rect width="128" height="128" rx="24" fill="#1E5FAE"/>
+  <g transform="rotate(-8 64 64)">
+    <rect x="20" y="34" width="88" height="60" rx="9" fill="#FFFFFF"/>
+    <path d="M20 43a9 9 0 0 1 9-9h70a9 9 0 0 1 9 9v9H20z" fill="#C8102E"/>
+    <rect x="32" y="62" width="40" height="6" rx="3" fill="#1A1D21"/>
+    <rect x="32" y="76" width="56" height="6" rx="3" fill="#5B6470"/>
+  </g>
 </svg>

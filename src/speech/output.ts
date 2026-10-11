@@ -55,6 +55,12 @@ export function pickVoice(lang: Lang): SpeechSynthesisVoice | null {
 }
 
 let unlocked = false
+// Chrome on Android swallows an utterance queued in the same tick as a
+// cancel(). hush() records when it cancelled, and say() waits this long after
+// one before speaking; `gen` lets a hush in that gap drop the pending line.
+const CANCEL_SETTLE_MS = 80
+let cancelledAt = 0
+let gen = 0
 
 /**
  * Call from a user gesture once, so later speak() calls work on iOS. It also
@@ -79,6 +85,8 @@ export function unlock(): void {
 /** Stop whatever is being read. Called before the mic opens, so the clip does not contain our own voice. */
 export function hush(): void {
   if (!available()) return
+  gen++
+  cancelledAt = Date.now()
   try {
     speechSynthesis.cancel()
   } catch {}
@@ -93,11 +101,16 @@ function say(text: string, lang: Lang, rate: number, voice: SpeechSynthesisVoice
     u.onend = onEnd
     u.onerror = onEnd
   }
-  // Chrome on Android swallows an utterance queued in the same tick as a
-  // cancel(), so when something is being read, stop it and speak a beat later.
-  if (speechSynthesis.speaking || speechSynthesis.pending) {
+  // When something is being read, or hush() just ran (voice.ts silences the
+  // previous line right before handing this one over), stop it and speak a
+  // beat later; see CANCEL_SETTLE_MS. A hush inside that beat wins.
+  if (speechSynthesis.speaking || speechSynthesis.pending || Date.now() - cancelledAt < CANCEL_SETTLE_MS) {
     speechSynthesis.cancel()
-    setTimeout(() => speechSynthesis.speak(u), 80)
+    cancelledAt = Date.now()
+    const mine = ++gen
+    setTimeout(() => {
+      if (mine === gen) speechSynthesis.speak(u)
+    }, CANCEL_SETTLE_MS)
   } else {
     speechSynthesis.speak(u)
   }

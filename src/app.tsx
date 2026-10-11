@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { useRoute } from './router'
 import { get, set } from './storage'
-import { clearNative, hasNative, lang, setNative, t, useLangTick } from './i18n/lang'
+import { clearNative, hasNative, lang, learning, setNative, t, useLangTick } from './i18n/lang'
+import { Icon, Mark, type IconName } from './ui/Icon'
 // BirthGate.tsx, not Gate.tsx: a file named Gate.tsx beside gate.ts collides on
 // a case-insensitive disk (Windows, macOS) and TypeScript resolves the wrong one.
 import { BirthGate } from './gate/BirthGate'
@@ -73,12 +74,15 @@ export function App() {
   // answered, so it gets a bare shell of its own until the gate is done.
   if (route.path === '/about' && (!picked || !mode)) {
     return (
-      <div class="shell">
+      <div class="shell" data-learning={learning()}>
         <header class="top">
           <a class="brand" href="#/">
+            <Mark />
             {t('app_name')}
           </a>
-          <a href="#/">← {t('back')}</a>
+          <a href="#/">
+            <Icon name="back" size={16} /> {t('back')}
+          </a>
         </header>
         <main id="main" tabIndex={-1}>
           <About />
@@ -116,7 +120,7 @@ export function App() {
 
   if (mode === 'kid') {
     return (
-      <div class="shell kid">
+      <div class="shell kid" data-learning={learning()}>
         <header class="top">
           <span class="brand">{t('kids_title')}</span>
         </header>
@@ -128,12 +132,12 @@ export function App() {
   }
 
   // In the order of the loop: rehearse, take the card, go to the place.
-  const links: [string, string, string][] = [
-    ['/learn', t('nav_learn'), '💬'],
-    ['/card', t('nav_card'), '🪪'],
-    ['/places', t('nav_places'), '📍'],
-    ['/table', t('nav_table'), '☕'],
-    ['/ninos', t('nav_kids'), '⭐'],
+  const links: [string, string, IconName][] = [
+    ['/learn', t('nav_learn'), 'rehearse'],
+    ['/card', t('nav_card'), 'card'],
+    ['/places', t('nav_places'), 'places'],
+    ['/table', t('nav_table'), 'table'],
+    ['/ninos', t('nav_kids'), 'kids'],
   ]
   // Privacy and About are footer links, not tabs: six tabs overflow a 390px
   // phone and the last one scrolls out of sight with nothing to say it is there.
@@ -168,7 +172,7 @@ export function App() {
   }
 
   return (
-    <div class="shell">
+    <div class="shell" data-learning={learning()}>
       {/* Moves focus without touching the hash: href="#main" alone would be a
           route change, and the router would swap the page out from under it. */}
       <a
@@ -183,13 +187,14 @@ export function App() {
       </a>
       <header class="top">
         <a class="brand" href="#/learn">
-          <svg class="mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="7.5" fill="var(--en)" /><circle cx="15" cy="12" r="7.5" fill="var(--es)" fill-opacity="0.85" /></svg>
+          <Mark />
           {t('app_name')}
         </a>
         {/* The two things people go looking for, where they look: top right. */}
         <div class="top-actions">
           <button type="button" class="chip-btn" onClick={changeLanguage} aria-label={t('change_language')} title={t('change_language')}>
-            🌐 {lang() === 'es' ? 'Español' : 'English'}
+            <Icon name="globe" size={16} />
+            {lang() === 'es' ? 'Español' : 'English'}
           </button>
           <a class="chip-btn" href="#/about" aria-label={t('nav_about')} title={t('nav_about')}>
             ?
@@ -199,9 +204,7 @@ export function App() {
       <nav class="tabs" aria-label="Sections">
         {links.map(([path, label, ico]) => (
           <a href={'#' + path} class={current === path ? 'on' : ''} aria-current={current === path ? 'page' : undefined}>
-            <span class="ico" aria-hidden="true">
-              {ico}
-            </span>
+            <Icon name={ico} size={22} />
             <span>{label}</span>
           </a>
         ))}

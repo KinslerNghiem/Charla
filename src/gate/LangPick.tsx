@@ -5,11 +5,15 @@
 // switch, because two independent switches confused every tester.
 
 import type { Lang } from '../i18n/strings'
+import { Mark } from '../ui/Icon'
 
 export function LangPick({ onPick }: { onPick: (native: Lang) => void }) {
   return (
     <main class="gate langpick">
-      <h1><svg class="mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="7.5" fill="var(--en)" /><circle cx="15" cy="12" r="7.5" fill="var(--es)" fill-opacity="0.85" /></svg>Charla</h1>
+      <h1>
+        <Mark size={36} />
+        Charla
+      </h1>
       <p class="tagline">
         Practica la conversación. Luego, tenla de verdad.
         <br />
@@ -19,13 +23,19 @@ export function LangPick({ onPick }: { onPick: (native: Lang) => void }) {
         ¿Qué idioma hablas? <span class="alt-q">Which language do you speak?</span>
       </h2>
       <div class="pick">
-        <button type="button" class="primary big-pick" lang="es" onClick={() => onPick('es')}>
-          Hablo español
-          <small>Voy a practicar inglés</small>
+        <button type="button" class="big-pick" lang="es" onClick={() => onPick('es')}>
+          <span class="band" aria-hidden="true" />
+          <span class="body">
+            Hablo español
+            <small>Voy a practicar inglés</small>
+          </span>
         </button>
-        <button type="button" class="primary big-pick" lang="en" onClick={() => onPick('en')}>
-          I speak English
-          <small>I will practice Spanish</small>
+        <button type="button" class="big-pick" lang="en" onClick={() => onPick('en')}>
+          <span class="band" aria-hidden="true" />
+          <span class="body">
+            I speak English
+            <small>I will practice Spanish</small>
+          </span>
         </button>
       </div>
       <p class="note">

@@ -3,6 +3,7 @@ import type { Scene, ScriptChoice } from '../content/scene.schema'
 import type { Lang } from '../i18n/strings'
 import { t } from '../i18n/lang'
 import { speak } from '../speech/output'
+import { Icon } from '../ui/Icon'
 
 // The scripted version of a scene: the partner's line, two or three choices,
 // a gentle retry on a wrong one. Used when the API is unreachable, and it is
@@ -81,7 +82,7 @@ export function OfflineScene({
         </p>
         <p class="gloss">{node.partner[native]}</p>
         <button type="button" class="ghost" onClick={listen}>
-          🔊 {t('listen')}
+          <Icon name="speaker" size={16} /> {t('listen')}
         </button>
         {noVoice && <p class="note">{t(learning === 'es' ? 'no_voice_es' : 'no_voice_en')}</p>}
       </div>

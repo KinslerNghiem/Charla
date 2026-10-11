@@ -29,7 +29,7 @@ async function render(file, size, pad = 0) {
   const off = Math.round(size * pad)
   await page.setViewportSize({ width: size, height: size })
   await page.setContent(
-    `<body style="margin:0;background:#24476B;width:${size}px;height:${size}px;overflow:hidden">
+    `<body style="margin:0;background:#1E5FAE;width:${size}px;height:${size}px;overflow:hidden">
        <div style="position:absolute;left:${off}px;top:${off}px;width:${inner}px;height:${inner}px">${svg}</div>
      </body>`,
   )

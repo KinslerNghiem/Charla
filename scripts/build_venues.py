@@ -25,7 +25,7 @@ SRC = os.path.join(ROOT, "data", "venues.csv")
 OUT = os.path.join(ROOT, "public", "venues.geojson")
 
 STATUSES = {"unknown", "reported", "confirmed", "listed_by_business", "listed_public"}
-TYPES = {"pharmacy", "restaurant", "clinic", "driver_services", "school", "grocery", "library", "college", "bank", "post_office", "transit", "park", "community"}
+TYPES = {"pharmacy", "restaurant", "ice_cream", "clinic", "driver_services", "school", "grocery", "library", "college", "bank", "post_office", "transit", "park", "community"}
 FORMATS = {"in_person", "online", "both"}
 YES_NO = {"yes", "no", "unknown", ""}
 
