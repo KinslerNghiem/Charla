@@ -49,6 +49,6 @@ export function meta(text: string): boolean {
 export const CANNED = {
   redirect: {
     en: "Let's get back to the scene. What do you need today?",
-    es: 'Volvamos a la escena. ¿Qué necesitas hoy?',
+    es: 'Volvamos a la escena. ¿Qué necesita hoy?',
   },
 }

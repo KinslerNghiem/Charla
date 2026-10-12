@@ -3,21 +3,42 @@
   "place_type": "restaurant",
   "kid": true,
   "channel": "counter",
-  "title": { "en": "Order at the taquería", "es": "Pedir en la taquería" },
+  "title": {
+    "en": "Order at the taquería",
+    "es": "Pedir en la taquería"
+  },
   "roles": {
-    "partner": { "en": "person at the counter", "es": "persona del mostrador" },
-    "learner": { "en": "kid ordering food", "es": "niño o niña que pide comida" }
+    "partner": {
+      "en": "person at the counter",
+      "es": "persona del mostrador"
+    },
+    "learner": {
+      "en": "kid ordering food",
+      "es": "niño o niña que pide comida"
+    }
   },
   "goal": {
     "en": "Order two tacos and a drink by yourself, and say whether it is for here or to go.",
-    "es": "Pedir dos tacos y una bebida tú solo, y decir si es para aquí o para llevar."
+    "es": "Pedir dos tacos y una bebida sin ayuda, y decir si es para aquí o para llevar."
   },
   "must_use": [
-    { "en": "Two chicken tacos, please.", "es": "Dos tacos de pollo, por favor." },
-    { "en": "A horchata, please.", "es": "Una horchata, por favor." },
-    { "en": "For here, please.", "es": "Para aquí, por favor." }
+    {
+      "en": "Two chicken tacos, please.",
+      "es": "Dos tacos de pollo, por favor."
+    },
+    {
+      "en": "A horchata, please.",
+      "es": "Una horchata, por favor."
+    },
+    {
+      "en": "For here, please.",
+      "es": "Para aquí, por favor."
+    }
   ],
-  "expect": { "en": "Anything to drink?", "es": "¿Algo de tomar?" },
+  "expect": {
+    "en": "Anything to drink?",
+    "es": "¿Algo de tomar?"
+  },
   "success": {
     "en": "You get your food and your drink and say thank you.",
     "es": "Recibes tu comida y tu bebida y das las gracias."
@@ -30,87 +51,204 @@
     "start": "s1",
     "nodes": {
       "s1": {
-        "partner": { "en": "Hi! What would you like?", "es": "¡Hola! ¿Qué te doy?" },
+        "partner": {
+          "en": "Hi! What would you like?",
+          "es": "¡Hola! ¿Qué te doy?"
+        },
         "choices": [
           {
-            "text": { "en": "Two chicken tacos, please.", "es": "Dos tacos de pollo, por favor." },
+            "text": {
+              "en": "Two chicken tacos, please.",
+              "es": "Dos pollo tacos, por favor."
+            },
+            "picture": "🌮",
+            "for": "es",
+            "tip": {
+              "en": "The filling comes after, with «de»: \"Dos tacos de pollo, por favor.\"",
+              "es": "El relleno va después, con «de»: \"Dos tacos de pollo, por favor.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Two chicken tacos, please.",
+              "es": "Dos tacos de pollo, por favor."
+            },
             "picture": "🌮",
             "best": true,
             "next": "s2"
           },
           {
-            "text": { "en": "Tacos.", "es": "Tacos." },
+            "text": {
+              "en": "Tacos.",
+              "es": "Tacos."
+            },
             "picture": "💬",
-            "tip": { "en": "Say how many, and add \"please\".", "es": "Di cuántos, y agrega \"please\"." },
+            "for": "en",
+            "tip": {
+              "en": "Say how many, and add \"please\".",
+              "es": "Di cuántos, y agrega \"please\"."
+            },
             "next": null
           },
           {
-            "text": { "en": "A bicycle, please.", "es": "Una bicicleta, por favor." },
+            "text": {
+              "en": "A bicycle, please.",
+              "es": "Una bicicleta, por favor."
+            },
             "picture": "🚲",
-            "tip": { "en": "They sell tacos, not bicycles!", "es": "¡Venden tacos, no bicicletas!" },
+            "for": "en",
+            "tip": {
+              "en": "They sell tacos, not bicycles!",
+              "es": "¡Venden tacos, no bicicletas!"
+            },
             "next": null
           }
         ]
       },
       "s2": {
-        "partner": { "en": "Two chicken tacos. Anything to drink?", "es": "Dos tacos de pollo. ¿Algo de tomar?" },
+        "partner": {
+          "en": "Two chicken tacos. Anything to drink?",
+          "es": "Dos tacos de pollo. ¿Algo de tomar?"
+        },
         "choices": [
           {
-            "text": { "en": "A horchata, please.", "es": "Una horchata, por favor." },
+            "text": {
+              "en": "A horchata, please.",
+              "es": "Una horchata, por favor."
+            },
             "picture": "🥤",
             "best": true,
             "next": "s3"
           },
           {
-            "text": { "en": "Water, please.", "es": "Agua, por favor." },
+            "text": {
+              "en": "Water, please.",
+              "es": "Agua, por favor."
+            },
             "picture": "💧",
             "best": true,
             "next": "s3"
           },
           {
-            "text": { "en": "Two more bicycles.", "es": "Dos bicicletas más." },
+            "text": {
+              "en": "Two more bicycles.",
+              "es": "Dos bicicletas más."
+            },
             "picture": "🚲",
-            "tip": { "en": "They asked about a drink.", "es": "Preguntaron por una bebida." },
+            "for": "en",
+            "tip": {
+              "en": "They asked about a drink.",
+              "es": "Preguntaron por una bebida."
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "A horchata, please.",
+              "es": "Un horchata, por favor."
+            },
+            "picture": "🥤",
+            "for": "es",
+            "tip": {
+              "en": "«Horchata» is feminine: \"Una horchata, por favor.\"",
+              "es": "«Horchata» es femenino: \"Una horchata, por favor.\""
+            },
             "next": null
           }
         ]
       },
       "s3": {
-        "partner": { "en": "That's eight dollars. For here or to go?", "es": "Son ocho dólares. ¿Para aquí o para llevar?" },
+        "partner": {
+          "en": "That's eight dollars. For here or to go?",
+          "es": "Son ocho dólares. ¿Para aquí o para llevar?"
+        },
         "choices": [
           {
-            "text": { "en": "For here, please.", "es": "Para aquí, por favor." },
+            "text": {
+              "en": "To go, please.",
+              "es": "Para ir, por favor."
+            },
+            "picture": "🛍️",
+            "for": "es",
+            "tip": {
+              "en": "\"To go\" is «para llevar»: \"Para llevar, por favor.\"",
+              "es": "«To go» es «para llevar»: \"Para llevar, por favor.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "For here, please.",
+              "es": "Para aquí, por favor."
+            },
             "picture": "🪑",
             "best": true,
             "next": "s4"
           },
           {
-            "text": { "en": "To go, please.", "es": "Para llevar, por favor." },
+            "text": {
+              "en": "To go, please.",
+              "es": "Para llevar, por favor."
+            },
             "picture": "🛍️",
             "best": true,
             "next": "s4"
           },
           {
-            "text": { "en": "Yes.", "es": "Sí." },
+            "text": {
+              "en": "Yes.",
+              "es": "Sí."
+            },
             "picture": "💬",
-            "tip": { "en": "Pick one: for here, or to go.", "es": "Elige una: para aquí, o para llevar." },
+            "for": "en",
+            "tip": {
+              "en": "Pick one: for here, or to go.",
+              "es": "Elige una: para aquí, o para llevar."
+            },
             "next": null
           }
         ]
       },
       "s4": {
-        "partner": { "en": "Here you go. Enjoy!", "es": "Aquí tienes. ¡Buen provecho!" },
+        "partner": {
+          "en": "Here you go. Enjoy!",
+          "es": "Aquí tienes. ¡Buen provecho!"
+        },
         "choices": [
           {
-            "text": { "en": "Thank you!", "es": "¡Gracias!" },
+            "text": {
+              "en": "Thank you!",
+              "es": "¡Gracias!"
+            },
             "picture": "🙏",
             "best": true,
             "next": null
           },
           {
-            "text": { "en": "Give me.", "es": "Dame." },
+            "text": {
+              "en": "Give me.",
+              "es": "Dame."
+            },
             "picture": "😐",
-            "tip": { "en": "Say thank you.", "es": "Da las gracias." },
+            "for": "en",
+            "tip": {
+              "en": "Say thank you.",
+              "es": "Da las gracias."
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "You too!",
+              "es": "¡Tú también!"
+            },
+            "picture": "😐",
+            "for": "es",
+            "tip": {
+              "en": "«Buen provecho» is a wish for you; the answer is thanks: \"¡Gracias!\"",
+              "es": "«Buen provecho» es un deseo para ti; la respuesta es dar las gracias: \"¡Gracias!\""
+            },
             "next": null
           }
         ]

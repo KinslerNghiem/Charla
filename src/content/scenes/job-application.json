@@ -31,7 +31,7 @@
     },
     {
       "en": "How do I apply?",
-      "es": "¿Cómo puedo solicitar el puesto?"
+      "es": "¿Cómo hago la solicitud?"
     }
   ],
   "expect": {
@@ -58,6 +58,32 @@
           {
             "text": {
               "en": "Hi. Are you hiring right now?",
+              "es": "Hola. ¿Están hiring ahora?"
+            },
+            "picture": "📋",
+            "for": "es",
+            "tip": {
+              "en": "«Contratar»: \"¿Están contratando ahora?\"",
+              "es": "«Contratar»: \"¿Están contratando ahora?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Hi. Do you have a job for me?",
+              "es": "Hola. ¿Tienes trabajo para mí?"
+            },
+            "picture": "😟",
+            "for": "es",
+            "tip": {
+              "en": "«Tienes» is «tú», and the question puts the manager on the spot. The usual way: \"¿Están contratando ahora?\"",
+              "es": "«Tienes» es de «tú», y la pregunta pone a la gerente en un aprieto. Lo normal: \"¿Están contratando ahora?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Hi. Are you hiring right now?",
               "es": "Hola. ¿Están contratando ahora?"
             },
             "picture": "📋",
@@ -70,6 +96,7 @@
               "es": "Hola. ¿Tiene trabajo?"
             },
             "picture": "🔨",
+            "for": "en",
             "tip": {
               "en": "\"Do you have work?\" asks about a task to do. For a job, ask \"Are you hiring right now?\"",
               "es": "«Do you have work?» pregunta por una tarea. Para un empleo, pregunta \"Are you hiring right now?\""
@@ -82,9 +109,10 @@
               "es": "Necesito un trabajo."
             },
             "picture": "😟",
+            "for": "en",
             "tip": {
               "en": "True, but it puts the manager on the spot. The usual question is \"Are you hiring right now?\"",
-              "es": "Es cierto, pero pone a la gerente en un aprieto. La pregunta normal es \"Are you hiring right now?\""
+              "es": "Es cierto, pero pone a la gerente en un aprieto. Lo normal es preguntar \"Are you hiring right now?\""
             },
             "next": null
           }
@@ -93,7 +121,7 @@
       "s2": {
         "partner": {
           "en": "We are, for part-time cashiers. Have you worked in a store before?",
-          "es": "Sí, cajeros de medio tiempo. ¿Ha trabajado en una tienda antes?"
+          "es": "Sí, buscamos cajeros de medio tiempo. ¿Ha trabajado en una tienda antes?"
         },
         "choices": [
           {
@@ -120,9 +148,23 @@
               "es": "Sí, tengo dos años trabajando en un súper."
             },
             "picture": "🔁",
+            "for": "en",
             "tip": {
               "en": "\"I have two years working\" is the Spanish shape. Say \"I worked two years at a grocery store.\"",
               "es": "«I have two years working» es la forma del español. Di \"I worked two years at a grocery store.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Yes, I have worked in a store for two years.",
+              "es": "Sí, yo he trabajado en una tienda para dos años."
+            },
+            "picture": "🛒",
+            "for": "es",
+            "tip": {
+              "en": "A length of time is «durante», or nothing at all; never «para»: \"Sí, dos años en un supermercado.\"",
+              "es": "Un periodo de tiempo va con «durante», o sin nada; nunca «para»: \"Sí, dos años en un supermercado.\""
             },
             "next": null
           }
@@ -136,10 +178,24 @@
         "choices": [
           {
             "text": {
+              "en": "I can work evenings and weekends.",
+              "es": "Puedo trabajar en las noches y los fin de semanas."
+            },
+            "picture": "📆",
+            "for": "es",
+            "tip": {
+              "en": "The plural is «fines de semana»: \"los fines de semana\". («En las noches» is fine.)",
+              "es": "El plural es «fines de semana»: \"los fines de semana\". («En las noches» está bien.)"
+            },
+            "next": null
+          },
+          {
+            "text": {
               "en": "I can work in the afternoons and in the ends of week.",
               "es": "Puedo trabajar en las tardes y en los finales de semana."
             },
             "picture": "📆",
+            "for": "en",
             "tip": {
               "en": "\"Weekends\" is one word, and no \"in the\" before evenings: \"I can work evenings and weekends.\"",
               "es": "«Weekends» es una sola palabra, y no lleva «in the» antes de evenings: \"I can work evenings and weekends.\""
@@ -161,6 +217,7 @@
               "es": "Lo que usted quiera."
             },
             "picture": "🤷",
+            "for": "en",
             "tip": {
               "en": "Managers need real hours to plan a schedule. Say when you can: \"I can work evenings and weekends.\"",
               "es": "Los gerentes necesitan horas reales para armar el horario. Di cuándo puedes: \"I can work evenings and weekends.\""
@@ -181,6 +238,7 @@
               "es": "¿Cómo yo solicito?"
             },
             "picture": "❓",
+            "for": "en",
             "tip": {
               "en": "Questions need \"do\": \"How do I apply?\"",
               "es": "Las preguntas necesitan «do»: \"How do I apply?\""
@@ -190,7 +248,7 @@
           {
             "text": {
               "en": "How do I apply?",
-              "es": "¿Cómo puedo solicitar el puesto?"
+              "es": "¿Cómo hago la solicitud?"
             },
             "picture": "💻",
             "best": true,
@@ -202,9 +260,23 @@
               "es": "¿Me puede dar el trabajo ahora?"
             },
             "picture": "😅",
+            "for": "en",
             "tip": {
               "en": "Hiring goes through the application, even when the manager likes you. Ask \"How do I apply?\"",
               "es": "La contratación pasa por la solicitud, aunque le caigas bien a la gerente. Pregunta \"How do I apply?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "How do I apply?",
+              "es": "¿Cómo me aplico?"
+            },
+            "picture": "❓",
+            "for": "es",
+            "tip": {
+              "en": "«Aplicarse» means to apply yourself to a task. Say \"¿Cómo hago la solicitud?\" (or, as many people say here, \"¿Cómo aplico?\").",
+              "es": "«Aplicarse» es esforzarse en algo. Di \"¿Cómo hago la solicitud?\" (o, como dice mucha gente aquí, \"¿Cómo aplico?\")."
             },
             "next": null
           }
@@ -213,13 +285,26 @@
       "s5": {
         "partner": {
           "en": "Go to our website, click Careers, and put my name, Dana, as the referral.",
-          "es": "Entre a nuestro sitio web, haga clic en Careers y ponga mi nombre, Dana, como referencia."
+          "es": "Entre a nuestro sitio web, haga clic en Careers y ponga mi nombre, Dana, en la parte de referido."
         },
         "choices": [
           {
             "text": {
+              "en": "Thanks. What's your name again?",
+              "es": "Gracias. ¿Cuál es su nombre otra vez?"
+            },
+            "picture": "🤔",
+            "for": "es",
+            "tip": {
+              "en": "She just said it: Dana. Repeat it back and say when you will apply: \"Gracias, Dana. Hago la solicitud esta noche.\"",
+              "es": "Lo acaba de decir: Dana. Repítelo y di cuándo vas a solicitar: \"Gracias, Dana. Hago la solicitud esta noche.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
               "en": "Thank you, Dana. I'll apply tonight.",
-              "es": "Gracias, Dana. Lo solicito esta noche."
+              "es": "Gracias, Dana. Hago la solicitud esta noche."
             },
             "picture": "🙏",
             "best": true,
@@ -231,6 +316,7 @@
               "es": "Gracias. Yo solicito esta noche."
             },
             "picture": "🌃",
+            "for": "en",
             "tip": {
               "en": "\"Tonight\" is one word, and a plan takes \"I'll\": \"I'll apply tonight.\"",
               "es": "«Tonight» es una sola palabra, y un plan lleva «I'll»: \"I'll apply tonight.\""

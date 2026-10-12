@@ -2,21 +2,42 @@
   "id": "electric-bill-call",
   "place_type": "home",
   "channel": "phone",
-  "title": { "en": "Call about a high electric bill", "es": "Llamar por un recibo de luz muy alto" },
+  "title": {
+    "en": "Call about a high electric bill",
+    "es": "Llamar por un recibo de luz muy alto"
+  },
   "roles": {
-    "partner": { "en": "customer service agent at the electric company", "es": "agente de servicio al cliente de la compañía de luz" },
-    "learner": { "en": "customer whose bill almost doubled this month", "es": "cliente cuyo recibo casi se duplicó este mes" }
+    "partner": {
+      "en": "customer service agent at the electric company",
+      "es": "agente de servicio al cliente de la compañía de luz"
+    },
+    "learner": {
+      "en": "customer whose bill almost doubled this month",
+      "es": "cliente cuyo recibo casi se duplicó este mes"
+    }
   },
   "goal": {
     "en": "Say why you're calling, get through the account check, ask about a payment plan, and have the agreement sent to your phone.",
-    "es": "Decir por qué llamas, pasar la verificación de la cuenta, preguntar por un plan de pagos y que te manden el acuerdo al teléfono."
+    "es": "Decir por qué llamas, pasar la verificación de la cuenta, preguntar por un plan de pagos y pedir que te manden el acuerdo por mensaje."
   },
   "must_use": [
-    { "en": "I'm calling about my bill.", "es": "Llamo por mi recibo." },
-    { "en": "Can I set up a payment plan?", "es": "¿Puedo hacer un plan de pagos?" },
-    { "en": "Could you repeat the amount, please?", "es": "¿Me repite la cantidad, por favor?" }
+    {
+      "en": "I'm calling about my bill.",
+      "es": "Llamo por mi recibo."
+    },
+    {
+      "en": "Can I set up a payment plan?",
+      "es": "¿Puedo hacer un plan de pagos?"
+    },
+    {
+      "en": "Could you repeat the amount, please?",
+      "es": "¿Me repite la cantidad, por favor?"
+    }
   ],
-  "expect": { "en": "Can I have your account number, or the name and address on the account?", "es": "¿Me da su número de cuenta, o el nombre y la dirección de la cuenta?" },
+  "expect": {
+    "en": "Can I have your account number, or the name and address on the account?",
+    "es": "¿Me da su número de cuenta, o el nombre y la dirección de la cuenta?"
+  },
   "success": {
     "en": "The agent found your account, explained the budget plan, and you have the new monthly amount by text.",
     "es": "El agente encontró tu cuenta, te explicó el plan de pagos y tienes la nueva cantidad mensual por mensaje."
@@ -29,139 +50,337 @@
     "start": "s1",
     "nodes": {
       "s1": {
-        "partner": { "en": "Thank you for calling customer service, this is Jordan. How can I help you today?", "es": "Gracias por llamar a servicio al cliente, habla Jordan. ¿En qué le puedo ayudar hoy?" },
+        "partner": {
+          "en": "Thank you for calling customer service, this is Jordan. How can I help you today?",
+          "es": "Gracias por llamar a servicio al cliente, habla Jordan. ¿En qué le puedo ayudar hoy?"
+        },
         "choices": [
           {
-            "text": { "en": "Hi. I'm calling for my bill because it comes very high this month.", "es": "Hola. Llamo por mi recibo porque este mes viene muy alto." },
+            "text": {
+              "en": "Hi. I'm calling about my bill. This month it's almost double.",
+              "es": "Hola. Estoy llamando sobre mi bill. Este mes es casi doble."
+            },
             "picture": "📈",
-            "tip": { "en": "\"Calling for\" means on behalf of someone; the topic takes \"about\". And a bill \"is\" high, it doesn't \"come\" high: \"I'm calling about my bill. It's very high this month.\"", "es": "«Calling for» es llamar de parte de alguien; el tema lleva «about». Y un recibo «is» high, no «comes» high: \"I'm calling about my bill. It's very high this month.\"" },
+            "for": "es",
+            "tip": {
+              "en": "«Recibo» (or «factura»), and «el doble» takes «el»: \"Llamo por mi recibo. Este mes es casi el doble.\"",
+              "es": "«Recibo» (o «factura»), y «el doble» lleva «el»: \"Llamo por mi recibo. Este mes es casi el doble.\""
+            },
             "next": null
           },
           {
-            "text": { "en": "Hi. I'm calling about my bill. This month it's almost double.", "es": "Hola. Llamo por mi recibo. Este mes es casi el doble." },
+            "text": {
+              "en": "Hi. I'm calling for my bill because it comes very high this month.",
+              "es": "Hola. Llamo por mi recibo porque este mes viene muy alto."
+            },
+            "picture": "📈",
+            "for": "en",
+            "tip": {
+              "en": "\"Calling for\" means on behalf of someone; the topic takes \"about\". And a bill \"is\" high, it doesn't \"come\" high: \"I'm calling about my bill. It's very high this month.\"",
+              "es": "«Calling for» es llamar de parte de alguien; el tema lleva «about». Y un recibo «is» high, no «comes» high: \"I'm calling about my bill. It's very high this month.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Hi. I'm calling about my bill. This month it's almost double.",
+              "es": "Hola. Llamo por mi recibo. Este mes es casi el doble."
+            },
             "picture": "📞",
             "best": true,
             "next": "s2"
           },
           {
-            "text": { "en": "Hi. I want to complain. You are charging me too much money.", "es": "Hola. Quiero quejarme. Me están cobrando demasiado dinero." },
+            "text": {
+              "en": "Hi. I want to complain. You are charging me too much money.",
+              "es": "Hola. Quiero quejarme. Me están cobrando demasiado dinero."
+            },
             "picture": "😠",
-            "tip": { "en": "Maybe, but starting with a complaint puts the agent on defense. Name the topic first and they'll look into it: \"I'm calling about my bill.\"", "es": "Quizá, pero empezar con una queja pone al agente a la defensiva. Primero di el tema y lo van a revisar: \"I'm calling about my bill.\"" },
+            "for": "en",
+            "tip": {
+              "en": "Maybe, but starting with a complaint puts the agent on defense. Name the topic first and they'll look into it: \"I'm calling about my bill.\"",
+              "es": "Quizá, pero empezar con una queja pone al agente a la defensiva. Primero di el tema y lo van a revisar: \"I'm calling about my bill.\""
+            },
             "next": null
           }
         ]
       },
       "s2": {
-        "partner": { "en": "I can look into that. Can I have your account number, or the name and address on the account?", "es": "Con gusto lo reviso. ¿Me da su número de cuenta, o el nombre y la dirección de la cuenta?" },
+        "partner": {
+          "en": "I can look into that. Can I have your account number, or the name and address on the account?",
+          "es": "Con gusto lo reviso. ¿Me da su número de cuenta, o el nombre y la dirección de la cuenta?"
+        },
         "choices": [
           {
-            "text": { "en": "Yes. I live in the street Main, number 123, in Aurora.", "es": "Sí. Vivo en la calle Main, número 123, en Aurora." },
+            "text": {
+              "en": "Yes. I live in the street Main, number 123, in Aurora.",
+              "es": "Sí. Vivo en la calle Main, número 123, en Aurora."
+            },
             "picture": "📍",
-            "tip": { "en": "In English the number comes first and \"Street\" goes after the name: \"123 Main Street\". Also give the name on the account. (In this rehearsal, always use a made-up address like this one, never your real one.)", "es": "En inglés el número va primero y «Street» va después del nombre: «123 Main Street». Da también el nombre de la cuenta. (En este ensayo usa siempre una dirección inventada como esta, nunca la tuya de verdad.)" },
+            "for": "en",
+            "tip": {
+              "en": "In English the number comes first and \"Street\" goes after the name: \"123 Main Street\". Also give the name on the account. (In this rehearsal, always use a made-up address like this one, never your real one.)",
+              "es": "En inglés el número va primero y «Street» va después del nombre: «123 Main Street». Da también el nombre de la cuenta. (En este ensayo usa siempre una dirección inventada como esta, nunca la tuya de verdad.)"
+            },
             "next": null
           },
           {
-            "text": { "en": "I don't have the number with me. It's under Rosa Herrera, 123 Main Street, apartment 4, Aurora.", "es": "No tengo el número a la mano. Está a nombre de Rosa Herrera, 123 Main Street, departamento 4, Aurora." },
+            "text": {
+              "en": "I don't have the number with me. It's under Rosa Herrera, 123 Main Street, apartment 4, Aurora.",
+              "es": "No tengo el número a la mano. Está a nombre de Rosa Herrera, 123 Main Street, apartamento 4, Aurora."
+            },
             "picture": "🏠",
             "best": true,
             "next": "s3"
           },
           {
-            "text": { "en": "I don't know my number. Can you search with my social security?", "es": "No sé mi número. ¿Puede buscar con mi seguro social?" },
+            "text": {
+              "en": "I don't know my number. Can you search with my social security?",
+              "es": "No sé mi número. ¿Puede buscar con mi seguro social?"
+            },
             "picture": "🔒",
-            "tip": { "en": "Never offer your Social Security number on a call you made about a bill; they don't need it. The name and address on the account are enough.", "es": "Nunca ofrezcas tu número de seguro social en una llamada por un recibo; no lo necesitan. Con el nombre y la dirección de la cuenta basta." },
+            "for": "en",
+            "tip": {
+              "en": "Never offer your Social Security number on a call you made about a bill; they don't need it. The name and address on the account are enough.",
+              "es": "Nunca ofrezcas tu número de seguro social en una llamada por un recibo; no lo necesitan. Con el nombre y la dirección de la cuenta basta."
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "I don't have the number with me. It's under Rosa Herrera, 123 Main Street, apartment 4, Aurora.",
+              "es": "No tengo el número conmigo. Es bajo Rosa Herrera, 123 Main Street, apartamento 4, Aurora."
+            },
+            "picture": "🏠",
+            "for": "es",
+            "tip": {
+              "en": "«Bajo» is physically under something. An account is «a nombre de»: \"Está a nombre de Rosa Herrera.\" («Conmigo» is fine; «a la mano» is the everyday phrase.)",
+              "es": "«Bajo» es debajo de algo. Una cuenta está «a nombre de»: \"Está a nombre de Rosa Herrera.\" («Conmigo» está bien; «a la mano» es lo que se dice a diario.)"
+            },
             "next": null
           }
         ]
       },
       "s3": {
-        "partner": { "en": "Got it, I see the account. Your bill this month is two hundred forty-one dollars and sixteen cents. July was a lot hotter, so the air conditioning ran more.", "es": "Listo, ya veo la cuenta. Su recibo de este mes es de doscientos cuarenta y un dólares con dieciséis centavos. Julio estuvo mucho más caluroso, así que el aire acondicionado trabajó más." },
+        "partner": {
+          "en": "Got it, I see the account. Your bill this month is two hundred forty-one dollars and sixteen cents. July was a lot hotter, so the air conditioning ran more.",
+          "es": "Listo, ya veo la cuenta. Su recibo de este mes es de doscientos cuarenta y un dólares con dieciséis centavos. Julio estuvo mucho más caluroso, así que el aire acondicionado trabajó más."
+        },
         "choices": [
           {
-            "text": { "en": "Two hundred fourteen? That's not possible, I don't use the air.", "es": "¿Doscientos catorce? No es posible, no uso el aire." },
+            "text": {
+              "en": "Two hundred fourteen? That's not possible, I don't use the air.",
+              "es": "¿Doscientos catorce? No es posible, no uso el aire."
+            },
             "picture": "😮",
-            "tip": { "en": "You heard fourteen; they said forty-one. Numbers on the phone are the easiest thing to mishear, so ask: \"Could you repeat the amount, please?\"", "es": "Oíste catorce; dijeron cuarenta y uno. Los números por teléfono son lo más fácil de oír mal, así que pregunta: \"Could you repeat the amount, please?\"" },
+            "for": "es",
+            "tip": {
+              "en": "You heard catorce; they said cuarenta y uno. Numbers on the phone are the easiest thing to mishear, so ask: \"¿Me repite la cantidad, por favor?\"",
+              "es": "Oíste catorce; dijeron cuarenta y uno. Los números por teléfono son lo más fácil de oír mal, así que pregunta: \"¿Me repite la cantidad, por favor?\""
+            },
             "next": null
           },
           {
-            "text": { "en": "Sorry, could you repeat the amount, please?", "es": "Perdón, ¿me repite la cantidad, por favor?" },
+            "text": {
+              "en": "Two hundred fourteen? That's not possible, I don't use the air.",
+              "es": "¿Doscientos catorce? No es posible, no uso el aire."
+            },
+            "picture": "😮",
+            "for": "en",
+            "tip": {
+              "en": "You heard fourteen; they said forty-one. Numbers on the phone are the easiest thing to mishear, so ask: \"Could you repeat the amount, please?\"",
+              "es": "Oíste catorce; dijeron cuarenta y uno. Los números por teléfono son lo más fácil de oír mal, así que pregunta: \"Could you repeat the amount, please?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Sorry, could you repeat the amount, please?",
+              "es": "Perdón, ¿me repite la cantidad, por favor?"
+            },
             "picture": "🔁",
             "best": true,
             "next": "s4"
           },
           {
-            "text": { "en": "Okay, I understand. Can you repeat me the quantity?", "es": "Bueno, entiendo. ¿Me puede repetir la cantidad?" },
+            "text": {
+              "en": "Okay, I understand. Can you repeat me the quantity?",
+              "es": "Bueno, entiendo. ¿Me puede repetir la cantidad?"
+            },
             "picture": "🔢",
-            "tip": { "en": "Two Spanish patterns: \"repeat me\" (English says \"repeat it for me\" or just \"repeat\") and \"quantity\" for cantidad de dinero, which is \"amount\": \"Could you repeat the amount, please?\"", "es": "Dos calcos del español: «repeat me» (en inglés es «repeat it for me» o solo «repeat») y «quantity» para cantidad de dinero, que es «amount»: \"Could you repeat the amount, please?\"" },
+            "for": "en",
+            "tip": {
+              "en": "Two Spanish patterns: \"repeat me\" (English says \"repeat it for me\" or just \"repeat\") and \"quantity\" for cantidad de dinero, which is \"amount\": \"Could you repeat the amount, please?\"",
+              "es": "Dos calcos del español: «repeat me» (en inglés es «repeat it for me» o solo «repeat») y «quantity» para cantidad de dinero, que es «amount»: \"Could you repeat the amount, please?\""
+            },
             "next": null
           }
         ]
       },
       "s4": {
-        "partner": { "en": "Of course. Two hundred forty-one dollars and sixteen cents. Two, four, one, point one, six.", "es": "Claro. Doscientos cuarenta y un dólares con dieciséis centavos. Dos, cuatro, uno, punto uno, seis." },
+        "partner": {
+          "en": "Of course. Two hundred forty-one dollars and sixteen cents. Two, four, one, point one, six.",
+          "es": "Claro. Doscientos cuarenta y un dólares con dieciséis centavos. Dos, cuatro, uno, punto uno, seis."
+        },
         "choices": [
           {
-            "text": { "en": "Thank you. That's a lot for us right now. Can I set up a payment plan?", "es": "Gracias. Es mucho para nosotros ahora. ¿Puedo hacer un plan de pagos?" },
+            "text": {
+              "en": "Thank you. That's a lot for us right now. Can I set up a payment plan?",
+              "es": "Gracias. Es mucho para nosotros ahora. ¿Puedo hacer un plan de pagos?"
+            },
             "picture": "📋",
             "best": true,
             "next": "s5"
           },
           {
-            "text": { "en": "Thank you. It's a lot. Can I make a plan of payments?", "es": "Gracias. Es mucho. ¿Puedo hacer un plan de pagos?" },
+            "text": {
+              "en": "Thank you. It's a lot. Can I make a plan of payments?",
+              "es": "Gracias. Es mucho. ¿Puedo hacer un plan de pagos?"
+            },
             "picture": "💳",
-            "tip": { "en": "Very close. The set phrase is \"payment plan\" and you \"set up\" a plan: \"Can I set up a payment plan?\"", "es": "Muy cerca. La frase hecha es «payment plan» y un plan se «set up»: \"Can I set up a payment plan?\"" },
+            "for": "en",
+            "tip": {
+              "en": "Very close. The set phrase is \"payment plan\" and you \"set up\" a plan: \"Can I set up a payment plan?\"",
+              "es": "Muy cerca. La frase hecha es «payment plan» y un plan se «set up»: \"Can I set up a payment plan?\""
+            },
             "next": null
           },
           {
-            "text": { "en": "Thank you. I can't pay this, I'm not going to pay it.", "es": "Gracias. No puedo pagar esto, no lo voy a pagar." },
+            "text": {
+              "en": "Thank you. I can't pay this, I'm not going to pay it.",
+              "es": "Gracias. No puedo pagar esto, no lo voy a pagar."
+            },
             "picture": "🚫",
-            "tip": { "en": "Saying you won't pay starts a different conversation, about shutoffs. Ask for help instead; they have a plan for exactly this: \"Can I set up a payment plan?\"", "es": "Decir que no vas a pagar empieza otra conversación, la de los cortes. Mejor pide ayuda; tienen un plan justo para esto: \"Can I set up a payment plan?\"" },
+            "for": "en",
+            "tip": {
+              "en": "Saying you won't pay starts a different conversation, about shutoffs. Ask for help instead; they have a plan for exactly this: \"Can I set up a payment plan?\"",
+              "es": "Decir que no vas a pagar empieza otra conversación, la de los cortes de servicio. Mejor pide ayuda; tienen un plan justo para esto: \"Can I set up a payment plan?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Thank you. It's too much. Can I pay in payments?",
+              "es": "Gracias. Es demasiado. ¿Puedo pagar en pagos?"
+            },
+            "picture": "💳",
+            "for": "es",
+            "tip": {
+              "en": "«Pagar en pagos» repeats itself. Ask for the plan by name: \"¿Puedo hacer un plan de pagos?\" (or «pagar en cuotas»).",
+              "es": "«Pagar en pagos» se repite. Pide el plan por su nombre: \"¿Puedo hacer un plan de pagos?\" (o «pagar en cuotas»)."
+            },
             "next": null
           }
         ]
       },
       "s5": {
-        "partner": { "en": "Yes. We have a budget plan: we average your last twelve months, so you pay about the same amount every month. For you that's about one hundred thirty dollars. Would you like to start that today?", "es": "Sí. Tenemos un plan de presupuesto: promediamos sus últimos doce meses y paga más o menos lo mismo cada mes. En su caso son unos ciento treinta dólares. ¿Quiere empezarlo hoy?" },
+        "partner": {
+          "en": "Yes. We have a budget plan: we average your last twelve months, so you pay about the same amount every month. For you that's about one hundred thirty dollars. Would you like to start that today?",
+          "es": "Sí. Tenemos un plan de presupuesto: promediamos sus últimos doce meses y paga más o menos lo mismo cada mes. En su caso son unos ciento treinta dólares. ¿Quiere empezarlo hoy?"
+        },
         "choices": [
           {
-            "text": { "en": "Yes. And the two hundred forty-one, I don't pay it now?", "es": "Sí. ¿Y los doscientos cuarenta y uno, no los pago ahora?" },
-            "picture": "🤔",
-            "tip": { "en": "Good question, and the agent will explain how this month gets folded in. Ask it as an English question: \"Do I still pay this month's bill?\" Then ask for it in writing.", "es": "Buena pregunta, y el agente te explicará cómo entra este mes. Hazla con forma de pregunta en inglés: \"Do I still pay this month's bill?\" Luego pídelo por escrito." },
+            "text": {
+              "en": "Yes, please. Send me the details by text.",
+              "es": "Sí, por favor. Mándame los detalles por mensaje."
+            },
+            "picture": "📱",
+            "for": "es",
+            "tip": {
+              "en": "«Mándame» is «tú», and an order. With the agent, ask: \"¿Me puede mandar los detalles por mensaje?\"",
+              "es": "«Mándame» es de «tú», y es una orden. Con el agente, pregunta: \"¿Me puede mandar los detalles por mensaje?\""
+            },
             "next": null
           },
           {
-            "text": { "en": "Yes, please. Can you send me the details by text?", "es": "Sí, por favor. ¿Me puede mandar los detalles por mensaje?" },
+            "text": {
+              "en": "Yes. And the two hundred forty-one, I don't pay it now?",
+              "es": "Sí. ¿Y los doscientos cuarenta y uno, no los pago ahora?"
+            },
+            "picture": "🤔",
+            "for": "en",
+            "tip": {
+              "en": "Good question, and the agent will explain how this month gets folded in. Ask it as an English question: \"Do I still pay this month's bill?\" Then ask for it in writing.",
+              "es": "Buena pregunta, y el agente te explicará cómo se incluye el recibo de este mes. Hazla con forma de pregunta en inglés: \"Do I still pay this month's bill?\" Luego pídelo por escrito."
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Yes, please. Can you send me the details by text?",
+              "es": "Sí, por favor. ¿Me puede mandar los detalles por mensaje?"
+            },
             "picture": "📱",
             "best": true,
             "next": "s6"
           },
           {
-            "text": { "en": "Yes. Send me the paper to my house, please.", "es": "Sí. Mándeme el papel a mi casa, por favor." },
+            "text": {
+              "en": "Yes. Send me the paper to my house, please.",
+              "es": "Sí. Mándeme el papel a mi casa, por favor."
+            },
             "picture": "✉️",
-            "tip": { "en": "Mail works, but it takes a week. A text arrives while you're on the call, and it's your proof: \"Can you send me the details by text?\"", "es": "Por correo funciona, pero tarda una semana. Un mensaje llega mientras estás en la llamada, y es tu prueba: \"Can you send me the details by text?\"" },
+            "for": "en",
+            "tip": {
+              "en": "Mail works, but it takes a week. A text arrives while you're on the call, and it's your proof: \"Can you send me the details by text?\"",
+              "es": "Por correo funciona, pero tarda una semana. Un mensaje llega mientras estás en la llamada, y es tu prueba: \"Can you send me the details by text?\""
+            },
             "next": null
           }
         ]
       },
       "s6": {
-        "partner": { "en": "Done. You'll get a text in a minute with the plan and the new amount. Anything else today?", "es": "Listo. En un minuto le llega un mensaje con el plan y la nueva cantidad. ¿Algo más por hoy?" },
+        "partner": {
+          "en": "Done. You'll get a text in a minute with the plan and the new amount. Anything else today?",
+          "es": "Listo. En un minuto le llega un mensaje con el plan y la nueva cantidad. ¿Algo más por hoy?"
+        },
         "choices": [
           {
-            "text": { "en": "No, that's all. Thank you for your help, Jordan.", "es": "No, eso es todo. Gracias por su ayuda, Jordan." },
+            "text": {
+              "en": "No, that's all. Thank you for your help, Jordan.",
+              "es": "No, eso es todo. Gracias por su ayuda, Jordan."
+            },
             "picture": "🙏",
             "best": true,
             "next": null
           },
           {
-            "text": { "en": "Yes, thank you, that's all, bye.", "es": "Sí, gracias, eso es todo, adiós." },
+            "text": {
+              "en": "Yes, thank you, that's all, bye.",
+              "es": "Sí, gracias, eso es todo, adiós."
+            },
             "picture": "👋",
-            "tip": { "en": "\"Anything else?\" asks if you need more. If not, the answer is \"No, that's all.\" \"Yes\" keeps them waiting for another request.", "es": "«Anything else?» pregunta si necesitas algo más. Si no, la respuesta es «No, that's all». Con «yes» se quedan esperando otra cosa." },
+            "for": "en",
+            "tip": {
+              "en": "\"Anything else?\" asks if you need more. If not, the answer is \"No, that's all.\" \"Yes\" keeps them waiting for another request.",
+              "es": "«Anything else?» pregunta si necesitas algo más. Si no, la respuesta es «No, that's all». Con «yes» se quedan esperando otra cosa."
+            },
             "next": null
           },
           {
-            "text": { "en": "No. Thank you for your patience, I am very sorry for my English.", "es": "No. Gracias por su paciencia, perdón por mi inglés." },
+            "text": {
+              "en": "No. Thank you for your patience, I am very sorry for my English.",
+              "es": "No. Gracias por su paciencia, perdón por mi inglés."
+            },
             "picture": "😔",
-            "tip": { "en": "Thank them, yes; apologize, no. You just handled a bill call in English. \"Thank you for your help\" is all it needs.", "es": "Dar las gracias, sí; disculparte, no. Acabas de resolver una llamada del recibo en inglés. Con \"Thank you for your help\" basta." },
+            "for": "en",
+            "tip": {
+              "en": "Thank them, yes; apologize, no. You just handled a bill call in English. \"Thank you for your help\" is all it needs.",
+              "es": "Dar las gracias, sí; disculparte, no. Acabas de resolver una llamada sobre tu recibo en inglés. Con \"Thank you for your help\" basta."
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "No, that's all. Thank you for your help, Jordan.",
+              "es": "No, eso es todo. Gracias por tu ayuda, Jordan."
+            },
+            "picture": "🙏",
+            "for": "es",
+            "tip": {
+              "en": "A first name on a service call does not switch you to «tú». Keep «usted»: \"Gracias por su ayuda, Jordan.\"",
+              "es": "Que te digan su nombre en una llamada de servicio no cambia el trato a «tú». Sigue con «usted»: \"Gracias por su ayuda, Jordan.\""
+            },
             "next": null
           }
         ]

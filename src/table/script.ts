@@ -17,7 +17,7 @@ const ICEBREAKERS: Bi[] = [
   { en: 'What did you eat today?', es: '¿Qué comiste hoy?' },
   { en: 'Where were you born? What is it like there?', es: '¿Dónde naciste? ¿Cómo es ese lugar?' },
   { en: 'What do you do on Sundays?', es: '¿Qué haces los domingos?' },
-  { en: 'What is one thing you like about this town?', es: '¿Qué es algo que te gusta de esta ciudad?' },
+  { en: 'What is one thing you like about this town?', es: '¿Qué es lo que más te gusta de esta ciudad?' },
 ]
 
 const WRAP: Bi = { en: 'One phrase you learned today. Say it out loud.', es: 'Una frase que aprendiste hoy. Dila en voz alta.' }

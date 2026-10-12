@@ -1,7 +1,7 @@
 # Charla
 
 **Practice the conversation. Then go have it.**
-**Practica la conversación. Luego, tenla de verdad.**
+**Practica la conversación. Luego, sal a tenerla de verdad.**
 
 A conversation-practice app for Spanish speakers learning English (and the
 reverse) in Naperville and Aurora, Illinois, built for the 2026 Congressional

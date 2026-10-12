@@ -13,17 +13,17 @@
     },
     "learner": {
       "en": "adult who wants to join a class",
-      "es": "adulto que quiere entrar a una clase"
+      "es": "adulto que quiere inscribirse en una clase"
     }
   },
   "goal": {
     "en": "Ask to sign up for language classes, find out when they meet, and ask about the placement test.",
-    "es": "Pedir inscribirte en clases de idiomas, averiguar cuándo son y preguntar por el examen de nivel."
+    "es": "Inscribirte en clases de idiomas, averiguar cuándo son y preguntar por el examen de nivel."
   },
   "must_use": [
     {
       "en": "I'd like to sign up for English classes.",
-      "es": "Me gustaría inscribirme en clases de español."
+      "es": "Me gustaría inscribirme en clases de inglés."
     },
     {
       "en": "When do the classes meet?",
@@ -52,13 +52,39 @@
       "s1": {
         "partner": {
           "en": "Welcome. How can I help you?",
-          "es": "Bienvenido. ¿En qué le puedo ayudar?"
+          "es": "Hola, buenas. ¿En qué le puedo ayudar?"
         },
         "choices": [
           {
             "text": {
+              "en": "I'd like to register for English classes.",
+              "es": "Me gustaría registrar para clases de inglés."
+            },
+            "picture": "✍️",
+            "for": "es",
+            "tip": {
+              "en": "«Inscribirse» and «registrarse» take «me», and the class takes «en»: \"Me gustaría inscribirme en clases de inglés.\"",
+              "es": "«Inscribirse» y «registrarse» llevan «me», y la clase lleva «en»: \"Me gustaría inscribirme en clases de inglés.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "I want to attend English classes.",
+              "es": "Quiero atender clases de inglés."
+            },
+            "picture": "🎓",
+            "for": "es",
+            "tip": {
+              "en": "«Atender» is to look after someone. To attend a class is «asistir a», or simply «tomar»: \"Quiero tomar clases de inglés.\"",
+              "es": "«Atender» es cuidar a alguien. Ir a una clase es «asistir a», o simplemente «tomar»: \"Quiero tomar clases de inglés.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
               "en": "I'd like to sign up for English classes.",
-              "es": "Me gustaría inscribirme en clases de español."
+              "es": "Me gustaría inscribirme en clases de inglés."
             },
             "picture": "🎓",
             "best": true,
@@ -70,6 +96,7 @@
               "es": "Quiero inscribir en clases de inglés."
             },
             "picture": "✍️",
+            "for": "en",
             "tip": {
               "en": "\"Inscribe\" is to engrave, and \"classes of English\" is Spanish order. Say \"I'd like to sign up for English classes.\"",
               "es": "«Inscribe» es grabar, y «classes of English» es orden del español. Di \"I'd like to sign up for English classes.\""
@@ -82,6 +109,7 @@
               "es": "Inglés, por favor."
             },
             "picture": "💬",
+            "for": "en",
             "tip": {
               "en": "Say what you want to do: \"I'd like to sign up for English classes.\"",
               "es": "Di qué quieres hacer: \"I'd like to sign up for English classes.\""
@@ -120,9 +148,23 @@
               "es": "No, es primera vez mía."
             },
             "picture": "❓",
+            "for": "en",
             "tip": {
               "en": "English needs \"it\": \"No, it's my first time.\"",
               "es": "El inglés necesita «it»: \"No, it's my first time.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "No, it's my first time.",
+              "es": "No, es mi primer tiempo."
+            },
+            "picture": "🆕",
+            "for": "es",
+            "tip": {
+              "en": "«Tiempo» is time on the clock, or the weather. An occasion is «vez»: \"Es mi primera vez.\"",
+              "es": "«Tiempo» es el del reloj, o el clima. Una ocasión es «vez»: \"Es mi primera vez.\""
             },
             "next": null
           }
@@ -131,15 +173,29 @@
       "s3": {
         "partner": {
           "en": "Okay. The program is free for residents, and there are morning and evening groups.",
-          "es": "Bien. El programa es gratis para residentes, y hay grupos de mañana y de tarde."
+          "es": "Bien. El programa es gratis para residentes, y hay grupos en la mañana y en la tarde."
         },
         "choices": [
+          {
+            "text": {
+              "en": "When do the classes meet?",
+              "es": "¿Cuándo se encuentran las clases?"
+            },
+            "picture": "🕒",
+            "for": "es",
+            "tip": {
+              "en": "A class does not «encontrarse». Ask when it is: \"¿Cuándo son las clases?\"",
+              "es": "Una clase no «se encuentra». Pregunta cuándo es: \"¿Cuándo son las clases?\""
+            },
+            "next": null
+          },
           {
             "text": {
               "en": "What hour are the classes?",
               "es": "¿A qué hora son las clases?"
             },
             "picture": "🕒",
+            "for": "en",
             "tip": {
               "en": "\"What time\", not \"what hour\". Or ask about the days too: \"When do the classes meet?\"",
               "es": "«What time», no «what hour». O pregunta también por los días: \"When do the classes meet?\""
@@ -161,6 +217,7 @@
               "es": "¿Las clases son en la noche?"
             },
             "picture": "🌙",
+            "for": "en",
             "tip": {
               "en": "Start the question with the verb and say \"at night\": \"Are the classes at night?\" Or: \"When do the classes meet?\"",
               "es": "Empieza la pregunta con el verbo y di «at night»: \"Are the classes at night?\" O: \"When do the classes meet?\""
@@ -190,6 +247,7 @@
               "es": "¿Necesito hacer un examen, o no?"
             },
             "picture": "🔁",
+            "for": "en",
             "tip": {
               "en": "In English you \"take\" a test, and the question starts with \"Do I\": \"Do I need to take a placement test?\"",
               "es": "En inglés un examen se «take», y la pregunta empieza con «Do I»: \"Do I need to take a placement test?\""
@@ -202,9 +260,23 @@
               "es": "No quiero examen, hablo un poquito."
             },
             "picture": "😬",
+            "for": "en",
             "tip": {
               "en": "The test only finds the right class for you. Ask: \"Do I need to take a placement test?\"",
               "es": "El examen solo sirve para ponerte en la clase correcta. Pregunta: \"Do I need to take a placement test?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Evenings. Test?",
+              "es": "Las tardes. ¿Examen?"
+            },
+            "picture": "💬",
+            "for": "es",
+            "tip": {
+              "en": "Single words leave the desk guessing. Say it in sentences: \"Las tardes me quedan bien. ¿Necesito tomar un examen de nivel?\"",
+              "es": "Las palabras sueltas dejan a la recepción adivinando. Dilo en oraciones: \"Las tardes me quedan bien. ¿Necesito tomar un examen de nivel?\""
             },
             "next": null
           }
@@ -216,6 +288,19 @@
           "es": "Sí, es corto y gratis. Puede tomarlo el lunes a las 6. Traiga una identificación con foto."
         },
         "choices": [
+          {
+            "text": {
+              "en": "Perfect. I'll be here on Monday at 6. Thank you.",
+              "es": "Perfecto. Estaré aquí en lunes a las 6. Gracias."
+            },
+            "picture": "📅",
+            "for": "es",
+            "tip": {
+              "en": "Days take «el», not «en»: \"el lunes a las 6\".",
+              "es": "Los días llevan «el», no «en»: \"el lunes a las 6\"."
+            },
+            "next": null
+          },
           {
             "text": {
               "en": "Perfect. I'll be here Monday at 6. Thank you.",
@@ -231,6 +316,7 @@
               "es": "Perfecto. Estaré aquí el lunes a las 6 en punto."
             },
             "picture": "📅",
+            "for": "en",
             "tip": {
               "en": "No \"the\" before days or times in English: \"I'll be here Monday at 6.\"",
               "es": "En inglés no va «the» antes de los días ni de las horas: \"I'll be here Monday at 6.\""

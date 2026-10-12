@@ -2,7 +2,7 @@ import { readdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { SCENES, kidScenes } from '../src/content/scenes'
-import { PLACE_TYPES, isLearnerLine, validateScene } from '../src/content/scene.schema'
+import { PLACE_TYPES, choicesFor, isLearnerLine, validateScene } from '../src/content/scene.schema'
 
 const SCENES_DIR = join(__dirname, '..', 'src', 'content', 'scenes')
 
@@ -60,6 +60,35 @@ describe('scene cards', () => {
         expect(es.some((t) => t.includes(norm(p.es))), `${s.id}: "${p.es}" (es)`).toBe(true)
       }
     }
+  })
+
+  it('gives each direction its own wrong answers, and never two choices that read the same', () => {
+    for (const s of SCENES) {
+      for (const [id, n] of Object.entries(s.offline_script.nodes)) {
+        for (const dir of ['en', 'es'] as const) {
+          const shown = choicesFor(n, dir)
+          expect(shown.length, `${s.id}:${id} practicing ${dir}`).toBeGreaterThanOrEqual(2)
+          expect(shown.some((c) => c.best), `${s.id}:${id} practicing ${dir}`).toBe(true)
+          const texts = shown.map((c) => norm(c.text[dir]))
+          expect(new Set(texts).size, `${s.id}:${id} practicing ${dir}: two choices read the same`).toBe(texts.length)
+        }
+        // A wrong answer teaches one language's mistake, so it belongs to one direction.
+        for (const c of n.choices) {
+          if (!c.best) expect(c.for, `${s.id}:${id} "${c.text.en}" has no direction`).toMatch(/^(en|es)$/)
+        }
+      }
+    }
+  })
+
+  it('validator rejects a choice with an unknown direction and a node one direction cannot play', () => {
+    const base = JSON.parse(JSON.stringify(SCENES[0]))
+    const start = base.offline_script.nodes[base.offline_script.start]
+    start.choices[0].for = 'fr'
+    expect(validateScene(base).some((e) => e.includes('"for"'))).toBe(true)
+    const lonely = JSON.parse(JSON.stringify(SCENES[0]))
+    const node = lonely.offline_script.nodes[lonely.offline_script.start]
+    for (const c of node.choices) if (!c.best) c.for = 'en'
+    expect(validateScene(lonely).some((e) => e.includes('practicing es sees fewer'))).toBe(true)
   })
 
   it('show_staff_line is written for a reader of that language', () => {

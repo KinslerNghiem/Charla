@@ -85,12 +85,13 @@ export function Card() {
                 </span>
                 <span>
                   <b lang={target}>{p[target]}</b>
-                  <i>{p[nat]}</i>
+                  <i lang={nat}>{p[nat]}</i>
                 </span>
                 {listenButton(p[target])}
               </li>
             ))}
           </ol>
+          {scene.example_details && <p class="note examples">{t('card_examples')}</p>}
           {expect ? (
             <>
               <h2>{t('expected')}</h2>
@@ -98,19 +99,26 @@ export function Card() {
                 <span lang={target}>{expect[target]}</span>
                 {listenButton(expect[target])}
               </p>
-              <p class="gloss">{expect[nat]}</p>
+              <p class="gloss" lang={nat}>
+                {expect[nat]}
+              </p>
               <h2>{t('card_how_it_ends')}</h2>
               <p lang={target}>{scene.success[target]}</p>
-              <p class="gloss">{scene.success[nat]}</p>
+              <p class="gloss" lang={nat}>
+                {scene.success[nat]}
+              </p>
             </>
           ) : (
             <>
               <h2>{t('expected')}</h2>
               <p lang={target}>{scene.success[target]}</p>
-              <p class="gloss">{scene.success[nat]}</p>
+              <p class="gloss" lang={nat}>
+                {scene.success[nat]}
+              </p>
             </>
           )}
-          <h2>{t('staff_line')}</h2>
+          {/* On a call there is nobody to show a line to; it is said. */}
+          <h2>{t(scene.channel === 'phone' ? 'say_line' : 'staff_line')}</h2>
           <p class="staff-line with-voice">
             <span lang={target}>{scene.show_staff_line[target]}</span>
             {listenButton(scene.show_staff_line[target])}

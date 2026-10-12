@@ -5,7 +5,7 @@ The spreadsheet is the source of truth for the map. Every row is a place the
 team verified or a public program; staff are never named. Rows without
 coordinates are skipped loudly so nothing silently vanishes from the map.
 
-Only the columns in PUBLIC_COLS reach the client. `notes`, `source` and
+Only the columns in PUBLIC_COLS and OPTIONAL_COLS reach the client. `notes`, `source` and
 `verified_on` are team bookkeeping and stay in the CSV.
 
 The output also carries a top-level "zips" object (ZIP -> [lng, lat] centroid
@@ -47,6 +47,10 @@ PUBLIC_COLS = (
     "format",
 )
 REQUIRED_COLS = PUBLIC_COLS + ("lat", "lng", "source")
+# The three free-text columns again, in Spanish, for the Spanish interface.
+# Optional in the sheet so an older spreadsheet still builds; shipped as "".
+OPTIONAL_COLS = ("roles_es", "shifts_es", "club_schedule_es")
+SHIPPED_COLS = PUBLIC_COLS + OPTIONAL_COLS
 
 # Rough bounding box for DuPage / Will / Kane; anything outside is a typo.
 LNG_MIN, LNG_MAX = -88.6, -87.8
@@ -100,7 +104,7 @@ def main(src=SRC, out=OUT):
             if not (LAT_MIN <= lat <= LAT_MAX and LNG_MIN <= lng <= LNG_MAX):
                 errors.append("line %d (%s): coordinates outside the area" % (n, rid))
                 continue
-            props = {k: (row.get(k) or "").strip() for k in PUBLIC_COLS}
+            props = {k: (row.get(k) or "").strip() for k in SHIPPED_COLS}
             features.append(
                 {
                     "type": "Feature",

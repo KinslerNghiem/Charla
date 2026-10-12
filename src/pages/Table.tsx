@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'preact/hooks'
 import { SCENES, sceneById } from '../content/scenes'
 import { buildTableScript, phaseAt, totalSeconds } from '../table/script'
-import { lang, t } from '../i18n/lang'
+import { lang, other, t } from '../i18n/lang'
 import { isTeen } from '../gate/gate'
 import { askHelp } from '../tutor/client'
 import type { Help } from '../tutor/turn'
@@ -124,7 +124,10 @@ export function Table({ params }: { params: URLSearchParams }) {
             {Math.floor(at.remaining / 60)}:{String(at.remaining % 60).padStart(2, '0')}
           </p>
           <h2>{phase.id === 'switch' && <Icon name="swap" size={22} />}{phase.title[ui]}</h2>
-          <p class="lang-tag">{phase.lang === 'en' ? 'English' : 'Español'}</p>
+          {/* The language to speak now, named in itself, so both people at the table read it. */}
+          <p class="lang-tag" lang={phase.lang}>
+            {phase.lang === 'en' ? 'English' : 'Español'}
+          </p>
           <ul class="prompts" lang={phase.lang}>
             {phase.prompts.map((p) => (
               <li>{p[phase.lang]}</li>
@@ -146,8 +149,16 @@ export function Table({ params }: { params: URLSearchParams }) {
           </form>
           {help && (
             <div class="help-out">
-              {help.phrase && <p class="line">{help.phrase}</p>}
-              {help.literal && <p class="gloss">{help.literal}</p>}
+              {help.phrase && (
+                <p class="line" lang={phase.lang}>
+                  {help.phrase}
+                </p>
+              )}
+              {help.literal && (
+                <p class="gloss" lang={other(phase.lang)}>
+                  {help.literal}
+                </p>
+              )}
               {help.tip && <p class="tip">{help.tip}</p>}
             </div>
           )}

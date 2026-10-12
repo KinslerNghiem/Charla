@@ -5,7 +5,7 @@
   "channel": "counter",
   "title": {
     "en": "Ride the bus",
-    "es": "Viajar en autobús"
+    "es": "Ir en autobús"
   },
   "roles": {
     "partner": {
@@ -59,6 +59,19 @@
           {
             "text": {
               "en": "Does this bus go to the library?",
+              "es": "¿Este autobús va a la librería?"
+            },
+            "picture": "📕",
+            "for": "es",
+            "tip": {
+              "en": "«Librería» is a bookstore. The library is «la biblioteca»: \"¿Este autobús va a la biblioteca?\"",
+              "es": "«Librería» es una tienda de libros. La biblioteca es «la biblioteca»: \"¿Este autobús va a la biblioteca?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Does this bus go to the library?",
               "es": "¿Este autobús va a la biblioteca?"
             },
             "picture": "🚌",
@@ -71,6 +84,7 @@
               "es": "Biblioteca."
             },
             "picture": "💬",
+            "for": "en",
             "tip": {
               "en": "Ask the whole question: \"Does this bus go to the library?\"",
               "es": "Haz la pregunta completa: \"Does this bus go to the library?\""
@@ -83,6 +97,7 @@
               "es": "¿Este tren va a la biblioteca?"
             },
             "picture": "🚆",
+            "for": "en",
             "tip": {
               "en": "This is a bus! Say \"Does this bus go to the library?\"",
               "es": "¡Es un autobús! Di \"Does this bus go to the library?\""
@@ -112,6 +127,7 @@
               "es": "¿Cuánto es que cuesta?"
             },
             "picture": "❓",
+            "for": "en",
             "tip": {
               "en": "In a question, \"is\" goes before \"it\": \"How much is it?\"",
               "es": "En una pregunta, «is» va antes de «it»: \"How much is it?\""
@@ -124,9 +140,23 @@
               "es": "No quiero pagar."
             },
             "picture": "😬",
+            "for": "en",
             "tip": {
               "en": "Everyone pays on the bus. Ask \"How much is it?\"",
               "es": "En el autobús todos pagan. Pregunta \"How much is it?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "How much is it?",
+              "es": "¿Cuánto cuesto?"
+            },
+            "picture": "🙃",
+            "for": "es",
+            "tip": {
+              "en": "«Cuesto» means \"I cost\". The ride costs: \"¿Cuánto cuesta?\"",
+              "es": "«Cuesto» significa «yo cuesto». Lo que cuesta es el viaje: \"¿Cuánto cuesta?\""
             },
             "next": null
           }
@@ -140,8 +170,21 @@
         "choices": [
           {
             "text": {
+              "en": "Okay. Can you tell me when to get off?",
+              "es": "Bien. ¿Me avisas cuándo bajarme?"
+            },
+            "picture": "🙋",
+            "for": "es",
+            "tip": {
+              "en": "To the driver, a grown-up you do not know, use «usted»: \"¿Me avisa cuándo bajarme?\"",
+              "es": "Al chofer, un adulto que no conoces, se le habla de «usted»: \"¿Me avisa cuándo bajarme?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
               "en": "Okay! Thank you.",
-              "es": "¡Bien! Gracias."
+              "es": "¡Está bien! Gracias."
             },
             "picture": "🪑",
             "best": true,
@@ -150,7 +193,7 @@
           {
             "text": {
               "en": "Okay. Can you tell me when to get off?",
-              "es": "Bien. ¿Me avisa cuándo bajar?"
+              "es": "Está bien. ¿Me avisa cuándo bajarme?"
             },
             "picture": "🙋",
             "best": true,
@@ -162,9 +205,10 @@
               "es": "Yo parado."
             },
             "picture": "🧍",
+            "for": "en",
             "tip": {
               "en": "The driver asked you to sit. Say \"Okay! Thank you.\"",
-              "es": "El chofer te pidió sentarte. Di \"Okay! Thank you.\""
+              "es": "El chofer te pidió que te sentaras. Di \"Okay! Thank you.\""
             },
             "next": null
           }
@@ -173,7 +217,7 @@
       "s4": {
         "partner": {
           "en": "This is your stop. The library is right there.",
-          "es": "Esta es tu parada. La biblioteca está justo ahí."
+          "es": "Esta es tu parada. La biblioteca está ahí mismo."
         },
         "choices": [
           {
@@ -191,6 +235,7 @@
               "es": "Adiós."
             },
             "picture": "👋",
+            "for": "en",
             "tip": {
               "en": "Say thank you first: \"Thank you, driver!\"",
               "es": "Primero da las gracias: \"Thank you, driver!\""
@@ -203,9 +248,23 @@
               "es": "¿Dónde está la biblioteca?"
             },
             "picture": "🤔",
+            "for": "en",
             "tip": {
               "en": "The driver just told you: right there. Say \"Thank you, driver!\"",
-              "es": "El chofer te acaba de decir: justo ahí. Di \"Thank you, driver!\""
+              "es": "El chofer te acaba de decir dónde está: ahí mismo. Di \"Thank you, driver!\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Bye.",
+              "es": "Adiós."
+            },
+            "picture": "👋",
+            "for": "es",
+            "tip": {
+              "en": "Say thank you first: \"¡Gracias, chofer!\"",
+              "es": "Primero da las gracias: \"¡Gracias, chofer!\""
             },
             "next": null
           }

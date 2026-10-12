@@ -1,8 +1,9 @@
 // The first screen. One question, asked in both languages because nothing is
-// known yet: which language do you speak? The answer sets everything else.
-// The interface, the tips, the level names and the goal are in that language;
-// the partner speaks the other one. There is no separate "interface language"
-// switch, because two independent switches confused every tester.
+// known yet: which language do you speak? The answer sets both settings at
+// once: the interface, the tips and the glosses are in that language, and the
+// partner speaks the other one. Two questions here confused every tester, so
+// the two settings only come apart later, where each one lives: the header
+// chip for the interface language, the scene picker for the direction.
 
 import type { Lang } from '../i18n/strings'
 import { Mark } from '../ui/Icon'
@@ -15,7 +16,7 @@ export function LangPick({ onPick }: { onPick: (native: Lang) => void }) {
         Charla
       </h1>
       <p class="tagline">
-        Practica la conversación. Luego, tenla de verdad.
+        Practica la conversación. Luego, sal a tenerla de verdad.
         <br />
         Practice the conversation. Then go have it.
       </p>
@@ -39,8 +40,8 @@ export function LangPick({ onPick }: { onPick: (native: Lang) => void }) {
         </button>
       </div>
       <p class="note">
-        Puedes cambiarlo después, abajo de cada página. <br />
-        You can change this later, at the bottom of every page.
+        Puedes cambiar el idioma después, arriba a la derecha. <br />
+        You can change the language later, at the top right.
         <br />
         <a href="#/about">Acerca de Charla · About Charla</a>
       </p>

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { useRoute } from './router'
 import { get, set } from './storage'
-import { clearNative, hasNative, lang, learning, setNative, t, useLangTick } from './i18n/lang'
+import { hasNative, lang, learning, other, setNative, t, toggleLang, useLangTick } from './i18n/lang'
 import { Icon, Mark, type IconName } from './ui/Icon'
 // BirthGate.tsx, not Gate.tsx: a file named Gate.tsx beside gate.ts collides on
 // a case-insensitive disk (Windows, macOS) and TypeScript resolves the wrong one.
@@ -41,11 +41,9 @@ export function App() {
   const [picked, setPicked] = useState(hasNative)
   const pages = usePages(mode !== null && mode !== 'kid')
 
-  // A new page starts at its top, with its name in the tab title and focus on
-  // its content. The hash router changes none of that by itself: picking the
-  // twelfth scene used to open it scrolled halfway down.
-  const scene = route.params.get('scene')
-  const first = useRef(true)
+  // The tab title names the page in the interface language, and follows a
+  // language switch without a navigation.
+  const ui = lang()
   useEffect(() => {
     const names: Record<string, string> = {
       '/places': t('nav_places'),
@@ -57,6 +55,14 @@ export function App() {
     }
     const name = names[route.path] ?? t('nav_learn')
     document.title = `${name} · Charla`
+  }, [route.path, ui])
+
+  // A new page starts at its top with focus on its content. The hash router
+  // changes none of that by itself: picking the twelfth scene used to open it
+  // scrolled halfway down. Not on a language switch: the page stays where it is.
+  const scene = route.params.get('scene')
+  const first = useRef(true)
+  useEffect(() => {
     if (first.current) {
       first.current = false
       return
@@ -64,11 +70,6 @@ export function App() {
     window.scrollTo(0, 0)
     document.getElementById('main')?.focus({ preventScroll: true })
   }, [route.path, scene])
-
-  function changeLanguage() {
-    clearNative()
-    setPicked(false)
-  }
 
   // About is linked from the very first screen, before any question has been
   // answered, so it gets a bare shell of its own until the gate is done.
@@ -190,18 +191,22 @@ export function App() {
           <Mark />
           {t('app_name')}
         </a>
-        {/* The two things people go looking for, where they look: top right. */}
+        {/* The two things people go looking for, where they look: top right.
+            The language chip names the other language and switches the
+            interface to it, in place: the partner keeps its language, and a
+            conversation in progress keeps going. The direction has its own
+            switch on the scene picker. */}
         <div class="top-actions">
-          <button type="button" class="chip-btn" onClick={changeLanguage} aria-label={t('change_language')} title={t('change_language')}>
+          <button type="button" class="chip-btn" onClick={toggleLang} aria-label={t(ui === 'es' ? 'ui_to_en' : 'ui_to_es')} title={t(ui === 'es' ? 'ui_to_en' : 'ui_to_es')} lang={other(ui)}>
             <Icon name="globe" size={16} />
-            {lang() === 'es' ? 'Español' : 'English'}
+            {ui === 'es' ? 'English' : 'Español'}
           </button>
           <a class="chip-btn" href="#/about" aria-label={t('nav_about')} title={t('nav_about')}>
             ?
           </a>
         </div>
       </header>
-      <nav class="tabs" aria-label="Sections">
+      <nav class="tabs" aria-label={t('nav_sections')}>
         {links.map(([path, label, ico]) => (
           <a href={'#' + path} class={current === path ? 'on' : ''} aria-current={current === path ? 'page' : undefined}>
             <Icon name={ico} size={22} />

@@ -44,11 +44,15 @@ export function fallbackAddendum(target: string, partnerRole: string): string {
     '   Wrong: "I find it. What name?"  Right: "I found it. What is her name?"',
     '   Wrong: "I make tacos. For here?"  Right: "Two tacos, coming up. For here or to go?"',
     '4. Speak like the person behind the counter would, in the present moment: "Let me check", "Here you go", "One moment", "Sure". Do not narrate your own actions in the simple present ("I find", "I check", "I give", "I make"). A question is always a full question: "What is her name?", never "What name?".',
+    '5. Correct by recasting, never by praising or lecturing. The learner says "I need pick up medicine for my mother"; you say "Of course, you\'re picking up for your mother. What is her name?" and move on. No "great job", no "perfect", no "your English is good". Do not start two replies with the same word.',
     '',
     'EXAMPLE (pharmacy scene, level A2). Learner: "Hello, I need pick up medicine for my mother."',
     'Good JSON: {"reply":"Of course. What is her name?","tip":"","alt":["I need to pick up medicine for my mother."],"on_topic":true,"goal_reached":false,"safety_flag":false}',
     'EXAMPLE (school office, level A1). Learner: "Hello. I pick up my son. Mateo. Dentist."',
     `Good JSON: {"reply":"Okay. Can I see your ID?","tip":"Di: 'I'm here to pick up my son.'","alt":["I'm here to pick up my son, Mateo."],"on_topic":true,"goal_reached":false,"safety_flag":false}`,
+    'EXAMPLE (taquería scene, level A1, the learner is practicing Spanish). Learner: "Hola, quiero dos taco de pollo."',
+    'Good JSON: {"reply":"Claro. ¿Para aquí o para llevar?","tip":"","alt":["Dos tacos de pollo, por favor."],"on_topic":true,"goal_reached":false,"safety_flag":false}',
+    'When the target is Spanish, that is the Spanish to use: Latin American, usted to the customer, "Claro", "Aquí tiene", "¿Algo más?"; never "vale", "vosotros" or "ordenador".',
   ].join('\n')
 }
 

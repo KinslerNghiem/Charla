@@ -56,7 +56,7 @@ lugar cercano.
 **Lo que pedimos:** permiso para poner su negocio en el mapa de la aplicación
 como un lugar donde el personal tiene paciencia con alguien que practica su
 inglés. Ese es todo el compromiso. Sin letrero, sin capacitación, sin
-aplicación de su lado.
+nada que instalar de su lado.
 
 **Lo que muestra el registro:**
 
@@ -66,12 +66,12 @@ aplicación de su lado.
   "cajero, por las tardes". Nunca un nombre. Nunca la foto de una persona.
 
 **Lo que ven y hacen quienes aprenden:** la aplicación les da una tarjeta con
-sus frases y una línea para mostrarle a usted: *"I'm practicing my English.
+sus frases y un mensaje para mostrarle a usted: *"I'm practicing my English.
 Please speak a little more slowly."* Después de la visita tocan "Fui" una vez.
-Ese toque es anónimo y solo cuenta; nunca lleva un nombre, una ubicación ni
+Ese toque es anónimo y solo suma al conteo; nunca lleva un nombre, una ubicación ni
 una reseña.
 
-**Lo que nunca recolectamos ni mostramos:** nombres de empleados, nombres de
+**Lo que nunca recopilamos ni mostramos:** nombres de empleados, nombres de
 clientes, fotos, calificaciones con estrellas, reseñas escritas, la ubicación
 de nadie.
 
@@ -81,7 +81,7 @@ preguntas.
 
 Contacto del equipo: (see src/contact.ts)  (correo)
 
-☐ Sí, pueden ponernos.   Nombre del negocio: _______________________________
+☐ Sí, pueden incluirnos.   Nombre del negocio: _______________________________
 
 Idiomas en el mostrador: ☐ Español ☐ Inglés    Puesto / turno: _______________
 

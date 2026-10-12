@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { levelReminder } from '../src/tutor/levels'
 import { checkReply, countWords, simplerThan, splitSentences } from '../src/tutor/levels'
 
 describe('drift guard', () => {
@@ -43,6 +44,21 @@ describe('drift guard', () => {
   it('rejects too many sentences and too many questions', () => {
     expect(checkReply('Hi. Yes. No. Maybe.', 'A1').violations.join(' ')).toMatch(/sentences/)
     expect(checkReply('Name? Birthday?', 'A2').violations.join(' ')).toMatch(/questions/)
+  })
+
+  it('gives a Spanish sentence two more words at A1 and A2, none at B1', () => {
+    const es = '¿Cuál es su apellido y su fecha de nacimiento?' // 9 words: over the English A1 limit of 8, inside the Spanish 10
+    expect(checkReply(es, 'A1', 'es').ok).toBe(true)
+    expect(checkReply(es, 'A1', 'en').ok).toBe(false)
+    expect(checkReply(es, 'A1').ok).toBe(false)
+    const b1 = Array(19).fill('palabra').join(' ') + '.'
+    expect(checkReply(b1, 'B1', 'es').ok).toBe(false)
+  })
+
+  it('names the language in the level reminder', () => {
+    expect(levelReminder('A1', 'es')).toMatch(/Reply in Spanish\./)
+    expect(levelReminder('B1', 'en')).toMatch(/Reply in English\./)
+    expect(levelReminder('A2', 'es')).not.toMatch(/target language/)
   })
 
   it('steps down one level and stops at A1', () => {

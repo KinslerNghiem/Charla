@@ -26,6 +26,8 @@ export interface Bi {
 
 export type Level = 'A1' | 'A2' | 'B1'
 
+export type Lang = 'en' | 'es'
+
 /**
  * Every place a scene can be tied to. Each one needs a `type_<name>` label in
  * src/i18n/strings.ts and (for kid scenes) an icon in the Niños street.
@@ -59,6 +61,13 @@ export interface ScriptChoice {
   text: Bi
   /** Emoji used as the "picture" of this choice. Required on every choice; kid mode shows it. */
   picture?: string
+  /**
+   * Which direction a wrong answer is written for: 'en' when its mistake is
+   * an English one (a Spanish speaker practicing English sees it), 'es' when
+   * the mistake is a Spanish one. Absent means both, which is what the best
+   * choices are: right in either language. choicesFor() applies this.
+   */
+  for?: Lang
   /** A best choice moves the script forward; any other choice shows its tip and stays. */
   best?: boolean
   tip?: Bi
@@ -71,12 +80,23 @@ export interface ScriptNode {
   choices: ScriptChoice[]
 }
 
+/** The choices a learner practicing `learning` is shown: the best ones, plus the wrong answers written for that direction. */
+export function choicesFor(node: ScriptNode, learning: Lang): ScriptChoice[] {
+  return node.choices.filter((c) => !c.for || c.for === learning)
+}
+
 export interface Scene {
   id: string
   place_type: PlaceType
   kid?: boolean
   /** 'phone' for calls (landlord, calling in sick, the electric company); 'counter' for everything else. */
   channel?: Channel
+  /**
+   * True when the must-use lines carry an invented name, date or place
+   * ("Her last name is Garcia…", "…to Mexico"). The Go Card then says so, so
+   * nobody reads the example out loud at a real counter.
+   */
+  example_details?: boolean
   title: Bi
   roles: { partner: Bi; learner: Bi }
   goal: Bi
@@ -154,6 +174,7 @@ export function validateScene(s: unknown): string[] {
     let best = 0
     for (const c of node.choices ?? []) {
       if (!isBi(c.text)) errs.push(`node ${id}: choice text needs en and es`)
+      if (c.for !== undefined && c.for !== 'en' && c.for !== 'es') errs.push(`node ${id}: "for" must be "en" or "es"`)
       if (typeof c.picture !== 'string' || c.picture.trim() === '') errs.push(`node ${id}: every choice needs a picture`)
       if (c.best) {
         best++
@@ -163,6 +184,12 @@ export function validateScene(s: unknown): string[] {
       }
     }
     if (best === 0) errs.push(`node ${id}: needs at least one best choice`)
+    // Both directions play this script: each must see a real choice to make.
+    for (const dir of ['en', 'es'] as const) {
+      const shown = Array.isArray(node.choices) ? choicesFor(node, dir) : []
+      if (shown.length < 2) errs.push(`node ${id}: a learner practicing ${dir} sees fewer than 2 choices`)
+      if (!shown.some((c) => c.best)) errs.push(`node ${id}: a learner practicing ${dir} sees no best choice`)
+    }
   }
   return errs
 }

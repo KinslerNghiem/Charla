@@ -225,6 +225,9 @@ h2 { font-size: 20px; line-height: 1.25; margin: 22px 0 8px; }
 .steps a:hover { color: var(--ink); }
 .steps .num { flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--card-2); display: grid; place-items: center; font-weight: 600; font-size: 13px; color: var(--ink); }
 .steps li.here .num { background: var(--on-band); color: var(--accent); }
+/* The direction line under the picker's title: what you are practicing, and the switch. */
+.direction { display: flex; flex-wrap: wrap; gap: 2px 14px; align-items: baseline; margin: -6px 0 14px; font-size: 14px; color: var(--ink-2); }
+.direction b { color: var(--ink); font-weight: 600; }
 
 /* learn: the scene */
 .brief > summary { cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 44px; padding: 8px 14px; border-radius: var(--r-sm); background: var(--card); font-weight: 600; list-style: none; }

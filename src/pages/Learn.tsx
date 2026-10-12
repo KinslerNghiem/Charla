@@ -4,7 +4,7 @@ import type { Scene } from '../content/scene.schema'
 import { LEVELS, simplerThan, type Level } from '../tutor/levels'
 import { ApiError, askTutor, flagReply, type HistoryItem } from '../tutor/client'
 import { OfflineScene } from '../tutor/OfflineScene'
-import { learning, native, t, tIn } from '../i18n/lang'
+import { learning, native, other, setLearning, t } from '../i18n/lang'
 import { classify, detectTier, distanceAdvice, paceAdvice, startListener, type ClipStats, type Distance, type Listener, type Pace, type TalkError } from '../speech/input'
 import { hushVoice, say, unlockVoice } from '../speech/voice'
 import { get, set } from '../storage'
@@ -266,6 +266,7 @@ export function Learn({ params }: { params: URLSearchParams }) {
     }
     try {
       const l = startListener(tier, target, {
+        expected: scene?.must_use.map((p) => p[target]) ?? [],
         onOpen: () => setTalkState('listening'),
         onLevel: (v) => {
           if (meter.current) meter.current.style.width = `${Math.round(v * 100)}%`
@@ -378,7 +379,7 @@ export function Learn({ params }: { params: URLSearchParams }) {
             </span>
           </summary>
         <p>
-          <b>{t('goal_label')}:</b> {scene.goal[nat]}
+          <b>{t('goal_label')}:</b> <span lang={nat}>{scene.goal[nat]}</span>
         </p>
         <p class="levels-label">
           <b>{t('must_use')}:</b>
@@ -392,7 +393,7 @@ export function Learn({ params }: { params: URLSearchParams }) {
               <span>
                 {used[i] && <span class="sr-only">✓ </span>}
                 <span lang={target}>{p[target]}</span>
-                <i>{p[nat]}</i>
+                <i lang={nat}>{p[nat]}</i>
               </span>
               <button
                 type="button"
@@ -405,18 +406,18 @@ export function Learn({ params }: { params: URLSearchParams }) {
             </li>
           ))}
         </ol>
-        {/* Level names are in the learner's own language, like the direction
-            button: the person choosing "beginner" should not need the target
-            language to read the word. */}
+        {/* Level names follow the interface language like every other control:
+            the person choosing "beginner" reads it in the language they chose
+            for the app, never in the one they are learning. */}
         <p class="levels-label" id="levels-label">
-          <b>{tIn(nat, 'pick_level')}:</b>
+          <b>{t('pick_level')}:</b>
         </p>
         <div class="levels" role="radiogroup" aria-labelledby="levels-label">
           {LEVELS.map((l) => (
             <button type="button" role="radio" aria-checked={level === l} class={level === l ? 'on' : ''} onClick={() => setLevel(l)}>
               {/* "Beginner · a few words": the name on one line, the gloss under it. */}
-              <b>{tIn(nat, `level_${l}` as 'level_A1').split(' · ')[0]}</b>
-              <small>{tIn(nat, `level_${l}` as 'level_A1').split(' · ')[1] ?? ''}</small>
+              <b>{t(`level_${l}` as 'level_A1').split(' · ')[0]}</b>
+              <small>{t(`level_${l}` as 'level_A1').split(' · ')[1] ?? ''}</small>
             </button>
           ))}
         </div>
@@ -466,7 +467,7 @@ export function Learn({ params }: { params: URLSearchParams }) {
                 {m.kept && <p class="kept">{t('kept_at_level')}</p>}
                 {m.tip && (
                   <p class="tip">
-                    <b>{t('tip_label')}:</b> {m.tip}
+                    <b>{t('tip_label')}:</b> <span lang={nat}>{m.tip}</span>
                   </p>
                 )}
                 {m.alt && m.alt.length > 0 && (
@@ -613,7 +614,7 @@ export function Learn({ params }: { params: URLSearchParams }) {
                 </>
               )}
               {msgs.length === 0 && (
-                <p class="note">
+                <p class="note" lang={nat}>
                   {scene.roles.partner[nat]} ↔ {scene.roles.learner[nat]}
                 </p>
               )}
@@ -655,7 +656,9 @@ function ScenePicker({ onPick }: { onPick: (s: Scene) => void }) {
           <span class="title" lang={target}>
             {s.title[target]}
           </span>
-          <span class="sub">{s.title[nat]}</span>
+          <span class="sub" lang={nat}>
+            {s.title[nat]}
+          </span>
           {(isLast || s.kid || channelOf(s) === 'phone' || rehearsed.has(s.id)) && (
             <span class="tags">
               {rehearsed.has(s.id) && (
@@ -677,6 +680,17 @@ function ScenePicker({ onPick }: { onPick: (s: Scene) => void }) {
   return (
     <section class="picker">
       <h1>{t('pick_scene')}</h1>
+      {/* The direction, and the one place to change it: here, before a
+          conversation starts, never in the middle of one. The interface
+          language is a separate setting, up in the header. */}
+      <p class="direction">
+        <span>
+          {t('direction_label')}: <b>{t(target === 'en' ? 'lang_name_en' : 'lang_name_es')}</b>
+        </span>
+        <button type="button" class="link" onClick={() => setLearning(other(target))}>
+          {t(other(target) === 'en' ? 'direction_to_en' : 'direction_to_es')}
+        </button>
+      </p>
       {/* The whole app in one line, and each step is a way to get there. */}
       <ol class="steps" aria-label={t('steps_label')}>
         <li class="here">

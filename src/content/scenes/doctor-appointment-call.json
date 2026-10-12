@@ -36,7 +36,7 @@
   ],
   "expect": {
     "en": "Are you a new patient?",
-    "es": "¿Es paciente nuevo?"
+    "es": "¿Es su primera vez con nosotros?"
   },
   "success": {
     "en": "You have a day and a time, and you know what to bring.",
@@ -58,6 +58,32 @@
           {
             "text": {
               "en": "Hello. I'd like to make an appointment for a check-up.",
+              "es": "Hola. Quisiera hacer un appointment para un chequeo."
+            },
+            "picture": "📝",
+            "for": "es",
+            "tip": {
+              "en": "«Cita»: \"Quisiera hacer una cita para un chequeo.\"",
+              "es": "«Cita»: \"Quisiera hacer una cita para un chequeo.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Hello. I want to see the doctor.",
+              "es": "Hola. Quiero ver el doctor."
+            },
+            "picture": "🤔",
+            "for": "es",
+            "tip": {
+              "en": "A person as the object takes «a»: «ver al doctor». And say what you need: \"Quisiera hacer una cita para un chequeo.\"",
+              "es": "Una persona como objeto lleva «a»: «ver al doctor». Y di qué necesitas: \"Quisiera hacer una cita para un chequeo.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Hello. I'd like to make an appointment for a check-up.",
               "es": "Hola. Quisiera hacer una cita para un chequeo."
             },
             "picture": "📞",
@@ -70,6 +96,7 @@
               "es": "Hola. Quiero una cita con el doctor."
             },
             "picture": "📝",
+            "for": "en",
             "tip": {
               "en": "\"Cite\" is to quote someone. A cita is \"an appointment\": \"I'd like to make an appointment for a check-up.\"",
               "es": "«Cite» es citar a alguien. Una cita médica es «an appointment»: \"I'd like to make an appointment for a check-up.\""
@@ -82,6 +109,7 @@
               "es": "Hola. ¿Está el doctor?"
             },
             "picture": "🤔",
+            "for": "en",
             "tip": {
               "en": "On the phone, say what you need right away: \"I'd like to make an appointment for a check-up.\"",
               "es": "Por teléfono, di de una vez qué necesitas: \"I'd like to make an appointment for a check-up.\""
@@ -93,7 +121,7 @@
       "s2": {
         "partner": {
           "en": "Of course. Are you a new patient?",
-          "es": "Claro. ¿Es paciente nuevo?"
+          "es": "Claro. ¿Es su primera vez con nosotros?"
         },
         "choices": [
           {
@@ -120,9 +148,23 @@
               "es": "Sí, soy paciente nuevo yo."
             },
             "picture": "❓",
+            "for": "en",
             "tip": {
               "en": "English needs \"a\" before a job or a role: \"I'm a new patient.\" Or: \"Yes, it's my first time.\"",
               "es": "El inglés necesita «a» antes de un rol: \"I'm a new patient.\" O: \"Yes, it's my first time.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Yes, I'm a new patient.",
+              "es": "Sí, estoy un paciente nuevo."
+            },
+            "picture": "❓",
+            "for": "es",
+            "tip": {
+              "en": "Who you are takes «ser», and Spanish drops the «un»: \"Soy paciente nuevo.\" Or: \"Sí, es mi primera vez.\"",
+              "es": "Lo que eres va con «ser», y el español omite el «un»: \"Soy paciente nuevo.\" O: \"Sí, es mi primera vez.\""
             },
             "next": null
           }
@@ -136,10 +178,24 @@
         "choices": [
           {
             "text": {
+              "en": "Mornings are better for me. Tuesday at 8:30 works.",
+              "es": "Las mañanas son mejor para mí. Martes a las 8:30 trabaja."
+            },
+            "picture": "🌅",
+            "for": "es",
+            "tip": {
+              "en": "A time does not «trabajar»; it «está bien» or «me queda bien»: \"El martes a las 8:30 está bien.\"",
+              "es": "Una hora no «trabaja»; «está bien» o «me queda bien»: \"El martes a las 8:30 está bien.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
               "en": "The mornings are more good for me.",
               "es": "Las mañanas son más buenas para mí."
             },
             "picture": "🌅",
+            "for": "en",
             "tip": {
               "en": "\"Better\", not \"more good\": \"Mornings are better for me.\"",
               "es": "«Better», no «more good»: \"Mornings are better for me.\""
@@ -161,6 +217,7 @@
               "es": "Martes."
             },
             "picture": "💬",
+            "for": "en",
             "tip": {
               "en": "Say the time too so nothing gets mixed up: \"Tuesday at 8:30 works.\"",
               "es": "Di también la hora para que no haya confusión: \"Tuesday at 8:30 works.\""
@@ -172,7 +229,7 @@
       "s4": {
         "partner": {
           "en": "You're set for Tuesday at 8:30. Please arrive ten minutes early.",
-          "es": "Queda para el martes a las 8:30. Por favor llegue diez minutos antes."
+          "es": "Listo, queda para el martes a las 8:30. Por favor, llegue diez minutos antes."
         },
         "choices": [
           {
@@ -190,6 +247,7 @@
               "es": "Gracias. ¿Qué traigo yo?"
             },
             "picture": "❓",
+            "for": "en",
             "tip": {
               "en": "The question needs \"should\": \"What should I bring?\"",
               "es": "La pregunta necesita «should»: \"What should I bring?\""
@@ -202,9 +260,23 @@
               "es": "Bueno, adiós."
             },
             "picture": "👋",
+            "for": "en",
             "tip": {
               "en": "Before you hang up, ask: \"What should I bring?\"",
               "es": "Antes de colgar, pregunta: \"What should I bring?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Thank you. What should I bring?",
+              "es": "Gracias. ¿Qué debo traer?"
+            },
+            "picture": "🎒",
+            "for": "es",
+            "tip": {
+              "en": "From where you are, you will «llevar» things to the clinic; «traer» means bringing them here. \"¿Qué debo llevar?\"",
+              "es": "Desde donde estás, vas a «llevar» cosas a la clínica; «traer» es traerlas aquí. \"¿Qué debo llevar?\""
             },
             "next": null
           }
@@ -216,6 +288,19 @@
           "es": "Su identificación, su tarjeta del seguro si tiene, y una lista de sus medicinas."
         },
         "choices": [
+          {
+            "text": {
+              "en": "Perfect. Thank you, Rosa. See you Tuesday.",
+              "es": "Perfecto. Gracias, Rosa. Te veo el martes."
+            },
+            "picture": "👋",
+            "for": "es",
+            "tip": {
+              "en": "«Te veo» is «tú». On the phone the natural close is \"Hasta el martes.\"",
+              "es": "«Te veo» es de «tú». Por teléfono el cierre natural es \"Hasta el martes.\""
+            },
+            "next": null
+          },
           {
             "text": {
               "en": "Perfect. Thank you, Rosa. See you Tuesday.",
@@ -231,6 +316,7 @@
               "es": "No tengo seguro. ¿Entonces no puedo ir?"
             },
             "picture": "😟",
+            "for": "en",
             "tip": {
               "en": "You can still come. Say \"I don't have insurance. Is that okay?\", ask about the self-pay price, and then thank her.",
               "es": "Sí puedes ir. Di \"I don't have insurance. Is that okay?\", pregunta el precio sin seguro, y luego dale las gracias."

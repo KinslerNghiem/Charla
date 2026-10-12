@@ -126,6 +126,16 @@ def check(scene, errs):
                 bad("node %s: non-best choice needs a bilingual tip" % nid)
         if best == 0:
             bad("node %s: needs at least one best choice" % nid)
+        for c in choices:
+            if c.get("for") not in (None, "en", "es"):
+                bad('node %s: "for" must be "en" or "es"' % nid)
+        # Both directions play this script: each must see a real choice to make.
+        for d in ("en", "es"):
+            shown = [c for c in choices if not c.get("for") or c.get("for") == d]
+            if len(shown) < 2:
+                bad("node %s: a learner practicing %s sees fewer than 2 choices" % (nid, d))
+            if not any(c.get("best") for c in shown):
+                bad("node %s: a learner practicing %s sees no best choice" % (nid, d))
 
     # Every must_use phrase has to be modeled by a best choice, in both languages.
     for p in must:

@@ -99,7 +99,7 @@ describe('venues.geojson', () => {
       if (!['library', 'college', 'clinic', 'driver_services', 'community'].includes(f.properties.type)) {
         expect(f.properties.status, `${f.id} is a business without a signed yes`).toBe('listed_by_business')
       }
-      for (const col of ['roles', 'shifts', 'club_schedule'] as const) {
+      for (const col of ['roles', 'shifts', 'club_schedule', 'roles_es', 'shifts_es', 'club_schedule_es'] as const) {
         expect(f.properties[col] ?? '', `${f.id}.${col}`).not.toMatch(/verify/i)
       }
     }
@@ -108,7 +108,7 @@ describe('venues.geojson', () => {
   it('never names a staff member, in any free-text column', () => {
     // Every free-text column that reaches the client. `notes` never does.
     for (const f of data.features) {
-      for (const col of ['roles', 'shifts', 'club_schedule'] as const) {
+      for (const col of ['roles', 'shifts', 'club_schedule', 'roles_es', 'shifts_es', 'club_schedule_es'] as const) {
         let text: string = f.properties[col] ?? ''
         for (const phrase of ALLOWED) text = text.split(phrase).join('')
         expect(text, `${f.id}.${col} looks like it names a person`).not.toMatch(LOOKS_LIKE_A_NAME)

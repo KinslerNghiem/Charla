@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
-import type { Scene, ScriptChoice } from '../content/scene.schema'
+import { choicesFor, type Scene, type ScriptChoice } from '../content/scene.schema'
 import type { Lang } from '../i18n/strings'
 import { t } from '../i18n/lang'
 import { speak } from '../speech/output'
@@ -8,6 +8,10 @@ import { Icon } from '../ui/Icon'
 // The scripted version of a scene: the partner's line, two or three choices,
 // a gentle retry on a wrong one. Used when the API is unreachable, and it is
 // the whole of kid mode. No network. No free text.
+//
+// The wrong answers are written per direction (choicesFor): a Spanish speaker
+// practicing English is offered English mistakes with tips about English, and
+// an English speaker practicing Spanish is offered Spanish ones.
 //
 // Who reads the line aloud is handed in: Learn passes the neural voice, kid
 // mode passes nothing and gets the phone's own, so this file never imports
@@ -80,22 +84,30 @@ export function OfflineScene({
         <p class="line" lang={learning}>
           {node.partner[learning]}
         </p>
-        <p class="gloss">{node.partner[native]}</p>
+        <p class="gloss" lang={native}>
+          {node.partner[native]}
+        </p>
         <button type="button" class="ghost" onClick={listen}>
           <Icon name="speaker" size={16} /> {t('listen')}
         </button>
         {noVoice && <p class="note">{t(learning === 'es' ? 'no_voice_es' : 'no_voice_en')}</p>}
       </div>
-      {tip && <p class="tip">{tip}</p>}
+      {tip && (
+        <p class="tip" lang={native}>
+          {tip}
+        </p>
+      )}
       {!done && (
         <div class="choices">
-          {node.choices.map((c) => (
+          {choicesFor(node, learning).map((c) => (
             <button type="button" class={'choice' + (pictures && c.picture ? '' : ' nopic')} onClick={() => choose(c)}>
               {pictures && c.picture && <span class="pic" aria-hidden="true">{c.picture}</span>}
               <span class="txt" lang={learning}>
                 {c.text[learning]}
               </span>
-              <span class="sub">{c.text[native]}</span>
+              <span class="sub" lang={native}>
+                {c.text[native]}
+              </span>
             </button>
           ))}
         </div>

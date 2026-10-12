@@ -59,7 +59,10 @@
     "status": "listed_public",
     "club_schedule": "English Conversation Group (Literacy DuPage), Mondays 7:00-8:30 pm",
     "meet_ok": "yes",
-    "format": "in_person"
+    "format": "in_person",
+    "roles_es": "tutor del grupo de conversación",
+    "shifts_es": "lunes 7:00-8:30 pm",
+    "club_schedule_es": "grupo de conversación en inglés (Literacy DuPage), lunes 7:00-8:30 pm"
    }
   },
   {
@@ -86,7 +89,10 @@
     "status": "unknown",
     "club_schedule": "",
     "meet_ok": "yes",
-    "format": "in_person"
+    "format": "in_person",
+    "roles_es": "",
+    "shifts_es": "",
+    "club_schedule_es": ""
    }
   },
   {
@@ -113,7 +119,10 @@
     "status": "listed_public",
     "club_schedule": "Free English Language Acquisition classes (also evenings at Naperville North HS)",
     "meet_ok": "yes",
-    "format": "in_person"
+    "format": "in_person",
+    "roles_es": "oficina de educación para adultos",
+    "shifts_es": "",
+    "club_schedule_es": "clases gratuitas de inglés (English Language Acquisition; también por las tardes en Naperville North HS)"
    }
   },
   {
@@ -140,7 +149,10 @@
     "status": "listed_public",
     "club_schedule": "Literacy DuPage English conversation group on Zoom, Wednesdays 10-11 am (virtual)",
     "meet_ok": "no",
-    "format": "online"
+    "format": "online",
+    "roles_es": "tutor del grupo de conversación",
+    "shifts_es": "miércoles 10:00-11:00 am (virtual)",
+    "club_schedule_es": "grupo de conversación en inglés de Literacy DuPage por Zoom, miércoles 10-11 am (virtual)"
    }
   },
   {
@@ -167,7 +179,10 @@
     "status": "unknown",
     "club_schedule": "",
     "meet_ok": "yes",
-    "format": "in_person"
+    "format": "in_person",
+    "roles_es": "",
+    "shifts_es": "",
+    "club_schedule_es": ""
    }
   },
   {
@@ -194,7 +209,10 @@
     "status": "listed_public",
     "club_schedule": "Literacy DuPage English Conversation Group, Thursdays 6:30-8:00 pm, intermediate+, free",
     "meet_ok": "yes",
-    "format": "in_person"
+    "format": "in_person",
+    "roles_es": "tutor del grupo de conversación",
+    "shifts_es": "jueves 6:30-8:00 pm",
+    "club_schedule_es": "grupo de conversación en inglés de Literacy DuPage, jueves 6:30-8:00 pm, nivel intermedio o más, gratis"
    }
   },
   {
@@ -221,7 +239,10 @@
     "status": "listed_public",
     "club_schedule": "English Conversation Group, Saturdays 10:30-12:00, Room 332, bilingual, in person or Zoom, no registration (4th Saturday is a reading group)",
     "meet_ok": "yes",
-    "format": "both"
+    "format": "both",
+    "roles_es": "tutor del grupo de conversación",
+    "shifts_es": "sábados 10:30-12:00",
+    "club_schedule_es": "grupo de conversación en inglés, sábados 10:30-12:00, sala 332, bilingüe, presencial o por Zoom, sin inscripción (el cuarto sábado es grupo de lectura)"
    }
   },
   {
@@ -248,7 +269,10 @@
     "status": "listed_public",
     "club_schedule": "",
     "meet_ok": "no",
-    "format": "in_person"
+    "format": "in_person",
+    "roles_es": "ventanilla",
+    "shifts_es": "mar-vie 8-5:30, sáb 7:30-12",
+    "club_schedule_es": ""
    }
   },
   {
@@ -275,7 +299,10 @@
     "status": "listed_public",
     "club_schedule": "",
     "meet_ok": "no",
-    "format": "in_person"
+    "format": "in_person",
+    "roles_es": "ventanilla",
+    "shifts_es": "",
+    "club_schedule_es": ""
    }
   },
   {
@@ -302,7 +329,10 @@
     "status": "unknown",
     "club_schedule": "",
     "meet_ok": "no",
-    "format": "in_person"
+    "format": "in_person",
+    "roles_es": "recepción",
+    "shifts_es": "",
+    "club_schedule_es": ""
    }
   },
   {
@@ -329,7 +359,10 @@
     "status": "listed_public",
     "club_schedule": "",
     "meet_ok": "no",
-    "format": "in_person"
+    "format": "in_person",
+    "roles_es": "recepción",
+    "shifts_es": "",
+    "club_schedule_es": ""
    }
   },
   {
@@ -356,7 +389,10 @@
     "status": "listed_public",
     "club_schedule": "",
     "meet_ok": "no",
-    "format": "in_person"
+    "format": "in_person",
+    "roles_es": "recepción",
+    "shifts_es": "",
+    "club_schedule_es": ""
    }
   },
   {
@@ -383,7 +419,10 @@
     "status": "listed_public",
     "club_schedule": "Free English Language Acquisition classes, mornings 9-12 and evenings 6-9",
     "meet_ok": "yes",
-    "format": "in_person"
+    "format": "in_person",
+    "roles_es": "oficina de educación para adultos",
+    "shifts_es": "mañanas 9-12, tardes 6-9",
+    "club_schedule_es": "clases gratuitas de inglés (English Language Acquisition), mañanas 9-12 y tardes 6-9"
    }
   },
   {
@@ -410,7 +449,10 @@
     "status": "listed_public",
     "club_schedule": "Literacy DuPage ESL conversation group on Zoom, Tuesdays 10-11 am (virtual), intermediate+, free",
     "meet_ok": "no",
-    "format": "online"
+    "format": "online",
+    "roles_es": "voluntario del grupo de conversación",
+    "shifts_es": "martes 10:00-11:00 am (virtual)",
+    "club_schedule_es": "grupo de conversación de ESL de Literacy DuPage por Zoom, martes 10-11 am (virtual), nivel intermedio o más, gratis"
    }
   }
  ]

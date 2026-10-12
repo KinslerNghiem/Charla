@@ -82,7 +82,7 @@ export function Ninos() {
             location.reload()
           }}
         >
-          {t('change_language')}
+          {t('kids_change_both')}
         </button>
         {/* Kid mode has no other way out: the gate only ever lowers a mode, so
             leaving it means clearing everything and answering again. */}
@@ -117,7 +117,9 @@ export function Ninos() {
               <span class="txt" lang={target}>
                 {s.title[target]}
               </span>
-              <span class="sub">{s.title[nat]}</span>
+              <span class="sub" lang={nat}>
+                {s.title[nat]}
+              </span>
               {stickers.includes(s.id) && <span class="sticker" aria-label={t('kids_stickers')}>⭐</span>}
             </button>
           ))}

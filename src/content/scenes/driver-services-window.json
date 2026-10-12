@@ -2,21 +2,42 @@
   "id": "driver-services-window",
   "place_type": "driver_services",
   "channel": "counter",
-  "title": { "en": "Renew your driver's license", "es": "Renovar tu licencia de manejar" },
+  "title": {
+    "en": "Renew your driver's license",
+    "es": "Renovar tu licencia de conducir"
+  },
   "roles": {
-    "partner": { "en": "clerk at the Driver Services window", "es": "empleado o empleada de la ventanilla de Driver Services" },
-    "learner": { "en": "driver renewing a license that is about to expire", "es": "conductor que va a renovar su licencia porque está por vencerse" }
+    "partner": {
+      "en": "clerk at the Driver Services window",
+      "es": "empleado o empleada de la ventanilla de Driver Services"
+    },
+    "learner": {
+      "en": "driver renewing a license that is about to expire",
+      "es": "conductor que va a renovar su licencia porque está por vencerse"
+    }
   },
   "goal": {
     "en": "Say why you came, hand over the documents you brought, and leave knowing where to go next.",
-    "es": "Decir a qué viniste, entregar los documentos que traes y salir sabiendo a dónde ir después."
+    "es": "Decir a qué viniste, entregar los documentos que traes y salir sabiendo adónde ir después."
   },
   "must_use": [
-    { "en": "I'm here to renew my driver's license.", "es": "Vengo a renovar mi licencia de manejar." },
-    { "en": "Could you say that again, please?", "es": "¿Me lo puede repetir, por favor?" },
-    { "en": "Where do I go next?", "es": "¿A dónde voy después?" }
+    {
+      "en": "I'm here to renew my driver's license.",
+      "es": "Vengo a renovar mi licencia de conducir."
+    },
+    {
+      "en": "Could you say that again, please?",
+      "es": "¿Me lo puede repetir, por favor?"
+    },
+    {
+      "en": "Where do I go next?",
+      "es": "¿Adónde voy después?"
+    }
   ],
-  "expect": { "en": "I'll need your current license and one proof of address. REAL ID or standard?", "es": "Necesito su licencia actual y un comprobante de domicilio. ¿REAL ID o estándar?" },
+  "expect": {
+    "en": "I'll need your current license and one proof of address. REAL ID or standard?",
+    "es": "Necesito su licencia actual y un comprobante de domicilio. ¿REAL ID o estándar?"
+  },
   "success": {
     "en": "The clerk takes your license and your proof of address, you follow the instructions for the vision screening, and you leave knowing where to go for the photo and the cashier.",
     "es": "En la ventanilla reciben tu licencia y tu comprobante de domicilio, sigues las indicaciones del examen de la vista y te vas sabiendo a dónde ir para la foto y la caja."
@@ -29,139 +50,337 @@
     "start": "s1",
     "nodes": {
       "s1": {
-        "partner": { "en": "Good morning. What are you here for today?", "es": "Buenos días. ¿A qué viene hoy?" },
+        "partner": {
+          "en": "Good morning. What are you here for today?",
+          "es": "Buenos días. ¿A qué viene hoy?"
+        },
         "choices": [
           {
-            "text": { "en": "Good morning. I come to renovate my license of driving.", "es": "Buenos días. Vengo a renovar mi licencia de manejar." },
-            "picture": "🔧",
-            "tip": { "en": "\"Renovate\" is for houses; a license is \"renewed\". And it's \"driver's license\", not \"license of driving\": \"I'm here to renew my driver's license.\"", "es": "«Renovate» es para casas; una licencia se «renew». Y es «driver's license», no «license of driving»: \"I'm here to renew my driver's license.\"" },
+            "text": {
+              "en": "Good morning. I need you to renew my license.",
+              "es": "Buenos días. Necesito que me renueves la licencia."
+            },
+            "picture": "😬",
+            "for": "es",
+            "tip": {
+              "en": "«Renueves» is «tú». The clerk is «usted», and you only need to say why you came: \"Vengo a renovar mi licencia de conducir.\"",
+              "es": "«Renueves» es de «tú». A la persona de la ventanilla se le habla de «usted», y basta con decir a qué vienes: \"Vengo a renovar mi licencia de conducir.\""
+            },
             "next": null
           },
           {
-            "text": { "en": "Good morning. I'm here to renew my driver's license.", "es": "Buenos días. Vengo a renovar mi licencia de manejar." },
+            "text": {
+              "en": "Good morning. I come to renovate my license of driving.",
+              "es": "Buenos días. Vengo a renovar mi licencia de manejo."
+            },
+            "picture": "🔧",
+            "for": "en",
+            "tip": {
+              "en": "\"Renovate\" is for houses; a license is \"renewed\". And it's \"driver's license\", not \"license of driving\": \"I'm here to renew my driver's license.\"",
+              "es": "«Renovate» es para casas; una licencia se «renew». Y es «driver's license», no «license of driving»: \"I'm here to renew my driver's license.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Good morning. I'm here to renew my driver's license.",
+              "es": "Buenos días. Vengo a renovar mi licencia de conducir."
+            },
             "picture": "🪪",
             "best": true,
             "next": "s2"
           },
           {
-            "text": { "en": "Good morning. I want to make the license, it expires next month.", "es": "Buenos días. Quiero hacer la licencia, se vence el mes que viene." },
+            "text": {
+              "en": "Good morning. I want to make the license, it expires next month.",
+              "es": "Buenos días. Quiero sacar la licencia, se me vence el mes que viene."
+            },
             "picture": "📆",
-            "tip": { "en": "\"Make the license\" is sacar la licencia translated word for word. The clerk's word is \"renew\": \"I'm here to renew my driver's license.\"", "es": "«Make the license» es «sacar la licencia» palabra por palabra. La palabra de la ventanilla es «renew»: \"I'm here to renew my driver's license.\"" },
+            "for": "en",
+            "tip": {
+              "en": "\"Make the license\" is sacar la licencia translated word for word. The clerk's word is \"renew\": \"I'm here to renew my driver's license.\"",
+              "es": "«Make the license» es «sacar la licencia» palabra por palabra. La palabra de la ventanilla es «renew»: \"I'm here to renew my driver's license.\""
+            },
             "next": null
           }
         ]
       },
       "s2": {
-        "partner": { "en": "Okay so I'll need your current license and one proof of address and are you doing REAL ID today or standard?", "es": "Bueno, entonces le voy a pedir su licencia actual y un comprobante de domicilio y ¿hoy va a sacar la REAL ID o la estándar?" },
+        "partner": {
+          "en": "Okay so I'll need your current license and one proof of address and are you doing REAL ID today or standard?",
+          "es": "Bueno, entonces necesito su licencia actual y un comprobante de domicilio, ¿y hoy va a sacar la REAL ID o la estándar?"
+        },
         "choices": [
           {
-            "text": { "en": "Yes, here is my license and my bill. The normal one.", "es": "Sí, aquí está mi licencia y mi recibo. La normal." },
+            "text": {
+              "en": "Yes, here is my license and my bill. The normal one.",
+              "es": "Sí, aquí está mi licencia y mi recibo. La normal."
+            },
             "picture": "📄",
-            "tip": { "en": "You got two of the three, and \"the normal one\" is a good guess, but you cannot be sure yet. When it comes fast, ask: \"Could you say that again, please?\"", "es": "Captaste dos de tres, y «the normal one» es buena intuición, pero todavía no puedes estar seguro. Cuando hablan rápido, pregunta: \"Could you say that again, please?\"" },
+            "for": "en",
+            "tip": {
+              "en": "You got two of the three, and \"the normal one\" is a good guess, but you cannot be sure yet. When it comes fast, ask: \"Could you say that again, please?\"",
+              "es": "Captaste dos de tres, y «the normal one» es buena intuición, pero todavía no puedes estar seguro. Cuando hablan rápido, pregunta: \"Could you say that again, please?\""
+            },
             "next": null
           },
           {
-            "text": { "en": "Sorry, could you say that again, please? A little slower.", "es": "Perdón, ¿me lo puede repetir, por favor? Un poquito más despacio." },
+            "text": {
+              "en": "Sorry, could you say that again, please? A little slower.",
+              "es": "Perdón, ¿me lo puede repetir, por favor? Un poquito más despacio."
+            },
             "picture": "🔁",
             "best": true,
             "next": "s3"
           },
           {
-            "text": { "en": "Here, take all my papers and look for what you need.", "es": "Tome, llévese todos mis papeles y busque lo que necesite." },
+            "text": {
+              "en": "Here, take all my papers and look for what you need.",
+              "es": "Tome, llévese todos mis papeles y busque lo que necesite."
+            },
             "picture": "🗂️",
-            "tip": { "en": "Keep your folder until you know what they need. Ask them to repeat first: \"Could you say that again, please?\"", "es": "Quédate con tu carpeta hasta que sepas qué te piden. Primero pide que te lo repitan: \"Could you say that again, please?\"" },
+            "for": "en",
+            "tip": {
+              "en": "Keep your folder until you know what they need. Ask them to repeat first: \"Could you say that again, please?\"",
+              "es": "Quédate con tu carpeta hasta que sepas qué te piden. Primero pide que te lo repitan: \"Could you say that again, please?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Sorry, I don't understand anything. Do you speak English?",
+              "es": "Lo siento, no entiendo nada. ¿Habla inglés?"
+            },
+            "picture": "🙈",
+            "for": "es",
+            "tip": {
+              "en": "You understood most of it. Before switching languages, ask for a repeat: \"¿Me lo puede repetir, por favor? Un poquito más despacio.\" (And «perdón» is the word for excuse me; «lo siento» is for sympathy.)",
+              "es": "Entendiste casi todo. Antes de cambiar de idioma, pide que te lo repitan: \"¿Me lo puede repetir, por favor? Un poquito más despacio.\" (Y «perdón» es para disculparse; «lo siento» es para dar el pésame.)"
+            },
             "next": null
           }
         ]
       },
       "s3": {
-        "partner": { "en": "Of course. Your current license. One proof of address. REAL ID or standard?", "es": "Claro que sí. Su licencia actual. Un comprobante de domicilio. ¿REAL ID o estándar?" },
+        "partner": {
+          "en": "Of course. Your current license. One proof of address. REAL ID or standard?",
+          "es": "Claro que sí. Su licencia actual. Un comprobante de domicilio. ¿REAL ID o estándar?"
+        },
         "choices": [
           {
-            "text": { "en": "Here is my license, and my electric bill with my address. Standard, please.", "es": "Aquí está mi licencia y mi recibo de luz con mi dirección. Estándar, por favor." },
+            "text": {
+              "en": "Here is my license and my electric bill. Standard, please.",
+              "es": "Aquí está mi licencia y mi bill de la luz. Estándar, por favor."
+            },
+            "picture": "🧾",
+            "for": "es",
+            "tip": {
+              "en": "«Bill» is understood here, but the Spanish word is «recibo» (or «factura»): \"mi recibo de luz\".",
+              "es": "«Bill» se entiende aquí, pero la palabra en español es «recibo» (o «factura»): \"mi recibo de luz\"."
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Here is my license, and my electric bill with my address. Standard, please.",
+              "es": "Aquí está mi licencia y mi recibo de luz con mi dirección. Estándar, por favor."
+            },
             "picture": "🧾",
             "best": true,
             "next": "s4"
           },
           {
-            "text": { "en": "Here is my license and my electric bill. I don't know, what is the difference?", "es": "Aquí está mi licencia y mi recibo de luz. No sé, ¿cuál es la diferencia?" },
+            "text": {
+              "en": "Here is my license and my electric bill. I don't know, what is the difference?",
+              "es": "Aquí está mi licencia y mi recibo de luz. No sé, ¿cuál es la diferencia?"
+            },
             "picture": "🤔",
-            "tip": { "en": "A fair question, and the clerk will answer it. In this rehearsal you want standard, so say: \"Standard, please.\" (REAL ID is the one you need to board a plane.)", "es": "Buena pregunta, y en la ventanilla te la contestan. En este ensayo quieres la estándar, así que di: \"Standard, please.\" (La REAL ID es la que se necesita para subir a un avión.)" },
+            "for": "en",
+            "tip": {
+              "en": "A fair question, and the clerk will answer it. In this rehearsal you want standard, so say: \"Standard, please.\" (REAL ID is the one you need to board a plane.)",
+              "es": "Buena pregunta, y en la ventanilla te la contestan. En este ensayo quieres la estándar, así que di: \"Standard, please.\" (La REAL ID es la que se necesita para subir a un avión.)"
+            },
             "next": null
           },
           {
-            "text": { "en": "My license number is A-0000-0000 and I live in Aurora.", "es": "Mi número de licencia es A-0000-0000 y vivo en Aurora." },
+            "text": {
+              "en": "My license number is A-0000-0000 and I live in Aurora.",
+              "es": "Mi número de licencia es A-0000-0000 y vivo en Aurora."
+            },
             "picture": "🔢",
-            "tip": { "en": "You don't read your number out loud at the window, and \"I live in Aurora\" is not proof of address. Hand them the card and a bill with your address.", "es": "En la ventanilla no se lee el número en voz alta, y «I live in Aurora» no es comprobante de domicilio. Entrégales la tarjeta y un recibo con tu dirección." },
+            "for": "en",
+            "tip": {
+              "en": "You don't read your number out loud at the window, and \"I live in Aurora\" is not proof of address. Hand them the card and a bill with your address.",
+              "es": "En la ventanilla no se lee el número en voz alta, y «I live in Aurora» no es comprobante de domicilio. Entrégales la tarjeta y un recibo con tu dirección."
+            },
             "next": null
           }
         ]
       },
       "s4": {
-        "partner": { "en": "Thank you. Now the vision screening. Look into the machine and read the top line for me.", "es": "Gracias. Ahora el examen de la vista. Asómese a la máquina y léame la línea de arriba." },
+        "partner": {
+          "en": "Thank you. Now the vision screening. Look into the machine and read the top line for me.",
+          "es": "Gracias. Ahora el examen de la vista. Asómese a la máquina y léame la línea de arriba."
+        },
         "choices": [
           {
-            "text": { "en": "I can't read it, the letters are very small for me.", "es": "No puedo leerla, las letras están muy chiquitas para mí." },
+            "text": {
+              "en": "I can't read it, the letters are very small for me.",
+              "es": "No puedo leerla, las letras están muy chiquitas para mí."
+            },
             "picture": "😕",
-            "tip": { "en": "Say what would help instead: \"Can I keep my glasses on?\" or \"Can I try again?\"", "es": "Mejor di lo que te ayudaría: \"Can I keep my glasses on?\" o \"Can I try again?\"" },
+            "for": "en",
+            "tip": {
+              "en": "Say what would help instead: \"Can I keep my glasses on?\" or \"Can I try again?\"",
+              "es": "Mejor di lo que te ayudaría: \"Can I keep my glasses on?\" o \"Can I try again?\""
+            },
             "next": null
           },
           {
-            "text": { "en": "Okay. Can I keep my glasses on?", "es": "Está bien. ¿Me puedo dejar los lentes puestos?" },
+            "text": {
+              "en": "Okay. Can I keep my glasses on?",
+              "es": "Está bien. ¿Me puedo dejar los lentes puestos?"
+            },
             "picture": "👓",
             "best": true,
             "next": "s5"
           },
           {
-            "text": { "en": "I use lenses. Is it a problem?", "es": "Uso lentes. ¿Hay problema?" },
+            "text": {
+              "en": "I use lenses. Is it a problem?",
+              "es": "Uso lentes. ¿Hay problema?"
+            },
             "picture": "👁️",
-            "tip": { "en": "In English \"lenses\" means contact lenses. Lentes on your face are \"glasses\": \"Can I keep my glasses on?\"", "es": "En inglés «lenses» son lentes de contacto. Los lentes que llevas puestos son «glasses»: \"Can I keep my glasses on?\"" },
+            "for": "en",
+            "tip": {
+              "en": "In English \"lenses\" means contact lenses. Lentes on your face are \"glasses\": \"Can I keep my glasses on?\"",
+              "es": "En inglés «lenses» son lentes de contacto. Los lentes que llevas puestos son «glasses»: \"Can I keep my glasses on?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Okay. Can I keep my glasses on?",
+              "es": "Está bien. ¿Puedo mantener mis gafas en?"
+            },
+            "picture": "👓",
+            "for": "es",
+            "tip": {
+              "en": "«Keep … on» is not «mantener … en». Say \"¿Me puedo dejar los lentes puestos?\" («lentes» or «gafas», both fine).",
+              "es": "«Keep … on» no es «mantener … en». Di \"¿Me puedo dejar los lentes puestos?\" («lentes» o «gafas», las dos sirven)."
+            },
             "next": null
           }
         ]
       },
       "s5": {
-        "partner": { "en": "Good, you passed. Here is your ticket. You are number 42.", "es": "Muy bien, pasó. Aquí tiene su ficha. Es el número 42." },
+        "partner": {
+          "en": "Good, you passed. Here is your ticket. You are number 42.",
+          "es": "Muy bien, pasó. Aquí tiene su número: el 42."
+        },
         "choices": [
           {
-            "text": { "en": "Okay, thank you very much. Have a good day, bye.", "es": "Bueno, muchas gracias. Que tenga buen día, adiós." },
-            "picture": "👋",
-            "tip": { "en": "You are not done yet. Ask before you walk away: \"Where do I go next?\"", "es": "Todavía no terminas. Pregunta antes de irte: \"Where do I go next?\"" },
+            "text": {
+              "en": "Thank you. What's next?",
+              "es": "Gracias. ¿Qué es el próximo?"
+            },
+            "picture": "❓",
+            "for": "es",
+            "tip": {
+              "en": "«¿Qué es el próximo?» is \"what's the next\" word for word. Ask where to go: \"¿Adónde voy después?\" or \"¿Qué sigue?\"",
+              "es": "«¿Qué es el próximo?» es «what's the next» palabra por palabra. Pregunta adónde ir: \"¿Adónde voy después?\" o \"¿Qué sigue?\""
+            },
             "next": null
           },
           {
-            "text": { "en": "Thank you. Where do I go next?", "es": "Gracias. ¿A dónde voy después?" },
+            "text": {
+              "en": "Okay, thank you very much. Have a good day, bye.",
+              "es": "Bueno, muchas gracias. Que tenga buen día, adiós."
+            },
+            "picture": "👋",
+            "for": "en",
+            "tip": {
+              "en": "You are not done yet. Ask before you walk away: \"Where do I go next?\"",
+              "es": "Todavía no has terminado. Pregunta antes de irte: \"Where do I go next?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Thank you. Where do I go next?",
+              "es": "Gracias. ¿Adónde voy después?"
+            },
             "picture": "🎫",
             "best": true,
             "next": "s6"
           },
           {
-            "text": { "en": "Is my new license ready? Can I take it now?", "es": "¿Ya está lista mi licencia nueva? ¿Me la puedo llevar ya?" },
+            "text": {
+              "en": "Is my new license ready? Can I take it now?",
+              "es": "¿Ya está lista mi licencia nueva? ¿Me la puedo llevar ya?"
+            },
             "picture": "⏳",
-            "tip": { "en": "Not yet. The photo and the cashier come first, so ask where to go next.", "es": "Todavía no. Primero la foto y la caja, así que pregunta a dónde ir después." },
+            "for": "en",
+            "tip": {
+              "en": "Not yet. The photo and the cashier come first, so ask where to go next.",
+              "es": "Todavía no. Primero la foto y la caja, así que pregunta adónde ir después."
+            },
             "next": null
           }
         ]
       },
       "s6": {
-        "partner": { "en": "Sit in row B and watch the screen. They call your number for the photo, then you pay at the cashier.", "es": "Siéntese en la fila B y esté pendiente de la pantalla. Llaman su número para la foto y después pasa a pagar a la caja." },
+        "partner": {
+          "en": "Sit in row B and watch the screen. They call your number for the photo, then you pay at the cashier.",
+          "es": "Siéntese en la fila B y esté pendiente de la pantalla. Van a llamar su número para la foto, y después pasa a la caja a pagar."
+        },
         "choices": [
           {
-            "text": { "en": "Got it. Row B, then the photo, then the cashier. Thank you for your patience.", "es": "Entendido. Fila B, luego la foto, luego la caja. Gracias por su paciencia." },
+            "text": {
+              "en": "Got it. Row B, then the photo, then the cashier. Thank you for your patience.",
+              "es": "Entendido. Fila B, luego la foto, luego la caja. Gracias por su paciencia."
+            },
             "picture": "✅",
             "best": true,
             "next": null
           },
           {
-            "text": { "en": "Okay. Row B, after the photo, and after I pay in the box.", "es": "Está bien. Fila B, después la foto y después pago en la caja." },
+            "text": {
+              "en": "Okay. Row B, after the photo, and after I pay in the box.",
+              "es": "Está bien. Fila B, después la foto y después pago en la caja."
+            },
             "picture": "📦",
-            "tip": { "en": "\"The box\" is caja translated too literally; the place you pay is \"the cashier\". And \"then\" links the steps better than \"after\": \"Row B, then the photo, then the cashier.\"", "es": "«The box» es «caja» demasiado literal; donde pagas es «the cashier». Y «then» enlaza mejor los pasos que «after»: \"Row B, then the photo, then the cashier.\"" },
+            "for": "en",
+            "tip": {
+              "en": "\"The box\" is caja translated too literally; the place you pay is \"the cashier\". And \"then\" links the steps better than \"after\": \"Row B, then the photo, then the cashier.\"",
+              "es": "«The box» es «caja» demasiado literal; donde pagas es «the cashier». Y «then» enlaza mejor los pasos que «after»: \"Row B, then the photo, then the cashier.\""
+            },
             "next": null
           },
           {
-            "text": { "en": "Do I pay you now? How much is it?", "es": "¿Le pago a usted? ¿Cuánto es?" },
+            "text": {
+              "en": "Do I pay you now? How much is it?",
+              "es": "¿Le pago a usted? ¿Cuánto es?"
+            },
             "picture": "💵",
-            "tip": { "en": "Not at this window. You pay at the cashier, after the photo.", "es": "En esta ventanilla no. Se paga en la caja, después de la foto." },
+            "for": "en",
+            "tip": {
+              "en": "Not at this window. You pay at the cashier, after the photo.",
+              "es": "En esta ventanilla no. Se paga en la caja, después de la foto."
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Got it. Row B, then the photo, then the cashier. Thank you for your patience.",
+              "es": "Entendido. Fila B, luego la foto, luego el cajero. Gracias por su paciencia."
+            },
+            "picture": "🏧",
+            "for": "es",
+            "tip": {
+              "en": "«El cajero» is the ATM or the person; the place you pay is «la caja»: \"luego la caja\".",
+              "es": "«El cajero» es el cajero automático o la persona; donde se paga es «la caja»: \"luego la caja\"."
+            },
             "next": null
           }
         ]

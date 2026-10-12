@@ -2,24 +2,45 @@
   "id": "call-in-sick",
   "place_type": "work",
   "channel": "phone",
-  "title": { "en": "Call in sick to work", "es": "Avisar al trabajo que hoy no puedes ir" },
+  "title": {
+    "en": "Call in sick to work",
+    "es": "Avisar al trabajo que hoy no puedes ir"
+  },
   "roles": {
-    "partner": { "en": "shift supervisor answering the phone", "es": "supervisor de turno que contesta el teléfono" },
-    "learner": { "en": "worker calling before a morning shift", "es": "persona que llama antes del turno de la mañana" }
+    "partner": {
+      "en": "shift supervisor answering the phone",
+      "es": "supervisora de turno que contesta el teléfono"
+    },
+    "learner": {
+      "en": "worker calling before a morning shift",
+      "es": "persona que llama antes del turno de la mañana"
+    }
   },
   "goal": {
     "en": "Tell your supervisor you are sick and cannot come in today, say when you expect to be back, and ask what they need from you.",
-    "es": "Decirle a tu supervisor que te sientes mal y no puedes ir hoy, decir cuándo crees que vuelves y preguntar qué necesita de ti."
+    "es": "Decirle a tu supervisora que te sientes mal y no puedes ir hoy, decir cuándo crees que vuelves y preguntar qué necesita de ti."
   },
   "must_use": [
-    { "en": "I'm calling in sick today.", "es": "Llamo para avisar que hoy no puedo ir a trabajar; me siento mal." },
-    { "en": "I think I can come back tomorrow.", "es": "Creo que puedo volver mañana." },
-    { "en": "Do you need a doctor's note?", "es": "¿Necesita una nota del doctor?" }
+    {
+      "en": "I'm calling in sick today.",
+      "es": "Llamo para avisar que hoy no puedo ir a trabajar porque me siento mal."
+    },
+    {
+      "en": "I think I can come back tomorrow.",
+      "es": "Creo que puedo volver mañana."
+    },
+    {
+      "en": "Do you need a doctor's note?",
+      "es": "¿Necesita una nota del doctor?"
+    }
   ],
-  "expect": { "en": "What's going on?", "es": "¿Qué te pasa?" },
+  "expect": {
+    "en": "What's going on?",
+    "es": "¿Qué te pasa?"
+  },
   "success": {
     "en": "The supervisor knows you are out today, knows when to expect you, and has told you whether you need a doctor's note.",
-    "es": "El supervisor sabe que hoy no vas, sabe cuándo esperarte y te dijo si necesitas una nota del doctor."
+    "es": "La supervisora sabe que hoy no vas, sabe cuándo esperarte y te dijo si necesitas una nota del doctor."
   },
   "show_staff_line": {
     "en": "I'm practicing my English. Please speak a little more slowly.",
@@ -29,116 +50,294 @@
     "start": "s1",
     "nodes": {
       "s1": {
-        "partner": { "en": "Morning, this is Dana. Who's this?", "es": "Buenos días, habla Dana. ¿Quién habla?" },
+        "partner": {
+          "en": "Morning, this is Dana. Who's this?",
+          "es": "Buenos días, habla Dana. ¿Quién habla?"
+        },
         "choices": [
           {
-            "text": { "en": "Hi Dana, I'm Carlos from the morning. I'm calling because I'm bad today.", "es": "Hola Dana, soy Carlos de la mañana. Llamo porque hoy estoy mal." },
+            "text": {
+              "en": "Hi Dana, this is Carlos. I'm calling in sick today.",
+              "es": "Hola Dana, soy Carlos. Estoy llamando en enfermo hoy."
+            },
             "picture": "🤒",
-            "tip": { "en": "\"I'm bad\" means you behave badly; estoy mal is \"I'm sick\" or \"I don't feel well\". The workplace phrase is \"I'm calling in sick today.\"", "es": "«I'm bad» significa que te portas mal; «estoy mal» es «I'm sick» o «I don't feel well». La frase del trabajo es \"I'm calling in sick today.\"" },
+            "for": "es",
+            "tip": {
+              "en": "«Calling in sick» has no word-for-word Spanish. Say you cannot come in and why: \"Llamo para avisar que hoy no puedo ir a trabajar porque me siento mal.\"",
+              "es": "«Calling in sick» no se traduce palabra por palabra. Di que no puedes ir y por qué: \"Llamo para avisar que hoy no puedo ir a trabajar porque me siento mal.\""
+            },
             "next": null
           },
           {
-            "text": { "en": "Hi Dana, this is Carlos from the morning shift. I'm calling in sick today.", "es": "Hola Dana, habla Carlos del turno de la mañana. Llamo para avisar que hoy no puedo ir a trabajar; me siento mal." },
+            "text": {
+              "en": "Hi Dana, this is Carlos. I'm embarrassed and I can't come in.",
+              "es": "Hola Dana, soy Carlos. Estoy embarazado y no puedo ir."
+            },
+            "picture": "😳",
+            "for": "es",
+            "tip": {
+              "en": "«Embarazado» means pregnant, not embarrassed. For feeling sick say «me siento mal»: \"Llamo para avisar que hoy no puedo ir a trabajar porque me siento mal.\"",
+              "es": "«Embarazado» significa que espera un bebé, no «embarrassed». Para decir que te sientes enfermo: \"Llamo para avisar que hoy no puedo ir a trabajar porque me siento mal.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Hi Dana, I'm Carlos from the morning. I'm calling because I'm bad today.",
+              "es": "Hola Dana, soy Carlos de la mañana. Llamo porque hoy estoy mal."
+            },
+            "picture": "🤒",
+            "for": "en",
+            "tip": {
+              "en": "\"I'm bad\" means you behave badly; estoy mal is \"I'm sick\" or \"I don't feel well\". The workplace phrase is \"I'm calling in sick today.\"",
+              "es": "«I'm bad» significa que te portas mal; «estoy mal» es «I'm sick» o «I don't feel well». La frase del trabajo es \"I'm calling in sick today.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Hi Dana, this is Carlos from the morning shift. I'm calling in sick today.",
+              "es": "Hola Dana, habla Carlos del turno de la mañana. Llamo para avisar que hoy no puedo ir a trabajar porque me siento mal."
+            },
             "picture": "📞",
             "best": true,
             "next": "s2"
           },
           {
-            "text": { "en": "Hi Dana, this is Carlos. I'm not coming today.", "es": "Hola Dana, habla Carlos. Hoy no voy a ir." },
+            "text": {
+              "en": "Hi Dana, this is Carlos. I'm not coming today.",
+              "es": "Hola Dana, habla Carlos. Hoy no voy a ir."
+            },
             "picture": "🚫",
-            "tip": { "en": "That sounds like you quit, or like you chose not to come. The phrase for illness is \"I'm calling in sick.\"", "es": "Eso suena a que renuncias, o a que decidiste no ir. La frase para enfermedad es \"I'm calling in sick.\"" },
+            "for": "en",
+            "tip": {
+              "en": "That sounds like you quit, or like you chose not to come. The phrase for illness is \"I'm calling in sick.\"",
+              "es": "Eso suena a que renuncias, o a que decidiste no ir. La frase para enfermedad es \"I'm calling in sick.\""
+            },
             "next": null
           }
         ]
       },
       "s2": {
-        "partner": { "en": "Sorry to hear that. What's going on?", "es": "Lo siento. ¿Qué te pasa?" },
+        "partner": {
+          "en": "Sorry to hear that. What's going on?",
+          "es": "Lo siento. ¿Qué te pasa?"
+        },
         "choices": [
           {
-            "text": { "en": "I have a fever and I was up all night. I don't want to get anyone sick.", "es": "Tengo fiebre y no dormí en toda la noche. No quiero contagiar a nadie." },
+            "text": {
+              "en": "I have a fever and I was up all night. I don't want to get anyone sick.",
+              "es": "Tengo fiebre y no dormí en toda la noche. No quiero contagiar a nadie."
+            },
             "picture": "🌡️",
             "best": true,
             "next": "s3"
           },
           {
-            "text": { "en": "It's private. I don't want to talk about it.", "es": "Es privado. No quiero hablar de eso." },
+            "text": {
+              "en": "It's private. I don't want to talk about it.",
+              "es": "Es privado. No quiero hablar de eso."
+            },
             "picture": "🤐",
-            "tip": { "en": "You don't have to give details, but one symptom helps them plan: \"I have a fever.\"", "es": "No tienes que dar detalles, pero un síntoma les ayuda a planear: \"I have a fever.\"" },
+            "for": "en",
+            "tip": {
+              "en": "You don't have to give details, but one symptom helps them plan: \"I have a fever.\"",
+              "es": "No tienes que dar detalles, pero un síntoma les ayuda a planear: \"I have a fever.\""
+            },
             "next": null
           },
           {
-            "text": { "en": "I have fever and I am constipated, I think it's a cold.", "es": "Tengo fiebre y estoy constipado, creo que es un resfriado." },
+            "text": {
+              "en": "I have fever and I am constipated, I think it's a cold.",
+              "es": "Tengo fiebre y estoy constipado, creo que es un resfriado."
+            },
             "picture": "🤧",
-            "tip": { "en": "\"Constipated\" is a false friend: in English it means you can't go to the bathroom. Constipado is \"I have a cold\" or \"I'm congested\". Also: \"I have a fever\", with \"a\".", "es": "«Constipated» es un falso amigo: en inglés significa estreñido. «Constipado» es \"I have a cold\" o \"I'm congested\". Además: «I have a fever», con «a»." },
+            "for": "en",
+            "tip": {
+              "en": "\"Constipated\" is a false friend: in English it means you can't go to the bathroom. Constipado is \"I have a cold\" or \"I'm congested\". Also: \"I have a fever\", with \"a\".",
+              "es": "«Constipated» es un falso amigo: en inglés significa estreñido. «Constipado» es \"I have a cold\" o \"I'm congested\". Además: «I have a fever», con «a»."
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "I'm sick. I have a fever.",
+              "es": "Soy enfermo. Tengo una fiebre."
+            },
+            "picture": "🌡️",
+            "for": "es",
+            "tip": {
+              "en": "Being sick right now takes «estar»: \"Estoy enfermo\" (or \"enferma\", or \"me siento mal\"). And fever takes no article: \"Tengo fiebre.\"",
+              "es": "Estar enfermo ahora mismo va con «estar»: \"Estoy enfermo\" (o \"enferma\", o \"me siento mal\"). Y fiebre va sin artículo: \"Tengo fiebre.\""
+            },
             "next": null
           }
         ]
       },
       "s3": {
-        "partner": { "en": "Okay, rest up. Any idea when you'll be back?", "es": "Está bien, descansa. ¿Sabes cuándo vuelves?" },
+        "partner": {
+          "en": "Okay, rest up. Any idea when you'll be back?",
+          "es": "Está bien, descansa. ¿Sabes cuándo vuelves?"
+        },
         "choices": [
           {
-            "text": { "en": "I don't know, it depends how I feel in the morning.", "es": "No sé, depende de cómo me sienta en la mañana." },
-            "picture": "🤷",
-            "tip": { "en": "Give your best guess and promise an update: \"I think I can come back tomorrow. I'll call if not.\"", "es": "Da tu mejor cálculo y promete avisar: \"I think I can come back tomorrow. I'll call if not.\"" },
+            "text": {
+              "en": "I think I can come back tomorrow. If not, I'll call you back tonight.",
+              "es": "Creo que puedo regresar mañana. Si no, le llamo atrás esta noche."
+            },
+            "picture": "📞",
+            "for": "es",
+            "tip": {
+              "en": "«Llamar atrás» is \"call back\" word for word. Say «le llamo» or «le aviso»: \"Si no, le aviso esta noche.\"",
+              "es": "«Llamar atrás» es «call back» palabra por palabra. Di «le llamo» o «le aviso»: \"Si no, le aviso esta noche.\""
+            },
             "next": null
           },
           {
-            "text": { "en": "I think I can come back tomorrow. I'll call you tonight if not.", "es": "Creo que puedo volver mañana. Le llamo esta noche si no." },
+            "text": {
+              "en": "I don't know, it depends how I feel in the morning.",
+              "es": "No sé, depende de cómo me sienta en la mañana."
+            },
+            "picture": "🤷",
+            "for": "en",
+            "tip": {
+              "en": "Give your best guess and promise an update: \"I think I can come back tomorrow. I'll call if not.\"",
+              "es": "Di cuándo crees que vuelves y promete avisar: \"I think I can come back tomorrow. I'll call if not.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "I think I can come back tomorrow. I'll call you tonight if not.",
+              "es": "Creo que puedo volver mañana. Si no, le aviso esta noche."
+            },
             "picture": "📅",
             "best": true,
             "next": "s4"
           },
           {
-            "text": { "en": "Maybe next week. I want to be sure I'm good.", "es": "Quizá la próxima semana. Quiero estar bien del todo." },
+            "text": {
+              "en": "Maybe next week. I want to be sure I'm good.",
+              "es": "Quizá la próxima semana. Quiero estar bien del todo."
+            },
             "picture": "🗓️",
-            "tip": { "en": "For a fever, a day is the usual guess. A week needs a doctor. Try: \"I think I can come back tomorrow.\"", "es": "Para una fiebre, lo normal es un día. Una semana requiere doctor. Prueba: \"I think I can come back tomorrow.\"" },
+            "for": "en",
+            "tip": {
+              "en": "For a fever, a day is the usual guess. A week needs a doctor. Try: \"I think I can come back tomorrow.\"",
+              "es": "Con fiebre, lo normal es faltar un día. Para una semana ya hace falta un doctor. Prueba: \"I think I can come back tomorrow.\""
+            },
             "next": null
           }
         ]
       },
       "s4": {
-        "partner": { "en": "Sounds good. I'll cover your shift.", "es": "Perfecto. Yo cubro tu turno." },
+        "partner": {
+          "en": "Sounds good. I'll cover your shift.",
+          "es": "Perfecto. Yo cubro tu turno."
+        },
         "choices": [
           {
-            "text": { "en": "Thank you, Dana. Do you need a note of the doctor?", "es": "Gracias, Dana. ¿Necesita una nota del doctor?" },
+            "text": {
+              "en": "Thank you, Dana. Do you need a note of the doctor?",
+              "es": "Gracias, Dana. ¿Necesita una nota del doctor?"
+            },
             "picture": "🩺",
-            "tip": { "en": "Right question, Spanish word order. In English the owner goes first with 's: \"a doctor's note\". \"Do you need a doctor's note?\"", "es": "La pregunta correcta, con orden del español. En inglés el dueño va primero con 's: «a doctor's note». \"Do you need a doctor's note?\"" },
+            "for": "en",
+            "tip": {
+              "en": "Right question, Spanish word order. In English the owner goes first with 's: \"a doctor's note\". \"Do you need a doctor's note?\"",
+              "es": "La pregunta es la correcta, pero con el orden del español. En inglés el dueño va primero con 's: «a doctor's note». \"Do you need a doctor's note?\""
+            },
             "next": null
           },
           {
-            "text": { "en": "Thank you. Do you need a doctor's note?", "es": "Gracias. ¿Necesita una nota del doctor?" },
+            "text": {
+              "en": "Thank you. Do you need a doctor's note?",
+              "es": "Gracias. ¿Necesita una nota del doctor?"
+            },
             "picture": "📄",
             "best": true,
             "next": "s5"
           },
           {
-            "text": { "en": "Will I get paid for today?", "es": "¿Me van a pagar el día de hoy?" },
+            "text": {
+              "en": "Will I get paid for today?",
+              "es": "¿Me van a pagar el día de hoy?"
+            },
             "picture": "💵",
-            "tip": { "en": "A fair question for later, in person. Right now ask what they need from you: \"Do you need a doctor's note?\"", "es": "Buena pregunta para después, en persona. Ahora pregunta qué necesitan de ti: \"Do you need a doctor's note?\"" },
+            "for": "en",
+            "tip": {
+              "en": "A fair question for later, in person. Right now ask what they need from you: \"Do you need a doctor's note?\"",
+              "es": "Buena pregunta para después, en persona. Ahora pregunta qué necesitan de ti: \"Do you need a doctor's note?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Thank you. Is a doctor's note necessary?",
+              "es": "Gracias. ¿Es necesario una nota del doctor?"
+            },
+            "picture": "📄",
+            "for": "es",
+            "tip": {
+              "en": "«Nota» is feminine: \"¿Es necesaria una nota del doctor?\" Simpler still: \"¿Necesita una nota del doctor?\"",
+              "es": "«Nota» es femenino: \"¿Es necesaria una nota del doctor?\" Más simple: \"¿Necesita una nota del doctor?\""
+            },
             "next": null
           }
         ]
       },
       "s5": {
-        "partner": { "en": "Not for one day. If it's more than two, yes. Feel better.", "es": "Por un día no. Si son más de dos, sí. Que te mejores." },
+        "partner": {
+          "en": "Not for one day. If it's more than two, yes. Feel better.",
+          "es": "Por un día no. Si son más de dos, sí. Que te mejores."
+        },
         "choices": [
           {
-            "text": { "en": "Two what? Sorry, I didn't understand.", "es": "¿Dos qué? Perdón, no entendí." },
-            "picture": "❓",
-            "tip": { "en": "Two days. If you didn't catch it, ask: \"Sorry, more than two days?\" Then thank her.", "es": "Dos días. Si no lo entendiste, pregunta: \"Sorry, more than two days?\" Luego da las gracias." },
+            "text": {
+              "en": "Got it. Thank you, Dana. You too.",
+              "es": "Entendido. Gracias, Dana. Tú también."
+            },
+            "picture": "🙏",
+            "for": "es",
+            "tip": {
+              "en": "«Que te mejores» is a wish for you, so there is no \"you too\"; thanks is the answer: \"Entendido. Gracias, Dana.\"",
+              "es": "«Que te mejores» es un deseo para ti, así que no hay «you too»; la respuesta es dar las gracias: \"Entendido. Gracias, Dana.\""
+            },
             "next": null
           },
           {
-            "text": { "en": "Got it. Thank you, Dana.", "es": "Entendido. Gracias, Dana." },
+            "text": {
+              "en": "Two what? Sorry, I didn't understand.",
+              "es": "¿Dos qué? Perdón, no entendí."
+            },
+            "picture": "❓",
+            "for": "en",
+            "tip": {
+              "en": "Two days. If you didn't catch it, ask: \"Sorry, more than two days?\" Then thank her.",
+              "es": "Dos días. Si no lo entendiste, pregunta: \"Sorry, more than two days?\" Luego da las gracias."
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Got it. Thank you, Dana.",
+              "es": "Entendido. Gracias, Dana."
+            },
             "picture": "🙏",
             "best": true,
             "next": null
           },
           {
-            "text": { "en": "Okay, bye, I'm going to sleep.", "es": "Bueno, adiós, me voy a dormir." },
+            "text": {
+              "en": "Okay, bye, I'm going to sleep.",
+              "es": "Bueno, adiós, me voy a dormir."
+            },
             "picture": "😴",
-            "tip": { "en": "Confirm you understood and thank her: \"Got it. Thank you, Dana.\"", "es": "Confirma que entendiste y da las gracias: \"Got it. Thank you, Dana.\"" },
+            "for": "en",
+            "tip": {
+              "en": "Confirm you understood and thank her: \"Got it. Thank you, Dana.\"",
+              "es": "Confirma que entendiste y da las gracias: \"Got it. Thank you, Dana.\""
+            },
             "next": null
           }
         ]

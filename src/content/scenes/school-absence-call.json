@@ -31,7 +31,7 @@
     },
     {
       "en": "Can he get his homework from today?",
-      "es": "¿Puede recibir la tarea de hoy?"
+      "es": "¿Le pueden dar la tarea de hoy?"
     }
   ],
   "expect": {
@@ -40,7 +40,7 @@
   },
   "success": {
     "en": "The school has Mateo marked absent and excused, and you know how to get his homework.",
-    "es": "La escuela tiene a Mateo con falta justificada, y sabes cómo recibir su tarea."
+    "es": "La escuela tiene a Mateo con falta justificada, y sabes cómo conseguir su tarea."
   },
   "show_staff_line": {
     "en": "I'm practicing my English. Thank you for your patience.",
@@ -58,6 +58,19 @@
           {
             "text": {
               "en": "Good morning. I'm calling to report an absence. My son is sick.",
+              "es": "Buenos días. Llamo para reportar una absencia. Mi hijo es enfermo."
+            },
+            "picture": "📞",
+            "for": "es",
+            "tip": {
+              "en": "«Ausencia», and being sick right now takes «estar»: \"Mi hijo está enfermo.\"",
+              "es": "«Ausencia», y estar enfermo ahora va con «estar»: \"Mi hijo está enfermo.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Good morning. I'm calling to report an absence. My son is sick.",
               "es": "Buenos días. Llamo para reportar una ausencia. Mi hijo está enfermo."
             },
             "picture": "📞",
@@ -70,6 +83,7 @@
               "es": "Buenos días. Mi hijo no va hoy."
             },
             "picture": "🏠",
+            "for": "en",
             "tip": {
               "en": "Say \"isn't going today\", or better, the school's own phrase: \"I'm calling to report an absence.\"",
               "es": "Di «isn't going today», o mejor, la frase que usa la escuela: \"I'm calling to report an absence.\""
@@ -82,6 +96,7 @@
               "es": "Buenos días. Yo llamo por una ausencia."
             },
             "picture": "🔁",
+            "for": "en",
             "tip": {
               "en": "Something happening right now uses \"I'm calling\": \"I'm calling to report an absence.\"",
               "es": "Algo que pasa ahora mismo se dice con «I'm calling»: \"I'm calling to report an absence.\""
@@ -93,7 +108,7 @@
       "s2": {
         "partner": {
           "en": "I'm sorry to hear that. What's your child's name and teacher?",
-          "es": "Lamento escucharlo. ¿Cómo se llama su hijo y quién es su maestra?"
+          "es": "Ay, lo siento. ¿Cómo se llama su hijo y quién es su maestra?"
         },
         "choices": [
           {
@@ -111,6 +126,7 @@
               "es": "Mateo Ruiz. Está en el segundo título."
             },
             "picture": "🌡️",
+            "for": "en",
             "tip": {
               "en": "A \"degree\" is temperature or a diploma. School years are \"grades\": \"He is in second grade.\"",
               "es": "«Degree» es temperatura o un título universitario. Los años escolares son «grades»: \"He is in second grade.\""
@@ -123,9 +139,23 @@
               "es": "Mateo."
             },
             "picture": "💬",
+            "for": "en",
             "tip": {
               "en": "The office needs the last name, the grade and the teacher: \"My son, Mateo Ruiz, is in second grade. His teacher is Ms. Patel.\"",
               "es": "La oficina necesita el apellido, el grado y la maestra: \"My son, Mateo Ruiz, is in second grade. His teacher is Ms. Patel.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "My son, Mateo Ruiz, is in second grade. His teacher is Ms. Patel.",
+              "es": "Mi hijo, Mateo Ruiz, es en segundo grado. Su maestra es la señora Patel."
+            },
+            "picture": "🧒",
+            "for": "es",
+            "tip": {
+              "en": "Being in a grade takes «estar»: \"está en segundo grado\".",
+              "es": "Estar en un grado va con «estar»: \"está en segundo grado\"."
             },
             "next": null
           }
@@ -134,9 +164,35 @@
       "s3": {
         "partner": {
           "en": "Got it. Is it a fever, or something else?",
-          "es": "Anotado. ¿Es fiebre, o algo más?"
+          "es": "Listo. ¿Tiene fiebre, o es otra cosa?"
         },
         "choices": [
+          {
+            "text": {
+              "en": "He has a fever and a cough.",
+              "es": "Él tiene una fiebre y una tos."
+            },
+            "picture": "🤒",
+            "for": "es",
+            "tip": {
+              "en": "No article with these: \"Tiene fiebre y tos.\"",
+              "es": "Sin artículo: \"Tiene fiebre y tos.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "His stomach hurts.",
+              "es": "Su estómago duele."
+            },
+            "picture": "🤢",
+            "for": "es",
+            "tip": {
+              "en": "Spanish says it with «le duele»: \"Le duele el estómago.\"",
+              "es": "En español se dice con «le duele»: \"Le duele el estómago.\""
+            },
+            "next": null
+          },
           {
             "text": {
               "en": "He has a fever and a cough.",
@@ -161,6 +217,7 @@
               "es": "Tiene fiebre y está constipado."
             },
             "picture": "🤧",
+            "for": "en",
             "tip": {
               "en": "\"Constipated\" means estreñido. For a cold say \"a cold\"; say \"He has a fever and a cough.\"",
               "es": "«Constipated» significa estreñido. Para un resfriado di «a cold»; di \"He has a fever and a cough.\""
@@ -178,7 +235,7 @@
           {
             "text": {
               "en": "Understood. Can he get his homework from today?",
-              "es": "Entendido. ¿Puede recibir la tarea de hoy?"
+              "es": "Entendido. ¿Le pueden dar la tarea de hoy?"
             },
             "picture": "📚",
             "best": true,
@@ -190,6 +247,7 @@
               "es": "Bien. ¿Él puede tener la tarea?"
             },
             "picture": "🔁",
+            "for": "en",
             "tip": {
               "en": "The question starts with \"Can he\": \"Can he get his homework from today?\"",
               "es": "La pregunta empieza con «Can he»: \"Can he get his homework from today?\""
@@ -202,9 +260,23 @@
               "es": "Bueno, adiós."
             },
             "picture": "👋",
+            "for": "en",
             "tip": {
               "en": "Before you hang up, ask about the work he is missing: \"Can he get his homework from today?\"",
               "es": "Antes de colgar, pregunta por el trabajo que se pierde: \"Can he get his homework from today?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Understood. Can he get his homework from today?",
+              "es": "Entendido. ¿Puede él conseguir su tarea de hoy?"
+            },
+            "picture": "📚",
+            "for": "es",
+            "tip": {
+              "en": "Closer to how the office would say it: \"¿Le pueden dar la tarea de hoy?\" (or «mandar»).",
+              "es": "Más parecido a como lo diría la oficina: \"¿Le pueden dar la tarea de hoy?\" (o «mandar»)."
             },
             "next": null
           }
@@ -216,6 +288,19 @@
           "es": "Sí. Su maestra la manda con su hermana, o usted puede pasar por ella después de las tres."
         },
         "choices": [
+          {
+            "text": {
+              "en": "Thank you. I'll pick it up after three.",
+              "es": "Gracias. Yo la recojo después de tres."
+            },
+            "picture": "🕒",
+            "for": "es",
+            "tip": {
+              "en": "Times take «las»: \"después de las tres\".",
+              "es": "Las horas llevan «las»: \"después de las tres\"."
+            },
+            "next": null
+          },
           {
             "text": {
               "en": "Thank you. I'll pick it up after three.",
@@ -231,6 +316,7 @@
               "es": "Gracias. Yo recojo después de las tres en punto."
             },
             "picture": "🕒",
+            "for": "en",
             "tip": {
               "en": "No \"the\" before a time, and a plan takes \"I'll\": \"I'll pick it up after three.\"",
               "es": "No va «the» antes de la hora, y un plan lleva «I'll»: \"I'll pick it up after three.\""
@@ -240,5 +326,6 @@
         ]
       }
     }
-  }
+  },
+  "example_details": true
 }

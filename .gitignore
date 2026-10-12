@@ -12,3 +12,5 @@ Thumbs.db
 .impeccable/review/
 .impeccable/mocks/
 .impeccable/build/
+
+.bench/

@@ -18,6 +18,10 @@ describe('i18n strings', () => {
     }
   })
 
+  it('names keys in snake_case, so a dynamic lookup like `type_${x}` is predictable', () => {
+    for (const k of Object.keys(STRINGS.en)) expect(k).toMatch(/^[a-z][a-z0-9]*(_[a-zA-Z0-9]+)*$/)
+  })
+
   it('translate rather than copy (most Spanish strings differ from English)', () => {
     const keys = Object.keys(STRINGS.en) as (keyof typeof STRINGS.en)[]
     const same = keys.filter((k) => STRINGS.en[k] === STRINGS.es[k])

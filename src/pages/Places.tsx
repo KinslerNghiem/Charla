@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
 import type { Map as MapLibreMap } from 'maplibre-gl'
 import type { Feature, FeatureCollection, Point } from 'geojson'
-import { learning, t } from '../i18n/lang'
+import { lang, learning, t } from '../i18n/lang'
+import { venueField } from '../places/venueText'
 import { computeStatus, STATUSES, supportLang, type Reports, type Status } from '../places/badges'
 import { AURORA_DOWNTOWN, inServiceArea, ZIP_CENTERS } from '../places/centers'
 import { fetchReports, sendReport } from '../tutor/client'
@@ -24,6 +25,10 @@ interface VenueProps {
   shifts: string
   status: Status
   club_schedule: string
+  /** Spanish versions of the three free-text columns, when the sheet has them. */
+  roles_es?: string
+  shifts_es?: string
+  club_schedule_es?: string
   meet_ok: string
   format: string
   /** Set by this page for the map layer, never by the build. */
@@ -81,6 +86,7 @@ export function Places({ params }: { params: URLSearchParams }) {
   const map = useRef<MapLibreMap | null>(null)
   const mapMod = useRef<MapModule | null>(null)
   const target = learning()
+  const ui = lang()
   const support = supportLang(target)
 
   const features: Venue[] = useMemo(
@@ -285,19 +291,19 @@ export function Places({ params }: { params: URLSearchParams }) {
           <div class="body">
           <p class="addr">{sel.properties.address}</p>
           <p class={'badge ' + sel.properties.status}>{t(`badge_${sel.properties.status}` as 'badge_unknown')}</p>
-          {sel.properties.roles && (
+          {venueField(sel.properties, 'roles', ui) && (
             <p>
-              <b>{t('roles_label')}:</b> {sel.properties.roles}
+              <b>{t('roles_label')}:</b> {venueField(sel.properties, 'roles', ui)}
             </p>
           )}
-          {sel.properties.shifts && (
+          {venueField(sel.properties, 'shifts', ui) && (
             <p>
-              <b>{t('shifts_label')}:</b> {sel.properties.shifts}
+              <b>{t('shifts_label')}:</b> {venueField(sel.properties, 'shifts', ui)}
             </p>
           )}
-          {sel.properties.club_schedule && (
+          {venueField(sel.properties, 'club_schedule', ui) && (
             <p>
-              <b>{t('club_label')}:</b> {sel.properties.club_schedule}
+              <b>{t('club_label')}:</b> {venueField(sel.properties, 'club_schedule', ui)}
             </p>
           )}
           {sel.properties.meet_ok === 'yes' && !isTeen() && <p class="meet"><Icon name="table" size={16} /> {t('meet_ok')}</p>}
@@ -347,7 +353,7 @@ export function Places({ params }: { params: URLSearchParams }) {
           )}
           <p class="note">
             {CONTACT_EMAIL ? (
-              <a href={`mailto:${CONTACT_EMAIL}?subject=Charla%20listing`}>{t('opt_out')}</a>
+              <a href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(t('opt_out_subject'))}`}>{t('opt_out')}</a>
             ) : (
               <>
                 {t('opt_out')} {t('opt_out_how')}
@@ -367,7 +373,7 @@ export function Places({ params }: { params: URLSearchParams }) {
       </p>
       {data && shown.length === 0 && filter !== 'all' && (
         <p class="notice">
-          {t('places_none_type')} <a href={PARTNERS_URL}>docs/partners.md</a>
+          {t('places_none_type')} <a href={PARTNERS_URL}>{t('places_one_pager')}</a>
         </p>
       )}
       <ul class="venue-list">

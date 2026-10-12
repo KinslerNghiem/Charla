@@ -41,7 +41,7 @@
   },
   "success": {
     "en": "You have a new friend named Leo, and you are playing tag.",
-    "es": "Tienes un amigo nuevo que se llama Leo, y están jugando a las traes."
+    "es": "Tienes un amigo nuevo que se llama Leo, y están jugando a atraparse."
   },
   "show_staff_line": {
     "en": "I'm practicing my English. Thank you for your patience.",
@@ -59,6 +59,19 @@
           {
             "text": {
               "en": "Hi! Do you want to play?",
+              "es": "¡Hola! ¿Quiere jugar?"
+            },
+            "picture": "🤝",
+            "for": "es",
+            "tip": {
+              "en": "To another kid, use «tú»: \"¿Quieres jugar?\"",
+              "es": "A otro niño se le habla de «tú»: \"¿Quieres jugar?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Hi! Do you want to play?",
               "es": "¡Hola! ¿Quieres jugar?"
             },
             "picture": "🤝",
@@ -71,6 +84,7 @@
               "es": "¿Jugar?"
             },
             "picture": "💬",
+            "for": "en",
             "tip": {
               "en": "Say hi and ask the whole question: \"Hi! Do you want to play?\"",
               "es": "Saluda y haz la pregunta completa: \"Hi! Do you want to play?\""
@@ -83,6 +97,7 @@
               "es": "Dame el columpio."
             },
             "picture": "😠",
+            "for": "en",
             "tip": {
               "en": "That sounds bossy. Try \"Hi! Do you want to play?\"",
               "es": "Eso suena mandón. Prueba \"Hi! Do you want to play?\""
@@ -100,7 +115,7 @@
           {
             "text": {
               "en": "Let's play tag!",
-              "es": "¡Juguemos a las traes!"
+              "es": "¡Juguemos a atraparnos!"
             },
             "picture": "🏃",
             "best": true,
@@ -109,7 +124,7 @@
           {
             "text": {
               "en": "Let's go on the slide!",
-              "es": "¡Vamos a la resbaladilla!"
+              "es": "¡Vamos al tobogán!"
             },
             "picture": "🛝",
             "best": true,
@@ -121,9 +136,23 @@
               "es": "No sé."
             },
             "picture": "🤷",
+            "for": "en",
             "tip": {
               "en": "Pick a game so the fun can start: \"Let's play tag!\"",
               "es": "Elige un juego para que empiece la diversión: \"Let's play tag!\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Let's play tag!",
+              "es": "¡Vamos a jugar tag!"
+            },
+            "picture": "🏃",
+            "for": "es",
+            "tip": {
+              "en": "\"¡Juguemos a atraparnos!\" (kids also say «a las traes» or «a la lleva»).",
+              "es": "\"¡Juguemos a atraparnos!\" (los niños también dicen «a las traes» o «a la lleva»)."
             },
             "next": null
           }
@@ -132,9 +161,22 @@
       "s3": {
         "partner": {
           "en": "Okay! Who goes first?",
-          "es": "¡Va! ¿Quién empieza?"
+          "es": "¡Bueno! ¿Quién va primero?"
         },
         "choices": [
+          {
+            "text": {
+              "en": "You go first!",
+              "es": "¡Usted primero!"
+            },
+            "picture": "👉",
+            "for": "es",
+            "tip": {
+              "en": "«Usted» sounds like talking to a grown-up. With a friend: \"¡Tú primero!\"",
+              "es": "«Usted» suena a hablarle a un adulto. Con un amigo: \"¡Tú primero!\""
+            },
+            "next": null
+          },
           {
             "text": {
               "en": "You go first!",
@@ -150,6 +192,7 @@
               "es": "¡Yo, yo, yo!"
             },
             "picture": "😤",
+            "for": "en",
             "tip": {
               "en": "Letting your new friend go first is a nice way to start: \"You go first!\"",
               "es": "Dejar que tu nuevo amigo empiece es una forma amable de comenzar: \"You go first!\""
@@ -162,6 +205,7 @@
               "es": "Primero tú."
             },
             "picture": "🔁",
+            "for": "en",
             "tip": {
               "en": "Almost! The English order is \"You go first!\"",
               "es": "¡Casi! El orden en inglés es \"You go first!\""
@@ -191,6 +235,7 @@
               "es": "Yo me llamo a mí misma Sofi."
             },
             "picture": "🪞",
+            "for": "en",
             "tip": {
               "en": "\"I call myself\" is the Spanish shape. In English: \"My name is Sofi. What's your name?\"",
               "es": "«I call myself» es la forma del español. En inglés: \"My name is Sofi. What's your name?\""
@@ -203,9 +248,23 @@
               "es": "Sofi."
             },
             "picture": "💬",
+            "for": "en",
             "tip": {
               "en": "Ask their name back: \"My name is Sofi. What's your name?\"",
               "es": "Pregunta su nombre también: \"My name is Sofi. What's your name?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "My name is Sofi. What is your name?",
+              "es": "Mi nombre es Sofi. ¿Qué es tu nombre?"
+            },
+            "picture": "🪞",
+            "for": "es",
+            "tip": {
+              "en": "«¿Qué es tu nombre?» is word for word. Ask \"¿Cómo te llamas?\" (\"Mi nombre es Sofi\" works, but kids say \"Me llamo Sofi\".)",
+              "es": "«¿Qué es tu nombre?» es palabra por palabra. Pregunta \"¿Cómo te llamas?\" (\"Mi nombre es Sofi\" funciona, pero los niños dicen \"Me llamo Sofi\".)"
             },
             "next": null
           }
@@ -214,13 +273,26 @@
       "s5": {
         "partner": {
           "en": "I'm Leo. Ready? Run!",
-          "es": "Soy Leo. ¿Listo? ¡Corre!"
+          "es": "Soy Leo. ¿Listos? ¡A correr!"
         },
         "choices": [
           {
             "text": {
+              "en": "Yes! Let's go!",
+              "es": "¡Sí! ¡Vámonos a ir!"
+            },
+            "picture": "🎉",
+            "for": "es",
+            "tip": {
+              "en": "\"¡Vamos!\" is all of it.",
+              "es": "Con \"¡Vamos!\" basta."
+            },
+            "next": null
+          },
+          {
+            "text": {
               "en": "Ready! Let's go!",
-              "es": "¡Listo! ¡Vamos!"
+              "es": "¡Sí! ¡Vamos!"
             },
             "picture": "🎉",
             "best": true,
@@ -229,17 +301,19 @@
           {
             "text": {
               "en": "Wait, I'm tired.",
-              "es": "Espera, estoy cansado."
+              "es": "Espera, ya me cansé."
             },
             "picture": "😮‍💨",
+            "for": "en",
             "tip": {
               "en": "You just started! Say \"Ready! Let's go!\"",
-              "es": "¡Apenas empiezas! Di \"Ready! Let's go!\""
+              "es": "¡Apenas estás empezando! Di \"Ready! Let's go!\""
             },
             "next": null
           }
         ]
       }
     }
-  }
+  },
+  "example_details": true
 }

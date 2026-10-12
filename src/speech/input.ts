@@ -205,6 +205,8 @@ export interface ListenOptions {
   onStats?: (stats: ClipStats) => void
   /** Called while recording when the advice about distance changes. */
   onHint?: (hint: Distance) => void
+  /** Lines the scene expects ("¡Gracias!"): a transcript that is one of them is kept however short the clip. */
+  expected?: string[]
 }
 
 function bcp47(lang: Lang): string {
@@ -332,6 +334,25 @@ export function encodeWav(samples: Float32Array, rate: number): Blob {
 /** True when a transcript is Whisper filling silence rather than something the learner said. */
 export function looksHallucinated(text: string, loudMs: number): boolean {
   return loudMs < HALLUCINATION_MAX_LOUD_MS && HALLUCINATION.test(text.trim())
+}
+
+/**
+ * "¡Gracias!" is the last must-use line of three kid scenes and takes about
+ * half a second to say, which is inside the window where Whisper's "Thank
+ * you." is not believed. A transcript that is one of the scene's own lines is
+ * real, however short the clip was.
+ */
+export function isExpected(text: string, expected?: string[]): boolean {
+  const norm = (s: string) =>
+    s
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[^\p{L}\p{N}\s]/gu, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+  const t = norm(text)
+  return t !== '' && (expected ?? []).some((e) => norm(e) === t)
 }
 
 export function startRecorderListener(lang: Lang, opts: ListenOptions = {}): Listener {
@@ -475,7 +496,7 @@ export function startRecorderListener(lang: Lang, opts: ListenOptions = {}): Lis
             const text = (await transcribe(wav, lang)).trim()
             // "Thank you" is a real learner line too, so the phrase alone never
             // drops a transcript; it takes a clip too short to have held one.
-            resolve(looksHallucinated(text, loudMs) ? '' : text)
+            resolve(looksHallucinated(text, loudMs) && !isExpected(text, opts.expected) ? '' : text)
           } catch (err) {
             noteSttFailure(err)
             reject(err)

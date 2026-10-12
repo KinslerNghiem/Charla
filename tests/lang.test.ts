@@ -91,3 +91,76 @@ describe('language answer', () => {
     expect(m.tIn('en', 'nav_learn')).not.toBe('')
   })
 })
+
+describe('interface language and direction are separate settings', () => {
+  beforeEach(() => {
+    stub('localStorage', fakeStorage())
+    const bus = new EventTarget()
+    stub('dispatchEvent', (e: Event) => bus.dispatchEvent(e))
+    stub('addEventListener', (t: string, l: EventListener) => bus.addEventListener(t, l))
+    stub('removeEventListener', (t: string, l: EventListener) => bus.removeEventListener(t, l))
+    if (!('document' in globalThis)) stub('document', { documentElement: { lang: '' } })
+  })
+  afterEach(() => {
+    for (const n of stubbed.splice(0)) delete (globalThis as Record<string, unknown>)[n]
+  })
+
+  it('setLang switches the interface alone: direction, answer and progress stay', async () => {
+    const m = await load()
+    m.setNative('es')
+    localStorage.setItem('charla.rehearsed', '["pharmacy-refill"]')
+    localStorage.setItem('charla.lastCard', '{"scene_id":"pharmacy-refill"}')
+    m.setLang('en')
+    expect(m.lang()).toBe('en')
+    expect(m.learning()).toBe('en')
+    expect(m.native()).toBe('es')
+    expect(m.hasNative()).toBe(true)
+    expect(document.documentElement.lang).toBe('en')
+    expect(localStorage.getItem('charla.rehearsed')).toBe('["pharmacy-refill"]')
+    expect(localStorage.getItem('charla.lastCard')).toBe('{"scene_id":"pharmacy-refill"}')
+  })
+
+  it('toggleLang flips the interface and tells the components', async () => {
+    const m = await load()
+    m.setNative('es')
+    let ticks = 0
+    addEventListener('charla:lang', () => ticks++)
+    m.toggleLang()
+    expect(m.lang()).toBe('en')
+    m.toggleLang()
+    expect(m.lang()).toBe('es')
+    expect(ticks).toBe(2)
+    expect(m.learning()).toBe('en')
+  })
+
+  it('setLearning switches the direction alone: the interface language stays', async () => {
+    const m = await load()
+    m.setNative('es')
+    m.setLearning('es')
+    expect(m.learning()).toBe('es')
+    expect(m.native()).toBe('en')
+    expect(m.lang()).toBe('es')
+    expect(m.hasNative()).toBe(true)
+  })
+
+  it('remembers both settings across a reload, and stores nothing else for them', async () => {
+    let m = await load()
+    m.setNative('es')
+    m.setLang('en')
+    m = await load()
+    expect(m.lang()).toBe('en')
+    expect(m.learning()).toBe('en')
+    expect(m.native()).toBe('es')
+    expect(Object.keys(localStorage).sort()).toEqual(['charla.lang', 'charla.learning', 'charla.native'])
+  })
+
+  it('never shows a raw key: a missing string falls back to English, then to plain words', async () => {
+    const m = await load()
+    m.setNative('es')
+    const key = 'type_laundromat' as Parameters<typeof m.t>[0]
+    expect(m.t(key)).toBe('Laundromat')
+    expect(m.tIn('en', key)).toBe('Laundromat')
+    expect(m.humanize('badge_listed_by_city')).toBe('Listed by city')
+    expect(m.humanize('something_else_entirely')).toBe('Something else entirely')
+  })
+})

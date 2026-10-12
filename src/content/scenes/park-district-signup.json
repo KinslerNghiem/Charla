@@ -58,6 +58,32 @@
           {
             "text": {
               "en": "I want to sign up my daughter for swimming lessons.",
+              "es": "Quiero inscribir mi hija en clases de natación."
+            },
+            "picture": "🏊",
+            "for": "es",
+            "tip": {
+              "en": "A person as the object takes «a»: \"inscribir a mi hija\".",
+              "es": "Una persona como objeto lleva «a»: \"inscribir a mi hija\"."
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "I want to register my daughter for swimming lessons.",
+              "es": "Quiero registrar mi hija para lecciones de nadando."
+            },
+            "picture": "✍️",
+            "for": "es",
+            "tip": {
+              "en": "«Inscribir a» and «clases de natación»: \"Quiero inscribir a mi hija en clases de natación.\"",
+              "es": "«Inscribir a» y «clases de natación»: \"Quiero inscribir a mi hija en clases de natación.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "I want to sign up my daughter for swimming lessons.",
               "es": "Quiero inscribir a mi hija en clases de natación."
             },
             "picture": "🏊",
@@ -70,6 +96,7 @@
               "es": "Quiero inscribir a mi hija en clases de nadar."
             },
             "picture": "✍️",
+            "for": "en",
             "tip": {
               "en": "\"Inscribe\" means to engrave. For inscribir say \"sign up\" or \"register\": \"I want to sign up my daughter for swimming lessons.\"",
               "es": "«Inscribe» es grabar en piedra. Para inscribir di «sign up» o «register»: \"I want to sign up my daughter for swimming lessons.\""
@@ -82,6 +109,7 @@
               "es": "Natación para mi hija."
             },
             "picture": "💬",
+            "for": "en",
             "tip": {
               "en": "Say what you want to do with the whole sentence: \"I want to sign up my daughter for swimming lessons.\"",
               "es": "Di qué quieres hacer con la frase completa: \"I want to sign up my daughter for swimming lessons.\""
@@ -102,6 +130,7 @@
               "es": "Ella tiene siete años."
             },
             "picture": "7️⃣",
+            "for": "en",
             "tip": {
               "en": "Age in English uses \"is\", not \"has\": \"She's seven.\"",
               "es": "La edad en inglés se dice con «is», no con «has»: \"She's seven.\""
@@ -123,9 +152,23 @@
               "es": "Siete. Ella sabe nadar un poquito."
             },
             "picture": "🌊",
+            "for": "en",
             "tip": {
               "en": "After \"know\" you need \"how to\": \"She knows how to swim a little.\" Or: \"She's seven. She's a beginner.\"",
               "es": "Después de «know» va «how to»: \"She knows how to swim a little.\" O: \"She's seven. She's a beginner.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "She's seven. She's a beginner.",
+              "es": "Ella es siete. Ella es una principiante."
+            },
+            "picture": "👧",
+            "for": "es",
+            "tip": {
+              "en": "Age takes «tener»: \"Tiene siete años.\" And Spanish drops the «una»: \"Es principiante.\"",
+              "es": "La edad va con «tener»: \"Tiene siete años.\" Y el español omite el «una»: \"Es principiante.\""
             },
             "next": null
           }
@@ -139,10 +182,24 @@
         "choices": [
           {
             "text": {
+              "en": "What is the price?",
+              "es": "¿Qué es el precio?"
+            },
+            "picture": "❓",
+            "for": "es",
+            "tip": {
+              "en": "Ask with «cuánto»: \"¿Cuánto cuesta?\"",
+              "es": "Pregunta con «cuánto»: \"¿Cuánto cuesta?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
               "en": "How much it costs?",
               "es": "¿Cuánto es que cuesta?"
             },
             "picture": "❓",
+            "for": "en",
             "tip": {
               "en": "Questions in English use \"does\": \"How much does it cost?\"",
               "es": "Las preguntas en inglés usan «does»: \"How much does it cost?\""
@@ -164,9 +221,10 @@
               "es": "¿Cuál es el precio de las clases de natación?"
             },
             "picture": "📋",
+            "for": "en",
             "tip": {
               "en": "Long and Spanish-shaped. The short, natural way: \"How much does it cost?\"",
-              "es": "Largo y con forma de español. La forma corta y natural: \"How much does it cost?\""
+              "es": "Muy largo y con la forma del español. La forma corta y natural: \"How much does it cost?\""
             },
             "next": null
           }
@@ -193,9 +251,10 @@
               "es": "¿Hay un descuento para residentes, o no?"
             },
             "picture": "🔁",
+            "for": "en",
             "tip": {
-              "en": "A statement with a question mark is the Spanish pattern. Start with the verb: \"Is there a discount for residents?\"",
-              "es": "Una afirmación con signo de interrogación es patrón del español. Empieza con el verbo: \"Is there a discount for residents?\""
+              "en": "Fine in casual speech, with a rising voice. At a counter, start with the verb: \"Is there a discount for residents?\"",
+              "es": "En una charla informal funciona, con entonación de pregunta. En un mostrador, empieza con el verbo: \"Is there a discount for residents?\""
             },
             "next": null
           },
@@ -205,9 +264,23 @@
               "es": "Es mucho. ¿Me lo puede bajar?"
             },
             "picture": "😬",
+            "for": "en",
             "tip": {
               "en": "Park district prices are fixed, but there is usually a resident rate. Ask: \"Is there a discount for residents?\"",
               "es": "Los precios del distrito de parques son fijos, pero casi siempre hay tarifa para residentes. Pregunta: \"Is there a discount for residents?\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Do you have a discount for residents?",
+              "es": "¿Tienes un descuento para residentes?"
+            },
+            "picture": "🔁",
+            "for": "es",
+            "tip": {
+              "en": "«Tienes» is «tú». Ask the desk: \"¿Hay descuento para residentes?\"",
+              "es": "«Tienes» es de «tú». Pregúntale a la recepción: \"¿Hay descuento para residentes?\""
             },
             "next": null
           }
@@ -219,6 +292,19 @@
           "es": "Sí. Con comprobante de domicilio son setenta. ¿Tiene algo con su dirección?"
         },
         "choices": [
+          {
+            "text": {
+              "en": "Yes, I have my electric bill. Thank you.",
+              "es": "Sí, tengo mi bill de electricidad. Gracias."
+            },
+            "picture": "💡",
+            "for": "es",
+            "tip": {
+              "en": "«Recibo de luz»: \"Sí, tengo mi recibo de luz.\"",
+              "es": "«Recibo de luz»: \"Sí, tengo mi recibo de luz.\""
+            },
+            "next": null
+          },
           {
             "text": {
               "en": "Yes, I have my electric bill. Thank you.",
@@ -234,6 +320,7 @@
               "es": "Sí, tengo mi receta de la luz."
             },
             "picture": "🍳",
+            "for": "en",
             "tip": {
               "en": "A \"recipe\" is for cooking. A recibo is a \"bill\": \"I have my electric bill.\"",
               "es": "«Recipe» es para cocinar. Un recibo es «bill»: \"I have my electric bill.\""

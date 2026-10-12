@@ -3,21 +3,42 @@
   "place_type": "ice_cream",
   "kid": true,
   "channel": "counter",
-  "title": { "en": "Order an ice cream", "es": "Pedir un helado" },
+  "title": {
+    "en": "Order an ice cream",
+    "es": "Pedir un helado"
+  },
   "roles": {
-    "partner": { "en": "person at the ice cream counter", "es": "persona del mostrador de helados" },
-    "learner": { "en": "kid ordering their own ice cream", "es": "niño o niña que pide su propio helado" }
+    "partner": {
+      "en": "person at the ice cream counter",
+      "es": "persona del mostrador de helados"
+    },
+    "learner": {
+      "en": "kid ordering their own ice cream",
+      "es": "niño o niña que pide su propio helado"
+    }
   },
   "goal": {
     "en": "Order one scoop, pick a flavor, say if you want a cone or a cup, and say thank you.",
     "es": "Pedir una bola, elegir el sabor, decir si lo quieres en cono o en vaso, y dar las gracias."
   },
   "must_use": [
-    { "en": "One scoop of chocolate, please.", "es": "Una bola de chocolate, por favor." },
-    { "en": "In a cone, please.", "es": "En cono, por favor." },
-    { "en": "Thank you very much!", "es": "¡Muchas gracias!" }
+    {
+      "en": "One scoop of chocolate, please.",
+      "es": "Una bola de chocolate, por favor."
+    },
+    {
+      "en": "In a cone, please.",
+      "es": "En cono, por favor."
+    },
+    {
+      "en": "Thank you very much!",
+      "es": "¡Muchas gracias!"
+    }
   ],
-  "expect": { "en": "Cone or cup?", "es": "¿En cono o en vaso?" },
+  "expect": {
+    "en": "Cone or cup?",
+    "es": "¿En cono o en vaso?"
+  },
   "success": {
     "en": "You get your ice cream in a cone, and the person smiles because you said thank you.",
     "es": "Te dan tu helado en cono, y la persona sonríe porque diste las gracias."
@@ -30,93 +51,217 @@
     "start": "s1",
     "nodes": {
       "s1": {
-        "partner": { "en": "Hi there! What can I get you?", "es": "¡Hola! ¿Qué te doy?" },
+        "partner": {
+          "en": "Hi there! What can I get you?",
+          "es": "¡Hola! ¿Qué te doy?"
+        },
         "choices": [
           {
-            "text": { "en": "One scoop of chocolate, please.", "es": "Una bola de chocolate, por favor." },
+            "text": {
+              "en": "One scoop of chocolate ice cream, please.",
+              "es": "Una bola de chocolate helado, por favor."
+            },
+            "picture": "🍫",
+            "for": "es",
+            "tip": {
+              "en": "It is «helado de chocolate»: the flavor comes after. Here one scoop is enough: \"Una bola de chocolate, por favor.\"",
+              "es": "Se dice «helado de chocolate»: el sabor va después. Aquí basta con la bola: \"Una bola de chocolate, por favor.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "One scoop of chocolate, please.",
+              "es": "Una bola de chocolate, por favor."
+            },
             "picture": "🍫",
             "best": true,
             "next": "s2"
           },
           {
-            "text": { "en": "Chocolate.", "es": "Chocolate." },
+            "text": {
+              "en": "Chocolate.",
+              "es": "Chocolate."
+            },
             "picture": "💬",
-            "tip": { "en": "Say how much and say please: \"One scoop of chocolate, please.\"", "es": "Di cuánto y di por favor: \"One scoop of chocolate, please.\"" },
+            "for": "en",
+            "tip": {
+              "en": "Say how much and say please: \"One scoop of chocolate, please.\"",
+              "es": "Di cuánto y di por favor: \"One scoop of chocolate, please.\""
+            },
             "next": null
           },
           {
-            "text": { "en": "A pizza, please.", "es": "Una pizza, por favor." },
+            "text": {
+              "en": "A pizza, please.",
+              "es": "Una pizza, por favor."
+            },
             "picture": "🍕",
-            "tip": { "en": "This is an ice cream shop! Try \"One scoop of chocolate, please.\"", "es": "¡Es una heladería! Prueba \"One scoop of chocolate, please.\"" },
+            "for": "en",
+            "tip": {
+              "en": "This is an ice cream shop! Try \"One scoop of chocolate, please.\"",
+              "es": "¡Es una heladería! Prueba \"One scoop of chocolate, please.\""
+            },
             "next": null
           }
         ]
       },
       "s2": {
-        "partner": { "en": "Cone or cup?", "es": "¿En cono o en vaso?" },
+        "partner": {
+          "en": "Cone or cup?",
+          "es": "¿En cono o en vaso?"
+        },
         "choices": [
           {
-            "text": { "en": "In a cone, please.", "es": "En cono, por favor." },
+            "text": {
+              "en": "In a cone, please.",
+              "es": "En cono, por favor."
+            },
             "picture": "🍦",
             "best": true,
             "next": "s3"
           },
           {
-            "text": { "en": "In a cup, please.", "es": "En vaso, por favor." },
+            "text": {
+              "en": "In a cup, please.",
+              "es": "En vaso, por favor."
+            },
             "picture": "🥤",
             "best": true,
             "next": "s3"
           },
           {
-            "text": { "en": "Yes.", "es": "Sí." },
+            "text": {
+              "en": "Yes.",
+              "es": "Sí."
+            },
             "picture": "❓",
-            "tip": { "en": "They asked which one. Pick one: \"In a cone, please.\"", "es": "Te preguntaron cuál. Elige uno: \"In a cone, please.\"" },
+            "for": "en",
+            "tip": {
+              "en": "They asked which one. Pick one: \"In a cone, please.\"",
+              "es": "Te preguntaron cuál. Elige uno: \"In a cone, please.\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "In a cup, please.",
+              "es": "En una taza, por favor."
+            },
+            "picture": "☕",
+            "for": "es",
+            "tip": {
+              "en": "«Taza» is a coffee cup. The ice cream cup is «vaso»: \"En vaso, por favor.\"",
+              "es": "«Taza» es para el café. El vaso del helado es «vaso»: \"En vaso, por favor.\""
+            },
             "next": null
           }
         ]
       },
       "s3": {
-        "partner": { "en": "Here you go! Do you want sprinkles?", "es": "¡Aquí tienes! ¿Quieres chispitas?" },
+        "partner": {
+          "en": "Here you go! Do you want sprinkles?",
+          "es": "¡Aquí tienes! ¿Quieres chispitas?"
+        },
         "choices": [
           {
-            "text": { "en": "Yes, please!", "es": "¡Sí, por favor!" },
+            "text": {
+              "en": "Yes, I want!",
+              "es": "¡Sí, quiero!"
+            },
+            "picture": "😬",
+            "for": "es",
+            "tip": {
+              "en": "Add «por favor», the way you would in English: \"¡Sí, por favor!\"",
+              "es": "Agrega «por favor», como lo harías en inglés: \"¡Sí, por favor!\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Yes, please!",
+              "es": "¡Sí, por favor!"
+            },
             "picture": "🎉",
             "best": true,
             "next": "s4"
           },
           {
-            "text": { "en": "No, thank you.", "es": "No, gracias." },
+            "text": {
+              "en": "No, thank you.",
+              "es": "No, gracias."
+            },
             "picture": "🙂",
             "best": true,
             "next": "s4"
           },
           {
-            "text": { "en": "Give me.", "es": "Dame." },
+            "text": {
+              "en": "Give me.",
+              "es": "Dame."
+            },
             "picture": "😬",
-            "tip": { "en": "Say it the friendly way: \"Yes, please!\"", "es": "Dilo de forma amable: \"Yes, please!\"" },
+            "for": "en",
+            "tip": {
+              "en": "Say it the friendly way: \"Yes, please!\"",
+              "es": "Dilo de forma amable: \"Yes, please!\""
+            },
             "next": null
           }
         ]
       },
       "s4": {
-        "partner": { "en": "There you go. Enjoy!", "es": "Listo. ¡Que lo disfrutes!" },
+        "partner": {
+          "en": "There you go. Enjoy!",
+          "es": "Listo. ¡Que lo disfrutes!"
+        },
         "choices": [
           {
-            "text": { "en": "Thank you very much!", "es": "¡Muchas gracias!" },
+            "text": {
+              "en": "Thank you very much!",
+              "es": "¡Muchas gracias!"
+            },
             "picture": "🙏",
             "best": true,
             "next": null
           },
           {
-            "text": { "en": "Bye.", "es": "Adiós." },
+            "text": {
+              "en": "Bye.",
+              "es": "Adiós."
+            },
             "picture": "👋",
-            "tip": { "en": "Say thank you first: \"Thank you very much!\"", "es": "Primero da las gracias: \"Thank you very much!\"" },
+            "for": "en",
+            "tip": {
+              "en": "Say thank you first: \"Thank you very much!\"",
+              "es": "Primero da las gracias: \"Thank you very much!\""
+            },
             "next": null
           },
           {
-            "text": { "en": "Where is the bathroom?", "es": "¿Dónde está el baño?" },
+            "text": {
+              "en": "Where is the bathroom?",
+              "es": "¿Dónde está el baño?"
+            },
             "picture": "🚻",
-            "tip": { "en": "Good question for later! First say \"Thank you very much!\"", "es": "¡Buena pregunta para después! Primero di \"Thank you very much!\"" },
+            "for": "en",
+            "tip": {
+              "en": "Good question for later! First say \"Thank you very much!\"",
+              "es": "¡Buena pregunta para después! Primero di \"Thank you very much!\""
+            },
+            "next": null
+          },
+          {
+            "text": {
+              "en": "Thank you very much!",
+              "es": "¡Mucho gracias!"
+            },
+            "picture": "🙏",
+            "for": "es",
+            "tip": {
+              "en": "«Gracias» is plural, so «muchas»: \"¡Muchas gracias!\"",
+              "es": "«Gracias» es plural, así que «muchas»: \"¡Muchas gracias!\""
+            },
             "next": null
           }
         ]

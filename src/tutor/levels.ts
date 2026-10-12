@@ -49,8 +49,12 @@ export interface Check {
   violations: string[]
 }
 
-export function checkReply(text: string, level: Level): Check {
+// Spanish needs more words for the same thing ("¿Me da su fecha de
+// nacimiento?" is six to English's four), so at A1 and A2 a Spanish sentence
+// gets two more. B1 has room already.
+export function checkReply(text: string, level: Level, lang: 'en' | 'es' = 'en'): Check {
   const band = BANDS[level]
+  const maxWords = band.maxWordsPerSentence + (lang === 'es' && level !== 'B1' ? 2 : 0)
   const sentences = splitSentences(text)
   const violations: string[] = []
   if (sentences.length > band.maxSentences) {
@@ -62,8 +66,8 @@ export function checkReply(text: string, level: Level): Check {
   }
   for (const s of sentences) {
     const n = countWords(s)
-    if (n > band.maxWordsPerSentence) {
-      violations.push(`"${s.slice(0, 40)}" has ${n} words, max ${band.maxWordsPerSentence}`)
+    if (n > maxWords) {
+      violations.push(`"${s.slice(0, 40)}" has ${n} words, max ${maxWords}`)
     }
   }
   return { ok: violations.length === 0, violations }
@@ -75,4 +79,9 @@ export const LEVEL_REMINDER: Record<Level, string> = {
   A1: 'Level reminder: the learner is A1. At most 2 sentences, each 8 words or fewer. One question at most. Present tense and short polite requests (Tome asiento / Please have a seat) are fine; no past or future. Everyday words only. Reply in the target language.',
   A2: 'Level reminder: the learner is A2. At most 3 sentences, each 12 words or fewer. One question at most. Simple past and future are fine. Reply in the target language.',
   B1: 'Level reminder: the learner is B1. At most 4 sentences, each 18 words or fewer. Up to 2 questions. Connectors and opinions are fine. Reply in the target language.',
+}
+
+/** The reminder with the language named: "the target language" left a model room to guess. */
+export function levelReminder(level: Level, learning: 'en' | 'es'): string {
+  return LEVEL_REMINDER[level].replace('the target language', learning === 'es' ? 'Spanish' : 'English')
 }

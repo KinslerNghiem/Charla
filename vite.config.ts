@@ -32,7 +32,7 @@ export default defineConfig({
         ],
         shortcuts: [
           {
-            name: 'Go Card · Tarjeta para ir',
+            name: 'Go Card · Tu tarjeta',
             short_name: 'Go Card',
             url: '/#/card',
             icons: [{ src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png' }],
@@ -46,7 +46,7 @@ export default defineConfig({
         ],
         // From `npm run walk`. Every narrow shot shares one size, as the spec asks.
         screenshots: [
-          { src: 'screenshots/card.png', sizes: '780x1688', type: 'image/png', form_factor: 'narrow', label: 'Go Card · Tarjeta para ir' },
+          { src: 'screenshots/card.png', sizes: '780x1688', type: 'image/png', form_factor: 'narrow', label: 'Go Card · Tu tarjeta' },
           { src: 'screenshots/table.png', sizes: '780x1688', type: 'image/png', form_factor: 'narrow', label: 'Table mode · Modo mesa' },
           { src: 'screenshots/kids.png', sizes: '780x1688', type: 'image/png', form_factor: 'narrow', label: 'Charlita (kid mode)' },
           { src: 'screenshots/desktop.png', sizes: '2560x1600', type: 'image/png', form_factor: 'wide', label: 'Rehearse · Ensayar' },
