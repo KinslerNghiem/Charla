@@ -24,15 +24,44 @@
   "must_use": [
     {
       "en": "One scoop of chocolate, please.",
-      "es": "Una bola de chocolate, por favor."
+      "es": "Una bola de chocolate, por favor.",
+      "keys": {
+        "en": [
+          "scoop",
+          "chocolate"
+        ],
+        "es": [
+          "bola",
+          "chocolate"
+        ]
+      }
     },
     {
       "en": "In a cone, please.",
-      "es": "En cono, por favor."
+      "es": "En cono, por favor.",
+      "keys": {
+        "en": [
+          "cone",
+          "cup"
+        ],
+        "es": [
+          "cono",
+          "vaso"
+        ]
+      }
     },
     {
       "en": "Thank you very much!",
-      "es": "¡Muchas gracias!"
+      "es": "¡Muchas gracias!",
+      "keys": {
+        "en": [
+          "thank you",
+          "thanks"
+        ],
+        "es": [
+          "gracias"
+        ]
+      }
     }
   ],
   "expect": {

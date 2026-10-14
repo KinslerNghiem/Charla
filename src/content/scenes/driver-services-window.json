@@ -23,15 +23,58 @@
   "must_use": [
     {
       "en": "I'm here to renew my driver's license.",
-      "es": "Vengo a renovar mi licencia de conducir."
+      "es": "Vengo a renovar mi licencia de conducir.",
+      "keys": {
+        "en": [
+          "renew",
+          "license",
+          "licence"
+        ],
+        "es": [
+          "renovar",
+          "licencia"
+        ]
+      }
     },
     {
       "en": "Could you say that again, please?",
-      "es": "¿Me lo puede repetir, por favor?"
+      "es": "¿Me lo puede repetir, por favor?",
+      "keys": {
+        "en": [
+          "say that again",
+          "repeat",
+          "again please",
+          "slower",
+          "more slowly"
+        ],
+        "es": [
+          "repetir",
+          "repetirlo",
+          "repita",
+          "repítalo",
+          "otra vez",
+          "de nuevo",
+          "más despacio"
+        ]
+      }
     },
     {
       "en": "Where do I go next?",
-      "es": "¿Adónde voy después?"
+      "es": "¿Adónde voy después?",
+      "keys": {
+        "en": [
+          "where do i go",
+          "next",
+          "where now"
+        ],
+        "es": [
+          "adónde voy",
+          "a dónde voy",
+          "dónde voy",
+          "qué sigue",
+          "ahora qué"
+        ]
+      }
     }
   ],
   "expect": {

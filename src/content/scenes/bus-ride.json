@@ -24,15 +24,51 @@
   "must_use": [
     {
       "en": "Does this bus go to the library?",
-      "es": "¿Este autobús va a la biblioteca?"
+      "es": "¿Este autobús va a la biblioteca?",
+      "keys": {
+        "en": [
+          "go to the library",
+          "goes to the library",
+          "to the library",
+          "this bus"
+        ],
+        "es": [
+          "va a la biblioteca",
+          "a la biblioteca",
+          "este autobús",
+          "este camión"
+        ]
+      }
     },
     {
       "en": "How much is it?",
-      "es": "¿Cuánto cuesta?"
+      "es": "¿Cuánto cuesta?",
+      "keys": {
+        "en": [
+          "how much",
+          "cost",
+          "fare"
+        ],
+        "es": [
+          "cuánto cuesta",
+          "cuánto es",
+          "cuánto vale",
+          "cuánto cobra"
+        ]
+      }
     },
     {
       "en": "Thank you, driver!",
-      "es": "¡Gracias, chofer!"
+      "es": "¡Gracias, chofer!",
+      "keys": {
+        "en": [
+          "thank you",
+          "thanks"
+        ],
+        "es": [
+          "gracias"
+        ]
+      }
     }
   ],
   "expect": {

@@ -24,15 +24,55 @@
   "must_use": [
     {
       "en": "I'd like to get a library card.",
-      "es": "Quisiera sacar una tarjeta de la biblioteca."
+      "es": "Quisiera sacar una tarjeta de la biblioteca.",
+      "keys": {
+        "en": [
+          "library card",
+          "a card",
+          "get a card"
+        ],
+        "es": [
+          "tarjeta",
+          "credencial"
+        ]
+      }
     },
     {
       "en": "Yes, my mom is right there.",
-      "es": "Sí, mi mamá está ahí."
+      "es": "Sí, mi mamá está ahí.",
+      "keys": {
+        "en": [
+          "my mom",
+          "my mother",
+          "my dad",
+          "right there",
+          "with me"
+        ],
+        "es": [
+          "mi mamá",
+          "mi papá",
+          "mi madre",
+          "está ahí",
+          "está allí",
+          "conmigo"
+        ]
+      }
     },
     {
       "en": "Where are the comic books?",
-      "es": "¿Dónde están los cómics?"
+      "es": "¿Dónde están los cómics?",
+      "keys": {
+        "en": [
+          "comic",
+          "comics",
+          "where are"
+        ],
+        "es": [
+          "cómics",
+          "historietas",
+          "dónde están"
+        ]
+      }
     }
   ],
   "expect": {

@@ -23,15 +23,58 @@
   "must_use": [
     {
       "en": "I've had a sore throat and a fever since Monday.",
-      "es": "Tengo dolor de garganta y fiebre desde el lunes."
+      "es": "Tengo dolor de garganta y fiebre desde el lunes.",
+      "keys": {
+        "en": [
+          "sore throat",
+          "fever",
+          "since",
+          "hurts",
+          "pain"
+        ],
+        "es": [
+          "garganta",
+          "fiebre",
+          "desde",
+          "me duele",
+          "dolor"
+        ]
+      }
     },
     {
       "en": "I'm allergic to penicillin.",
-      "es": "Tengo alergia a la penicilina."
+      "es": "Tengo alergia a la penicilina.",
+      "keys": {
+        "en": [
+          "allergic",
+          "allergy",
+          "penicillin"
+        ],
+        "es": [
+          "alérgico",
+          "alérgica",
+          "alergia",
+          "penicilina"
+        ]
+      }
     },
     {
       "en": "Can I keep taking my blood pressure medicine?",
-      "es": "¿Puedo seguir tomando mi medicina para la presión?"
+      "es": "¿Puedo seguir tomando mi medicina para la presión?",
+      "keys": {
+        "en": [
+          "keep taking",
+          "blood pressure",
+          "my medicine",
+          "medication"
+        ],
+        "es": [
+          "seguir tomando",
+          "presión",
+          "mi medicina",
+          "medicamento"
+        ]
+      }
     }
   ],
   "expect": {

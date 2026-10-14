@@ -67,6 +67,8 @@ export function buildSystem(scene: Scene, level: Level, learning: Lang): string 
     '',
     `SIMPLER AND ANOTHER WAY: If the learner asks you to be simpler, say your previous line again with easier words and shorter sentences: same meaning, still in ${target}, no translation, and it is still your turn, so end with the same question. If they ask you to say it another way, rephrase your previous line with different words and the same meaning.`,
     '',
+    `CONVERSATION FLOW: Besides "reply", "tip" and "alt" you return "step": the number (1, 2 or 3) of the line from PHRASES THE LEARNER SHOULD GET TO USE that the learner's latest turn accomplished, in their own words or close to them, or 0 if none; "gloss": your reply translated into ${native}, one line, shown only if the learner asks for a translation; and "suggest": one natural ${target} sentence the learner could say next to move the errand forward, never your own line. A flow note after each learner turn says which of the learner's lines are still to cover. They are the learner's lines, never yours: you ask the question that invites the next one, one thing per turn at A1, you never say one of them yourself, you never answer a question the learner has not asked yet, and you never ask again for something already covered. A clarification turn (the learner asks you to repeat, to say it more simply, or what something means) gets the same content, shorter and plainer, and then the same question again; it is not a new topic. Also return "skill": the communication skill the learner's latest turn used, if clearly any: "repeat" (asked you to repeat), "slow_down" (asked you to slow down), "clarify" (asked what something means), "confirm" (said a name, date or number back to check it), "follow_up" (asked a further question), "problem" (stated a problem or asked for help), "unknown_word" (said they lack a word or asked how to say it), "next_step" (said what happens next before closing); otherwise "".`,
+    '',
     `SOUND LIKE THE PLACE: Use the words the real counter uses (co-pay, proof of address, REAL ID, placement test; copago, comprobante de domicilio, examen de nivel) and ask the follow-up questions a real ${partner} asks. At level B1, once in the conversation and never at A1 or A2, add one small, ordinary complication a learner could meet for real (the system is slow, one document is missing, a choice between two options), explain it kindly, and let them handle it. Assume nothing about the learner's immigration status, income, education or background: they are a customer, patient or parent like any other.`,
     '',
     'GOAL TRACKING: Set "goal_reached" true only once the success condition has actually happened in the conversation (for example, the item is handed over and the question answered). Do not set it early to be nice. When it is true, your reply closes the scene warmly, the way the person would, without praise.',
@@ -77,6 +79,29 @@ export function buildSystem(scene: Scene, level: Level, learning: Lang): string 
     '',
     'FORMAT: Respond only with the JSON object requested. "reply" is spoken text with no stage directions, no quotation marks around it, no emoji.',
   ].join('\n')
+}
+
+// The flow note: where the errand stands, from the app's state machine
+// (src/tutor/flow.ts). Volatile, so it rides with the level reminder after the
+// learner's turn, never in the cached system prompt. `lines` are the scene's
+// must-use lines in the language being practiced, numbered as the model
+// numbers "step".
+export function flowHint(phase: string, done: boolean[], lines: string[], level: Level): string {
+  const covered = lines.map((_, i) => i + 1).filter((n) => done[n - 1])
+  const left = lines.map((l, i) => ({ n: i + 1, l })).filter(({ n }) => !done[n - 1])
+  const parts = [`Flow note: phase ${phase.toUpperCase()}.`]
+  if (covered.length) parts.push(`Covered: ${covered.join(', ')} (the learner has already said these).`)
+  if (left.length) {
+    // "Whose line" matters: told what was still to cover, a model will say the
+    // learner's line itself or answer a question nobody asked yet.
+    parts.push(
+      `Still to cover: ${left.map(({ n, l }) => `${n} "${l}"`).join('; ')}. These are the LEARNER's lines, never yours. Ask the question that invites the next missing one${level === 'A1' ? ', one thing per turn' : ''}; a line that is itself a question is one only the learner asks, so wait for it and do not answer it before they ask.`,
+    )
+  } else {
+    parts.push('Everything is covered: finish the errand and close warmly once the success condition is met.')
+  }
+  if (phase === 'clarification') parts.push('The learner asked for help understanding: say your previous line again, shorter and plainer, then the same question.')
+  return parts.join(' ')
 }
 
 // Delivered in the first user turn, after the cached prefix, so an odd place

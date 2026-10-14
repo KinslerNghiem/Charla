@@ -1,4 +1,5 @@
 import type { Level } from './levels'
+import type { Phase } from './flow'
 import type { Help, TurnResponse } from './turn'
 import type { Lang } from '../i18n/strings'
 import type { Reports } from '../places/badges'
@@ -13,6 +14,9 @@ const STT_TIMEOUT_MS = 15_000
 // The voice normally answers in two to three seconds. Past this the device
 // voice reads the line instead: late audio is worse than plainer audio.
 const TTS_TIMEOUT_MS = 7_000
+// A turn is at most two model calls of 15 s each on the Worker. Past this
+// nothing is coming, and the scripted scene is better than a spinner.
+export const POST_TIMEOUT_MS = 35_000
 
 /** Carries the status so callers can tell "you are offline" from "that is all for today". */
 export class ApiError extends Error {
@@ -38,21 +42,31 @@ export interface TurnRequest {
   user: string
   command?: 'simpler' | 'another_way'
   place_name?: string
+  /** Where the errand stands (src/tutor/flow.ts), so the partner asks for what is still missing. */
+  phase?: Phase
+  done?: boolean[]
 }
 
 export type { TurnResponse }
 
 async function post<T>(path: string, body: unknown): Promise<T> {
-  const res = await fetch(BASE + path, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ ...(body as object), device: deviceId() }),
-  })
-  if (!res.ok) {
-    const text = await res.text().catch(() => '')
-    throw new ApiError(res.status, `${path} ${res.status} ${text}`.trim())
+  const ctl = new AbortController()
+  const timer = setTimeout(() => ctl.abort(), POST_TIMEOUT_MS)
+  try {
+    const res = await fetch(BASE + path, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ ...(body as object), device: deviceId() }),
+      signal: ctl.signal,
+    })
+    if (!res.ok) {
+      const text = await res.text().catch(() => '')
+      throw new ApiError(res.status, `${path} ${res.status} ${text}`.trim())
+    }
+    return (await res.json()) as T
+  } finally {
+    clearTimeout(timer)
   }
-  return (await res.json()) as T
 }
 
 export function askTutor(req: TurnRequest): Promise<TurnResponse> {

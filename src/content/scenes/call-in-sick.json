@@ -23,15 +23,65 @@
   "must_use": [
     {
       "en": "I'm calling in sick today.",
-      "es": "Llamo para avisar que hoy no puedo ir a trabajar porque me siento mal."
+      "es": "Llamo para avisar que hoy no puedo ir a trabajar porque me siento mal.",
+      "keys": {
+        "en": [
+          "calling in sick",
+          "sick today",
+          "can't come in",
+          "cannot come in",
+          "not feeling well",
+          "i'm sick",
+          "i am sick"
+        ],
+        "es": [
+          "no puedo ir",
+          "me siento mal",
+          "estoy enfermo",
+          "estoy enferma",
+          "reportarme enfermo",
+          "reportarme enferma"
+        ]
+      }
     },
     {
       "en": "I think I can come back tomorrow.",
-      "es": "Creo que puedo volver mañana."
+      "es": "Creo que puedo volver mañana.",
+      "keys": {
+        "en": [
+          "back tomorrow",
+          "come back",
+          "return",
+          "next week",
+          "tomorrow"
+        ],
+        "es": [
+          "volver mañana",
+          "regresar mañana",
+          "mañana",
+          "la próxima semana",
+          "regreso"
+        ]
+      }
     },
     {
       "en": "Do you need a doctor's note?",
-      "es": "¿Necesita una nota del doctor?"
+      "es": "¿Necesita una nota del doctor?",
+      "keys": {
+        "en": [
+          "doctor's note",
+          "doctors note",
+          "note from the doctor",
+          "a note"
+        ],
+        "es": [
+          "nota del doctor",
+          "nota del médico",
+          "justificante",
+          "certificado médico",
+          "una nota"
+        ]
+      }
     }
   ],
   "expect": {

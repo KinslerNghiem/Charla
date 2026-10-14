@@ -6,7 +6,7 @@
 //
 // Usage:
 //   npm run worker:dev                       (in another terminal)
-//   node scripts/convo-bench.mjs             (against http://localhost:8787)
+//   node --experimental-strip-types --import ./scripts/ts-resolve.mjs scripts/convo-bench.mjs
 //   BENCH_BASE=https://charla-api.<you>.workers.dev node scripts/convo-bench.mjs
 //
 // Each run costs model turns on the account's Workers AI allowance: about
@@ -111,15 +111,31 @@ function flags(reply, level, learning, prev) {
   return out
 }
 
-async function turn(c, history, user, command) {
+async function turn(c, history, user, command, flow) {
   const res = await fetch(BASE + '/api/turn', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ device, scene_id: c.scene, level: c.level, learning: c.learning, history, user, command }),
+    body: JSON.stringify({ device, scene_id: c.scene, level: c.level, learning: c.learning, history, user, command, phase: flow.phase, done: flow.done }),
   })
   if (!res.ok) return { error: `${res.status} ${await res.text()}` }
   return res.json()
 }
+
+// The same state machine the app runs (src/tutor/flow.ts), so the Worker gets
+// the flow note a real session would send. Node strips the types, and scripts/ts-resolve.mjs supplies the .ts extensions, when run as
+//   node --experimental-strip-types --import ./scripts/ts-resolve.mjs scripts/convo-bench.mjs
+// Without that flag the import fails and the bench runs without the flow.
+const flowMod = await import('../src/tutor/flow.ts').catch(() => null)
+const scenesMod = {
+  sceneById: (id) => {
+    try {
+      return JSON.parse(fs.readFileSync(path.resolve('src/content/scenes', id + '.json'), 'utf8'))
+    } catch {
+      return null
+    }
+  },
+}
+if (!flowMod) console.log('(flow module not loaded: run with --experimental-strip-types to send the flow note)')
 
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)
 const outDir = path.resolve('.bench')
@@ -133,11 +149,15 @@ for (const c of CONVERSATIONS) {
   lines.push(`## ${c.name}`, '')
   const history = []
   let prev = null
+  const scene = scenesMod?.sceneById(c.scene)
+  let flow = flowMod && scene ? flowMod.initialFlow(scene.must_use.length) : { phase: 'start', done: [] }
   for (const u of c.turns) {
     const command = u === SIMPLER ? 'simpler' : undefined
     const level = command ? (c.level === 'B1' ? 'A2' : 'A1') : c.level
-    const r = await turn({ ...c, level }, history, command ? '' : u, command)
+    if (flowMod && scene) flow = command ? flowMod.learnerTurn(flow, '', c.learning, scene.must_use, 'command') : flowMod.learnerTurn(flow, u, c.learning, scene.must_use)
+    const r = await turn({ ...c, level }, history, command ? '' : u, command, flow)
     turns++
+    if (!r.error && flowMod && scene) flow = flowMod.partnerTurn(flow, r)
     lines.push(`**Learner:** ${command ? '_(Simpler)_' : u}`)
     if (r.error) {
       lines.push(`**Partner:** _error ${r.error}_`, '')
@@ -150,6 +170,11 @@ for (const c of CONVERSATIONS) {
     lines.push(`**Partner:** ${r.reply}${r.kept_at_level ? ' _(rewritten once by the Worker)_' : ''}`)
     if (r.tip) lines.push(`- tip: ${r.tip}`)
     if (r.alt?.length) lines.push(`- alt: ${r.alt.join(' | ')}`)
+    if (r.step) lines.push(`- step: ${r.step}`)
+    if (r.gloss) lines.push(`- gloss: ${r.gloss}`)
+    if (r.suggest) lines.push(`- suggest: ${r.suggest}`)
+    if (r.skill) lines.push(`- skill: ${r.skill}`)
+    if (flowMod && scene) lines.push(`- flow: ${flow.phase}, covered ${flow.done.map((d, i) => (d ? i + 1 : null)).filter(Boolean).join(',') || 'none'}`)
     if (!r.on_topic) lines.push('- off topic')
     if (r.goal_reached) lines.push('- goal reached')
     if (f.length) lines.push(`- FLAGS: ${f.join('; ')}`)

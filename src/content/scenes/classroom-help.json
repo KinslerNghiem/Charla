@@ -24,15 +24,49 @@
   "must_use": [
     {
       "en": "Can you help me, please?",
-      "es": "¿Me puede ayudar, por favor?"
+      "es": "¿Me puede ayudar, por favor?",
+      "keys": {
+        "en": [
+          "help me",
+          "help"
+        ],
+        "es": [
+          "ayudar",
+          "ayuda",
+          "ayúdeme",
+          "ayúdame"
+        ]
+      }
     },
     {
       "en": "I don't understand this word.",
-      "es": "No entiendo esta palabra."
+      "es": "No entiendo esta palabra.",
+      "keys": {
+        "en": [
+          "don't understand",
+          "dont understand",
+          "this word",
+          "what does"
+        ],
+        "es": [
+          "no entiendo",
+          "esta palabra",
+          "qué significa"
+        ]
+      }
     },
     {
       "en": "May I go to the bathroom?",
-      "es": "¿Puedo ir al baño?"
+      "es": "¿Puedo ir al baño?",
+      "keys": {
+        "en": [
+          "bathroom",
+          "restroom"
+        ],
+        "es": [
+          "baño"
+        ]
+      }
     }
   ],
   "expect": {

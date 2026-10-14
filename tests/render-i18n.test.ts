@@ -26,6 +26,7 @@ interface Pages {
   Places: Page
   Table: Page
   Privacy: Page
+  Skills: Page
   About: Page
   Ninos: Page
   BirthGate: Page
@@ -153,11 +154,15 @@ const PAGES: [string, (p: Pages) => VNode, Record<string, unknown>?][] = [
   ['app shell', (p) => h(p.App, {}), {}],
   ['scene picker', (p) => h(p.Learn, { params: params() }), { rehearsed: ['bus-ride'], lastScene: 'clinic-front-desk' }],
   ['scene, before the first line', (p) => h(p.Learn, { params: params('scene=pharmacy-refill&place=Walgreens') }), {}],
+  ['scene opened from a skill', (p) => h(p.Learn, { params: params('scene=clinic-front-desk&skill=repeat') }), {}],
   ['Go Card', (p) => h(p.Card, {}), { lastCard: CARD }],
   ['Go Card, empty', (p) => h(p.Card, {}), {}],
   ['Places', (p) => h(p.Places, { params: params('type=pharmacy') }), { streak: [{ ts: Date.now(), place_id: 'x', how: 'easy' }] }],
   ['Table', (p) => h(p.Table, { params: params() }), {}],
   ['Privacy', (p) => h(p.Privacy, {}), {}],
+  ['Skills list', (p) => h(p.Skills, { params: params() }), { skills: { repeat: { tried: 1, used: [{ scene_id: 'pharmacy-refill', ts: 1 }] }, confirm: { again: true, used: [] }, problem: { tried: 2, used: [] } } }],
+  ['Skill detail', (p) => h(p.Skills, { params: params('skill=confirm') }), {}],
+  ['Skill drill', (p) => h(p.Skills, { params: params('skill=unknown_word&drill=1') }), {}],
   ['About', (p) => h(p.About, {}), {}],
   ['Charlita', (p) => h(p.Ninos, {}), { stickers: ['taqueria-order'] }],
   ['birth gate', (p) => h(p.BirthGate, { onDone: () => {} }), {}],
@@ -172,7 +177,7 @@ describe('every page renders in both interface languages, for both directions', 
           const html = render(make(P))
           const list = check(html, ui, name)
           // The scene pages put the other language on the screen; it has to be marked.
-          if (/scene|Card$|Charlita/.test(name) && learning !== ui) {
+          if (/scene|Card$|Charlita|Skill/.test(name) && learning !== ui) {
             expect(list.some((n) => n.lang === learning), `${name}: no content marked lang="${learning}"`).toBe(true)
           }
         })

@@ -1,5 +1,6 @@
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { fallbackJson, type ChatMsg } from '../src/fallback'
+import { MODEL_TIMEOUT_MS } from '../src/env'
 import { TurnSchema } from '../../src/tutor/turn'
 
 // Workers AI answers in three shapes depending on the model, and sometimes in a
@@ -7,7 +8,7 @@ import { TurnSchema } from '../../src/tutor/turn'
 // failures: parsed:null (the model answered badly) or error:true (it did not
 // answer). The caller treats those two differently, so they must stay distinct.
 
-const good = { reply: 'Of course. What is her name?', tip: '', alt: [], on_topic: true, goal_reached: false, safety_flag: false }
+const good = { reply: 'Of course. What is her name?', tip: '', alt: [], on_topic: true, goal_reached: false, safety_flag: false, step: 1, gloss: '', suggest: '', skill: '' }
 const msgs: ChatMsg[] = [{ role: 'system', content: 's' }, { role: 'user', content: 'u' }]
 
 function ai(result: unknown, reject = false) {
@@ -53,5 +54,15 @@ describe('fallbackJson', () => {
     const { ai: a } = ai(null, true)
     const res = await fallbackJson(a, '@cf/openai/gpt-oss-120b', msgs, TurnSchema, 500)
     expect(res).toEqual({ parsed: null, raw: '', usage: { in: 0, out: 0 }, error: true })
+  })
+
+  afterEach(() => vi.useRealTimers())
+
+  it('gives up on a hung model after the timeout, as error:true', async () => {
+    vi.useFakeTimers()
+    const run = vi.fn(() => new Promise(() => {}))
+    const p = fallbackJson({ run } as unknown as Ai, '@cf/openai/gpt-oss-120b', msgs, TurnSchema, 500)
+    await vi.advanceTimersByTimeAsync(MODEL_TIMEOUT_MS + 1)
+    expect(await p).toMatchObject({ parsed: null, error: true })
   })
 })

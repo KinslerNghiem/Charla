@@ -23,15 +23,65 @@
   "must_use": [
     {
       "en": "I'm calling about my bill.",
-      "es": "Llamo por mi recibo."
+      "es": "Llamo por mi recibo.",
+      "keys": {
+        "en": [
+          "about my bill",
+          "my bill",
+          "the bill",
+          "electric bill"
+        ],
+        "es": [
+          "mi recibo",
+          "mi factura",
+          "el recibo",
+          "la factura",
+          "cuenta de luz",
+          "el bill"
+        ]
+      }
     },
     {
       "en": "Can I set up a payment plan?",
-      "es": "¿Puedo hacer un plan de pagos?"
+      "es": "¿Puedo hacer un plan de pagos?",
+      "keys": {
+        "en": [
+          "payment plan",
+          "pay in installments",
+          "payment arrangement",
+          "budget plan"
+        ],
+        "es": [
+          "plan de pagos",
+          "plan de pago",
+          "pagar en cuotas",
+          "pagar en partes",
+          "pagos mensuales"
+        ]
+      }
     },
     {
       "en": "Could you repeat the amount, please?",
-      "es": "¿Me repite la cantidad, por favor?"
+      "es": "¿Me repite la cantidad, por favor?",
+      "keys": {
+        "en": [
+          "repeat the amount",
+          "repeat",
+          "how much",
+          "say the amount",
+          "again"
+        ],
+        "es": [
+          "repite la cantidad",
+          "repetir la cantidad",
+          "repetir",
+          "repetirlo",
+          "la cantidad",
+          "cuánto es",
+          "el monto",
+          "otra vez"
+        ]
+      }
     }
   ],
   "expect": {

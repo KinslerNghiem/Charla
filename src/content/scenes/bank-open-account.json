@@ -23,15 +23,58 @@
   "must_use": [
     {
       "en": "I'd like to open a checking account.",
-      "es": "Me gustaría abrir una cuenta de cheques."
+      "es": "Me gustaría abrir una cuenta de cheques.",
+      "keys": {
+        "en": [
+          "open a checking",
+          "open an account",
+          "checking account",
+          "open account"
+        ],
+        "es": [
+          "abrir una cuenta",
+          "cuenta de cheques",
+          "cuenta corriente"
+        ]
+      }
     },
     {
       "en": "What documents do I need?",
-      "es": "¿Qué documentos necesito?"
+      "es": "¿Qué documentos necesito?",
+      "keys": {
+        "en": [
+          "what documents",
+          "which documents",
+          "what do i need to bring",
+          "what id",
+          "what papers"
+        ],
+        "es": [
+          "qué documentos",
+          "cuáles documentos",
+          "qué necesito traer",
+          "qué papeles"
+        ]
+      }
     },
     {
       "en": "Is there a monthly fee?",
-      "es": "¿Tiene algún cargo mensual?"
+      "es": "¿Tiene algún cargo mensual?",
+      "keys": {
+        "en": [
+          "monthly fee",
+          "a fee",
+          "fees",
+          "cost per month",
+          "charge"
+        ],
+        "es": [
+          "cargo mensual",
+          "cuota mensual",
+          "comisión",
+          "cobran"
+        ]
+      }
     }
   ],
   "expect": {

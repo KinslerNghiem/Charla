@@ -23,15 +23,59 @@
   "must_use": [
     {
       "en": "I need to send this package to Mexico.",
-      "es": "Necesito enviar este paquete a México."
+      "es": "Necesito enviar este paquete a México.",
+      "keys": {
+        "en": [
+          "send",
+          "mail",
+          "ship",
+          "package"
+        ],
+        "es": [
+          "enviar",
+          "mandar",
+          "paquete"
+        ]
+      }
     },
     {
       "en": "How much is the cheapest option?",
-      "es": "¿Cuánto cuesta la opción más barata?"
+      "es": "¿Cuánto cuesta la opción más barata?",
+      "keys": {
+        "en": [
+          "cheapest",
+          "how much",
+          "cheaper",
+          "least expensive",
+          "cost"
+        ],
+        "es": [
+          "más barata",
+          "más barato",
+          "cuánto cuesta",
+          "cuánto es",
+          "económica",
+          "económico"
+        ]
+      }
     },
     {
       "en": "When will it arrive?",
-      "es": "¿Cuándo llega?"
+      "es": "¿Cuándo llega?",
+      "keys": {
+        "en": [
+          "arrive",
+          "get there",
+          "how long",
+          "when will"
+        ],
+        "es": [
+          "llega",
+          "llegar",
+          "cuánto tarda",
+          "cuándo"
+        ]
+      }
     }
   ],
   "expect": {

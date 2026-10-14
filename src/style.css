@@ -228,6 +228,74 @@ h2 { font-size: 20px; line-height: 1.25; margin: 22px 0 8px; }
 /* The direction line under the picker's title: what you are practicing, and the switch. */
 .direction { display: flex; flex-wrap: wrap; gap: 2px 14px; align-items: baseline; margin: -6px 0 14px; font-size: 14px; color: var(--ink-2); }
 .direction b { color: var(--ink); font-weight: 600; }
+/* Ways out when lost, under the composer; the translation and the suggestion unfold beneath. */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 2px; }
+.chips button { font-size: 14px; min-height: 36px; }
+.gloss-box, .suggest-box { background: var(--card-2); padding: 8px 10px; border-radius: var(--r-sm); font-size: 15px; margin: 6px 0; }
+.brief .phase { font-size: 12px; color: var(--ink-2); margin-left: 8px; }
+.hear { margin: 6px 0 4px; padding-left: 18px; font-size: 15px; }
+.hear li { margin: 2px 0; }
+/* The end of a scene: what was said, one strength, one thing to try. Observed, never scored. */
+.summary { background: var(--card); border-radius: var(--r); padding: 12px 14px; margin: 10px 0; display: grid; gap: 6px; text-align: left; }
+.summary h2 { margin: 0 0 2px; font-size: 18px; }
+.summary p { margin: 0; }
+
+/* skills: the entry card on the picker, the list, one skill, the drill */
+.skills-entry { display: grid; grid-template-columns: 44px 1fr; border-radius: var(--r); background: var(--card); overflow: hidden; text-decoration: none; color: var(--ink); margin: 0 0 18px; }
+.skills-entry:hover { background: var(--card-2); }
+.skills-entry .band { display: flex; align-items: center; justify-content: center; background: var(--accent-band); color: var(--on-band); }
+.skills-entry .body { display: grid; gap: 2px; padding: 12px 14px; }
+.skills-entry .title { font-weight: 600; font-size: 17px; }
+.skills-entry .sub { color: var(--ink-2); font-size: 14px; }
+.skills .intro { margin: -4px 0 14px; max-width: 60ch; }
+.skill-list { list-style: none; padding: 0; margin: 0 0 18px; display: grid; gap: 10px; grid-template-columns: 1fr; }
+@media (min-width: 560px) { .skill-list { grid-template-columns: 1fr 1fr; } }
+.skill-card { display: grid; grid-template-rows: 32px 1fr; height: 100%; border-radius: var(--r); background: var(--card); overflow: hidden; text-decoration: none; color: var(--ink); }
+.skill-card:hover { background: var(--card-2); }
+.skill-card .band { display: flex; align-items: center; padding: 0 12px; background: var(--accent-band); color: var(--on-band); }
+.skill-card .body { display: grid; align-content: start; gap: 2px; padding: 12px 14px 14px; }
+.skill-card .title { font-size: 19px; line-height: 1.2; font-weight: 600; }
+.skill-card .sub { color: var(--ink-2); font-size: 14px; }
+.skill-card .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.skill-card .tag { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; padding: 2px 8px; border-radius: 4px; background: var(--card-2); color: var(--ink-2); }
+.skill-card .tag.done { background: var(--ok-soft); color: var(--ok); }
+.skill-card .tag.again { background: var(--accent-soft); color: var(--accent); }
+.skill-detail .what { margin: 4px 0 0; max-width: 60ch; }
+.skill-detail h2 { font-size: 17px; margin: 18px 0 8px; color: var(--ink-2); }
+.exchange { background: var(--card); border-radius: var(--r); padding: 12px 14px; display: grid; gap: 2px; }
+.exchange .line { margin: 0; font-size: 19px; line-height: 1.3; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.exchange .learner { margin-top: 10px; padding-left: 12px; border-left: 3px solid var(--accent); }
+.exchange .gloss.learner { border-left: 3px solid transparent; margin-top: 0; }
+.skill-phrases { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.skill-phrases li { display: flex; align-items: center; gap: 10px; background: var(--card); border-radius: var(--r-sm); padding: 10px 12px; }
+.skill-phrases li > span { flex: 1; display: grid; }
+.skill-phrases b { font-size: 18px; line-height: 1.3; }
+.skill-phrases i { font-style: normal; color: var(--ink-2); font-size: 14px; }
+.skill-detail .row { margin: 14px 0; }
+.use-in { list-style: none; padding: 0; margin: 0 0 18px; display: grid; gap: 8px; }
+.use-in a { display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 8px 14px; border-radius: var(--r-sm); background: var(--card); color: var(--ink); text-decoration: none; }
+.use-in a:hover { background: var(--card-2); }
+.drill { background: var(--card-2); border-radius: var(--r); padding: 14px; margin: 14px 0; display: grid; gap: 10px; }
+.drill h2 { margin: 0; font-size: 17px; color: var(--ink); }
+.drill .note { margin: 0; }
+.drill .partner { background: var(--card); padding: 12px 14px; border-radius: var(--r); border-bottom-left-radius: 4px; }
+.drill .partner .line { margin: 0 0 4px; font-size: 20px; line-height: 1.3; }
+.drill .partner .gloss { margin: 0 0 6px; }
+.drill textarea { resize: vertical; border-radius: var(--r); min-height: 58px; border-color: transparent; }
+.drill textarea:focus-visible { border-color: var(--accent); }
+.drill .actions { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin: 8px 0 0; }
+.drill .feedback:empty { display: none; }
+.drill .feedback p { margin: 0; }
+.drill .feedback .ok { color: var(--ok); display: inline-flex; gap: 6px; align-items: center; font-weight: 600; }
+.drill .options { margin: 6px 0 0; padding-left: 18px; }
+.drill .options li { margin: 4px 0; }
+.drill .row { margin: 0; }
+.drill .done-note { margin: 0; color: var(--ok); font-weight: 600; }
+.chat .skill-tag { font-size: 12px; color: var(--accent); margin: 6px 0 0; display: inline-flex; align-items: center; gap: 4px; }
+.nudge { background: var(--accent-soft); border-radius: var(--r-sm); padding: 10px 12px; margin: 10px 0 0; display: grid; gap: 4px; }
+.nudge .label { font-size: 12px; font-weight: 600; color: var(--accent); }
+.nudge .line { margin: 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 18px; line-height: 1.3; }
+.nudge .gloss { margin: 0; }
 
 /* learn: the scene */
 .brief > summary { cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 44px; padding: 8px 14px; border-radius: var(--r-sm); background: var(--card); font-weight: 600; list-style: none; }

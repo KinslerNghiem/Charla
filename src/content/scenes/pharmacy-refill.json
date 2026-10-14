@@ -23,15 +23,62 @@
   "must_use": [
     {
       "en": "I'm here to pick up a prescription for my mother.",
-      "es": "Vengo a recoger una receta para mi mamá."
+      "es": "Vengo a recoger una receta para mi mamá.",
+      "keys": {
+        "en": [
+          "pick up",
+          "prescription",
+          "medicine",
+          "medication",
+          "refill"
+        ],
+        "es": [
+          "recoger",
+          "receta",
+          "medicina",
+          "medicamento",
+          "medicinas"
+        ]
+      }
     },
     {
       "en": "Her last name is Garcia and her date of birth is May 3rd, 1960.",
-      "es": "Su apellido es García y su fecha de nacimiento es el 3 de mayo de 1960."
+      "es": "Su apellido es García y su fecha de nacimiento es el 3 de mayo de 1960.",
+      "keys": {
+        "en": [
+          "last name",
+          "date of birth",
+          "born",
+          "birthday",
+          "birth date"
+        ],
+        "es": [
+          "apellido",
+          "fecha de nacimiento",
+          "nació",
+          "cumpleaños"
+        ]
+      }
     },
     {
       "en": "Should she take it with food?",
-      "es": "¿Debe tomarlo con comida?"
+      "es": "¿Debe tomarlo con comida?",
+      "keys": {
+        "en": [
+          "with food",
+          "take it",
+          "how often",
+          "side effects",
+          "questions about"
+        ],
+        "es": [
+          "con comida",
+          "tomarlo",
+          "cómo se toma",
+          "cuántas veces",
+          "efectos"
+        ]
+      }
     }
   ],
   "expect": {

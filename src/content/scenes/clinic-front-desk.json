@@ -23,15 +23,59 @@
   "must_use": [
     {
       "en": "I have an appointment at…",
-      "es": "Tengo una cita a las…"
+      "es": "Tengo una cita a las…",
+      "keys": {
+        "en": [
+          "appointment",
+          "checking in",
+          "check in"
+        ],
+        "es": [
+          "tengo una cita",
+          "cita a las",
+          "una cita",
+          "registrarme"
+        ]
+      }
     },
     {
       "en": "Could you repeat that more slowly, please?",
-      "es": "¿Podría repetirlo más despacio, por favor?"
+      "es": "¿Podría repetirlo más despacio, por favor?",
+      "keys": {
+        "en": [
+          "repeat",
+          "more slowly",
+          "slower",
+          "again please",
+          "say that again"
+        ],
+        "es": [
+          "repetir",
+          "repetirlo",
+          "repita",
+          "repítalo",
+          "más despacio",
+          "más lento",
+          "otra vez"
+        ]
+      }
     },
     {
       "en": "Do you have this form in Spanish?",
-      "es": "¿Tiene este formulario en español?"
+      "es": "¿Tiene este formulario en español?",
+      "keys": {
+        "en": [
+          "in spanish",
+          "spanish version",
+          "form in",
+          "in english"
+        ],
+        "es": [
+          "en español",
+          "en inglés",
+          "formulario en"
+        ]
+      }
     }
   ],
   "expect": {

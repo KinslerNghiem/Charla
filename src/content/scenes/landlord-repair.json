@@ -23,15 +23,60 @@
   "must_use": [
     {
       "en": "There is a leak under the kitchen sink.",
-      "es": "Hay una fuga debajo del fregadero de la cocina."
+      "es": "Hay una fuga debajo del fregadero de la cocina.",
+      "keys": {
+        "en": [
+          "leak",
+          "leaking",
+          "dripping",
+          "water under"
+        ],
+        "es": [
+          "fuga",
+          "gotea",
+          "goteando",
+          "pierde agua",
+          "hay agua"
+        ]
+      }
     },
     {
       "en": "When can someone come?",
-      "es": "¿Cuándo puede venir alguien?"
+      "es": "¿Cuándo puede venir alguien?",
+      "keys": {
+        "en": [
+          "when can",
+          "come",
+          "plumber",
+          "when will"
+        ],
+        "es": [
+          "cuándo puede",
+          "cuándo viene",
+          "plomero",
+          "cuándo pueden"
+        ]
+      }
     },
     {
       "en": "Can you write that down?",
-      "es": "¿Me lo puede poner por escrito?"
+      "es": "¿Me lo puede poner por escrito?",
+      "keys": {
+        "en": [
+          "write that down",
+          "in writing",
+          "text me",
+          "send me",
+          "written"
+        ],
+        "es": [
+          "por escrito",
+          "escribir",
+          "mensaje",
+          "anotar",
+          "me lo manda"
+        ]
+      }
     }
   ],
   "expect": {

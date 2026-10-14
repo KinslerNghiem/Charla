@@ -23,15 +23,54 @@
   "must_use": [
     {
       "en": "I'm here to pick up my son early.",
-      "es": "Vengo a recoger a mi hijo temprano."
+      "es": "Vengo a recoger a mi hijo temprano.",
+      "keys": {
+        "en": [
+          "pick up",
+          "early",
+          "my son",
+          "my daughter"
+        ],
+        "es": [
+          "recoger",
+          "temprano",
+          "mi hijo",
+          "mi hija"
+        ]
+      }
     },
     {
       "en": "He has a dentist appointment.",
-      "es": "Tiene una cita con el dentista."
+      "es": "Tiene una cita con el dentista.",
+      "keys": {
+        "en": [
+          "dentist",
+          "appointment",
+          "doctor"
+        ],
+        "es": [
+          "dentista",
+          "cita",
+          "doctor"
+        ]
+      }
     },
     {
       "en": "Can I request an interpreter for the parent-teacher conference?",
-      "es": "¿Puedo pedir un intérprete para la reunión con la maestra?"
+      "es": "¿Puedo pedir un intérprete para la reunión con la maestra?",
+      "keys": {
+        "en": [
+          "interpreter",
+          "translator",
+          "conference"
+        ],
+        "es": [
+          "intérprete",
+          "traductor",
+          "reunión",
+          "junta"
+        ]
+      }
     }
   ],
   "expect": {

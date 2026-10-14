@@ -47,6 +47,7 @@ export function App() {
   useEffect(() => {
     const names: Record<string, string> = {
       '/places': t('nav_places'),
+      '/skills': t('nav_skills'),
       '/card': t('nav_card'),
       '/table': t('nav_table'),
       '/ninos': t('nav_kids'),
@@ -142,7 +143,8 @@ export function App() {
   ]
   // Privacy and About are footer links, not tabs: six tabs overflow a 390px
   // phone and the last one scrolls out of sight with nothing to say it is there.
-  const current = route.path === '/' ? '/learn' : route.path
+  // Skills lives under Rehearse: a sixth tab would overflow a phone's bar.
+  const current = route.path === '/' || route.path === '/skills' ? '/learn' : route.path
 
   let page
   if (route.path === '/about') {
@@ -165,6 +167,9 @@ export function App() {
         break
       case '/privacy':
         page = <pages.Privacy />
+        break
+      case '/skills':
+        page = <pages.Skills params={route.params} />
         break
       default:
         // Keyed on the scene so picking a new one starts a clean conversation.

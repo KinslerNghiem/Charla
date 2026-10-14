@@ -23,15 +23,63 @@
   "must_use": [
     {
       "en": "I'd like to make an appointment for a check-up.",
-      "es": "Quisiera hacer una cita para un chequeo."
+      "es": "Quisiera hacer una cita para un chequeo.",
+      "keys": {
+        "en": [
+          "make an appointment",
+          "appointment",
+          "check-up",
+          "checkup",
+          "physical"
+        ],
+        "es": [
+          "hacer una cita",
+          "una cita",
+          "chequeo",
+          "revisión",
+          "examen físico"
+        ]
+      }
     },
     {
       "en": "Mornings are better for me.",
-      "es": "Las mañanas me quedan mejor."
+      "es": "Las mañanas me quedan mejor.",
+      "keys": {
+        "en": [
+          "mornings",
+          "morning",
+          "afternoon",
+          "better for me",
+          "works for me"
+        ],
+        "es": [
+          "mañanas",
+          "por la mañana",
+          "en la mañana",
+          "tarde",
+          "me queda",
+          "me conviene",
+          "está bien"
+        ]
+      }
     },
     {
       "en": "What should I bring?",
-      "es": "¿Qué debo llevar?"
+      "es": "¿Qué debo llevar?",
+      "keys": {
+        "en": [
+          "what should i bring",
+          "bring",
+          "what do i need"
+        ],
+        "es": [
+          "qué debo llevar",
+          "qué llevo",
+          "qué traigo",
+          "qué necesito llevar",
+          "qué debo traer"
+        ]
+      }
     }
   ],
   "expect": {

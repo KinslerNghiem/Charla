@@ -23,15 +23,61 @@
   "must_use": [
     {
       "en": "How is she doing in reading?",
-      "es": "¿Cómo va en lectura?"
+      "es": "¿Cómo va en lectura?",
+      "keys": {
+        "en": [
+          "reading",
+          "how is she doing",
+          "how is he doing",
+          "how is my"
+        ],
+        "es": [
+          "lectura",
+          "cómo va",
+          "cómo le va",
+          "leyendo"
+        ]
+      }
     },
     {
       "en": "What can we do at home?",
-      "es": "¿Qué podemos hacer en casa?"
+      "es": "¿Qué podemos hacer en casa?",
+      "keys": {
+        "en": [
+          "at home",
+          "what can we do",
+          "how can we help",
+          "help her"
+        ],
+        "es": [
+          "en casa",
+          "qué podemos hacer",
+          "cómo podemos ayudar",
+          "ayudarla"
+        ]
+      }
     },
     {
       "en": "Could you say that another way?",
-      "es": "¿Me lo puede decir de otra manera?"
+      "es": "¿Me lo puede decir de otra manera?",
+      "keys": {
+        "en": [
+          "another way",
+          "repeat",
+          "don't understand",
+          "explain",
+          "what does"
+        ],
+        "es": [
+          "otra manera",
+          "otra forma",
+          "repetir",
+          "repetirlo",
+          "no entiendo",
+          "qué significa",
+          "explicar"
+        ]
+      }
     }
   ],
   "expect": {

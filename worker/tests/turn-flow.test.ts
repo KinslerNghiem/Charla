@@ -9,7 +9,7 @@ import type { Turn } from '../../src/tutor/turn'
 // and what the learner gets back. Deterministic. What the real model says to
 // these prompts is the bench's job (scripts/convo-bench.mjs) and a human's.
 
-const ok = (reply: string, extra: Partial<Turn> = {}): Turn => ({ reply, tip: '', alt: [], on_topic: true, goal_reached: false, safety_flag: false, ...extra })
+const ok = (reply: string, extra: Partial<Turn> = {}): Turn => ({ reply, tip: '', alt: [], on_topic: true, goal_reached: false, safety_flag: false, step: 0, gloss: '', suggest: '', skill: '', ...extra })
 
 type Sent = { messages: { role: string; content: string }[] }
 
@@ -145,6 +145,57 @@ describe('a turn on the free-model path', () => {
     const right = model(ok('Sure. Your insurance card, please?', { tip: 'Di: "Could you repeat that more slowly, please?"' }))
     const out2 = await runTurn(right.env, { ...base, level: 'B1', user: 'Sorry, no entendí, could you repeat that?' })
     expect(out2?.tip).toBe('Di: "Could you repeat that more slowly, please?"')
+  })
+
+  it('tells the model where the errand stands and which lines are still to cover', async () => {
+    const m = model(ok('Thank you. What is her date of birth?'))
+    await runTurn(m.env, { ...base, phase: 'task', done: [true, false, false], user: 'Garcia.' })
+    const sent = m.lastUser(0)
+    expect(sent).toMatch(/Flow note: phase TASK\./)
+    expect(sent).toMatch(/Covered: 1 \(the learner has already said these\)\./)
+    expect(sent).toMatch(/Still to cover: 2 "Her last name is Garcia/)
+    expect(sent).toMatch(/3 "Should she take it with food\?"/)
+    expect(sent).toMatch(/one thing per turn/)
+    // Whose lines they are, or the model says them itself (seen on the free model).
+    expect(sent).toMatch(/LEARNER's lines, never yours/)
+    expect(sent).toMatch(/do not answer it before they ask/)
+  })
+
+  it('ignores an unknown phase or a malformed done list', async () => {
+    const m = model(ok('Sure. What is her name?'))
+    await runTurn(m.env, { ...base, phase: 'banana', done: 'yes' as unknown as boolean[] })
+    expect(m.lastUser(0)).toMatch(/phase START\./)
+    expect(m.lastUser(0)).toMatch(/Still to cover: 1 /)
+    expect(m.lastUser(0)).not.toMatch(/Covered:/)
+  })
+
+  it('asks for a plainer repeat on a clarification turn', async () => {
+    const m = model(ok('Her last name, please?'))
+    await runTurn(m.env, { ...base, phase: 'clarification', done: [true, false, false], user: 'Sorry, could you repeat that?' })
+    expect(m.lastUser(0)).toMatch(/say your previous line again, shorter and plainer/)
+  })
+
+  it('bounds the step and drops a gloss or suggestion in the wrong language', async () => {
+    const m = model(ok('Sure. What is her name?', { step: 7, gloss: 'Sure. What is her name?', suggest: 'Se llama García.' }))
+    const out = await runTurn(m.env, base)
+    expect(out?.step).toBe(0)
+    expect(out?.gloss).toBe('')
+    expect(out?.suggest).toBe('')
+    const good = model(ok('Sure. What is her name?', { step: 1, gloss: 'Claro. ¿Cómo se llama ella?', suggest: 'Her last name is Garcia.' }))
+    const out2 = await runTurn(good.env, base)
+    expect(out2?.step).toBe(1)
+    expect(out2?.gloss).toBe('Claro. ¿Cómo se llama ella?')
+    expect(out2?.suggest).toBe('Her last name is Garcia.')
+    const echo = model(ok('Sure. What is her name?', { suggest: 'sure. what is her name?' }))
+    expect((await runTurn(echo.env, base))?.suggest).toBe('')
+  })
+
+  it('keeps a skill only when it is one of the eight, and asks the model for it', async () => {
+    const m = model(ok('Sure. What is her name?', { skill: 'banana' }))
+    expect((await runTurn(m.env, base))?.skill).toBe('')
+    expect(m.sent(0).messages.map((x) => x.content).join('\n')).toMatch(/"skill": the communication skill/)
+    const good = model(ok('Thank you. One moment.', { skill: 'confirm' }))
+    expect((await runTurn(good.env, { ...base, user: 'Garcia, with a C, right?' }))?.skill).toBe('confirm')
   })
 
   it('returns null when the model cannot be reached, so the app shows the scripted scene', async () => {

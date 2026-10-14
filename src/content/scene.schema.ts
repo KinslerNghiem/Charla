@@ -24,6 +24,15 @@ export interface Bi {
   es: string
 }
 
+/**
+ * A must-use line with, optionally, the words that count as saying it in your
+ * own way: short stems per language, any one of which matches as whole words
+ * (src/tutor/flow.ts). Without keys, only the line itself matches.
+ */
+export interface Phrase extends Bi {
+  keys?: Partial<Record<Lang, string[]>>
+}
+
 export type Level = 'A1' | 'A2' | 'B1'
 
 export type Lang = 'en' | 'es'
@@ -105,7 +114,7 @@ export interface Scene {
    * form. They feed the Go Card, the chips, the Table prompts and the AI
    * prompt, so a bare noun ("prescription") does not belong here.
    */
-  must_use: Bi[]
+  must_use: Phrase[]
   /** The staff's first real question, e.g. "Last name and date of birth?" Shown on the card as what to expect. */
   expect?: Bi
   success: Bi
@@ -160,6 +169,15 @@ export function validateScene(s: unknown): string[] {
   } else {
     for (const p of x.must_use) {
       if (!isLearnerLine(p)) errs.push(`must_use "${p.en}" must be a line the learner can say (3+ words, ends with . ? or !)`)
+      const keys = (p as Phrase).keys
+      if (keys !== undefined) {
+        for (const l of ['en', 'es'] as const) {
+          const list = keys[l]
+          if (!Array.isArray(list) || list.length === 0 || !list.every((k) => typeof k === 'string' && k.trim() !== '')) {
+            errs.push(`must_use "${p.en}": keys.${l} must be a non-empty list of words`)
+          }
+        }
+      }
     }
   }
   const script = x.offline_script

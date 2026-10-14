@@ -3,6 +3,7 @@ import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { SCENES, kidScenes } from '../src/content/scenes'
 import { PLACE_TYPES, choicesFor, isLearnerLine, validateScene } from '../src/content/scene.schema'
+import { matchesObjective } from '../src/tutor/flow'
 
 const SCENES_DIR = join(__dirname, '..', 'src', 'content', 'scenes')
 
@@ -89,6 +90,20 @@ describe('scene cards', () => {
     const node = lonely.offline_script.nodes[lonely.offline_script.start]
     for (const c of node.choices) if (!c.best) c.for = 'en'
     expect(validateScene(lonely).some((e) => e.includes('practicing es sees fewer'))).toBe(true)
+  })
+
+  it('every must-use line has key words in both languages that match itself and no other line of its scene', () => {
+    for (const s of SCENES) {
+      s.must_use.forEach((p, i) => {
+        for (const lang of ['en', 'es'] as const) {
+          expect(p.keys?.[lang]?.length ?? 0, `${s.id} "${p.en}" keys.${lang}`).toBeGreaterThan(0)
+          expect(matchesObjective(p[lang], p, lang), `${s.id}: "${p[lang]}" should match its own keys`).toBe(true)
+          s.must_use.forEach((q, j) => {
+            if (j !== i) expect(matchesObjective(q[lang], p, lang), `${s.id}: "${q[lang]}" also matches the keys of "${p[lang]}"`).toBe(false)
+          })
+        }
+      })
+    }
   })
 
   it('show_staff_line is written for a reader of that language', () => {

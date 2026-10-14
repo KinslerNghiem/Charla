@@ -12,6 +12,16 @@ export const TurnSchema = z.object({
   on_topic: z.boolean().describe('False if the learner drifted away from the scene.'),
   goal_reached: z.boolean().describe('True once the scene\'s success condition has been met.'),
   safety_flag: z.boolean().describe('True if the learner wrote something unsafe, adult, or about self-harm.'),
+  // The three fields the conversation flow uses (src/tutor/flow.ts). The
+  // Worker bounds them before the app sees them: the step index inside the
+  // scene, the gloss and the suggestion each in the language it belongs in.
+  step: z.number().describe("1, 2 or 3: which of the learner's phrases their latest turn accomplished, in their own words or close to them; 0 if none."),
+  gloss: z.string().describe("Your reply translated into the learner's own language, one line. Shown only if they ask for a translation."),
+  suggest: z.string().describe('One natural sentence in the target language the learner could say next to move the errand forward. Never your own line.'),
+  // The model's one vote on the communication skill the learner's turn used.
+  // The app's own rule-based classifier (src/skills/intents.ts) decides first;
+  // the Worker keeps this only when it names one of the eight skill ids.
+  skill: z.string().describe("The communication skill the learner's latest turn used, if clearly any: repeat, slow_down, clarify, confirm, follow_up, problem, unknown_word or next_step. \"\" if none."),
 })
 
 export type Turn = z.infer<typeof TurnSchema>

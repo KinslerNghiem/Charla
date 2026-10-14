@@ -24,15 +24,53 @@
   "must_use": [
     {
       "en": "Hi! Do you want to play?",
-      "es": "¡Hola! ¿Quieres jugar?"
+      "es": "¡Hola! ¿Quieres jugar?",
+      "keys": {
+        "en": [
+          "want to play",
+          "play",
+          "hi"
+        ],
+        "es": [
+          "quieres jugar",
+          "jugar",
+          "hola"
+        ]
+      }
     },
     {
       "en": "You go first!",
-      "es": "¡Tú primero!"
+      "es": "¡Tú primero!",
+      "keys": {
+        "en": [
+          "you go first",
+          "you first",
+          "go first"
+        ],
+        "es": [
+          "tú primero",
+          "primero tú",
+          "ve tú",
+          "empieza tú"
+        ]
+      }
     },
     {
       "en": "My name is Sofi. What's your name?",
-      "es": "Me llamo Sofi. ¿Cómo te llamas?"
+      "es": "Me llamo Sofi. ¿Cómo te llamas?",
+      "keys": {
+        "en": [
+          "my name",
+          "your name",
+          "i'm"
+        ],
+        "es": [
+          "me llamo",
+          "mi nombre",
+          "cómo te llamas",
+          "soy"
+        ]
+      }
     }
   ],
   "expect": {

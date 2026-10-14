@@ -8,7 +8,7 @@ import type { Level } from '../../src/tutor/levels'
 // case here is a reply gpt-oss or Llama actually produced, or the correct line
 // that the check must not get in the way of.
 
-const turn = (reply: string): Turn => ({ reply, tip: '', alt: [], on_topic: true, goal_reached: false, safety_flag: false })
+const turn = (reply: string): Turn => ({ reply, tip: '', alt: [], on_topic: true, goal_reached: false, safety_flag: false, step: 0, gloss: '', suggest: '', skill: '' })
 const mustUse = (id: string, lang: 'en' | 'es' = 'en') => sceneById(id)!.must_use.map((p) => p[lang])
 const problems = (reply: string, level: Level = 'A2', scene = 'pharmacy-refill', learning: 'en' | 'es' = 'en') =>
   fallbackProblems(turn(reply), level, learning, mustUse(scene, learning))

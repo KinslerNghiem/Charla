@@ -23,15 +23,55 @@
   "must_use": [
     {
       "en": "I want to sign up my daughter for swimming lessons.",
-      "es": "Quiero inscribir a mi hija en clases de natación."
+      "es": "Quiero inscribir a mi hija en clases de natación.",
+      "keys": {
+        "en": [
+          "sign up",
+          "register",
+          "enroll",
+          "swimming",
+          "swim"
+        ],
+        "es": [
+          "inscribir",
+          "registrar",
+          "natación",
+          "nadar"
+        ]
+      }
     },
     {
       "en": "How much does it cost?",
-      "es": "¿Cuánto cuesta?"
+      "es": "¿Cuánto cuesta?",
+      "keys": {
+        "en": [
+          "how much",
+          "cost",
+          "price"
+        ],
+        "es": [
+          "cuánto cuesta",
+          "cuánto es",
+          "precio",
+          "cuánto vale"
+        ]
+      }
     },
     {
       "en": "Is there a discount for residents?",
-      "es": "¿Hay descuento para residentes?"
+      "es": "¿Hay descuento para residentes?",
+      "keys": {
+        "en": [
+          "discount",
+          "residents",
+          "resident"
+        ],
+        "es": [
+          "descuento",
+          "residentes",
+          "residente"
+        ]
+      }
     }
   ],
   "expect": {

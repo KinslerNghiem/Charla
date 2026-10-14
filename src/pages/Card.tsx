@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'preact/hooks'
 import { sceneById } from '../content/scenes'
 import { learning, native, t } from '../i18n/lang'
 import { get } from '../storage'
-import { hushVoice, say, unlockVoice } from '../speech/voice'
+import { likelyQuestions } from '../tutor/flow'
 import { Icon } from '../ui/Icon'
+import { ListenButton, useListen } from '../ui/ListenButton'
 
 interface LastCard {
   scene_id: string
@@ -20,30 +20,8 @@ export function Card() {
   const scene = sceneById(card?.scene_id)
   const target = learning()
   const nat = native()
-  const [speaking, setSpeaking] = useState<string | null>(null)
-  useEffect(() => () => hushVoice(), [])
-  function listen(text: string) {
-    if (speaking === text) {
-      hushVoice()
-      setSpeaking(null)
-      return
-    }
-    unlockVoice()
-    setSpeaking(text)
-    void say(text, target, { onEnd: () => setSpeaking((s) => (s === text ? null : s)) }).then((how) => {
-      if (how === 'none' || how === 'superseded') setSpeaking((s) => (s === text ? null : s))
-    })
-  }
-  const listenButton = (text: string) => (
-    <button
-      type="button"
-      class={'ghost small listen' + (speaking === text ? ' speaking' : '')}
-      onClick={() => listen(text)}
-      aria-label={`${speaking === text ? t('stop_voice') : t('listen')}: ${text}`}
-    >
-      <Icon name={speaking === text ? 'stop' : 'speaker'} size={18} />
-    </button>
-  )
+  const { speaking, toggle } = useListen(target)
+  const listenButton = (text: string) => <ListenButton text={text} speaking={speaking} onToggle={toggle} />
   if (!card || !scene) {
     return (
       <section class="card">
@@ -62,6 +40,8 @@ export function Card() {
   // `expect` is the staff's first real question. A scene without one shows
   // only how the visit ends.
   const expect = scene.expect
+  // More of what the staff may ask, from the scene's own script.
+  const hear = likelyQuestions(scene, target)
   // A call to the landlord or the boss happens at home or at work, which the
   // map cannot list, so those cards open every place rather than an empty filter.
   const placesHref = scene.place_type === 'home' || scene.place_type === 'work' ? '#/places' : `#/places?type=${encodeURIComponent(scene.place_type)}`
@@ -102,6 +82,16 @@ export function Card() {
               <p class="gloss" lang={nat}>
                 {expect[nat]}
               </p>
+              {hear.length > 0 && (
+                <>
+                  <h2>{t('hear_label')}</h2>
+                  <ul class="hear" lang={target}>
+                    {hear.map((q) => (
+                      <li>{q}</li>
+                    ))}
+                  </ul>
+                </>
+              )}
               <h2>{t('card_how_it_ends')}</h2>
               <p lang={target}>{scene.success[target]}</p>
               <p class="gloss" lang={nat}>

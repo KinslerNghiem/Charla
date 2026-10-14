@@ -24,15 +24,51 @@
   "must_use": [
     {
       "en": "Half a pound of ham, please.",
-      "es": "Media libra de jamón, por favor."
+      "es": "Media libra de jamón, por favor.",
+      "keys": {
+        "en": [
+          "half a pound",
+          "half pound",
+          "ham"
+        ],
+        "es": [
+          "media libra",
+          "jamón"
+        ]
+      }
     },
     {
       "en": "A little more, please.",
-      "es": "Un poco más, por favor."
+      "es": "Un poco más, por favor.",
+      "keys": {
+        "en": [
+          "little more",
+          "a bit more",
+          "more please"
+        ],
+        "es": [
+          "un poco más",
+          "poquito más",
+          "más por favor"
+        ]
+      }
     },
     {
       "en": "That's perfect, thank you.",
-      "es": "Así está perfecto, gracias."
+      "es": "Así está perfecto, gracias.",
+      "keys": {
+        "en": [
+          "perfect",
+          "that's good",
+          "that's fine",
+          "good thank"
+        ],
+        "es": [
+          "perfecto",
+          "está bien",
+          "así está"
+        ]
+      }
     }
   ],
   "expect": {

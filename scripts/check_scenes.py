@@ -90,6 +90,13 @@ def check(scene, errs):
     for p in must:
         if not learner_line(p):
             bad('must_use "%s" must be a line the learner can say (3+ words, ends with . ? or !)' % p["en"])
+        # Key words that count as saying the line in your own way (src/tutor/flow.ts).
+        keys = p.get("keys")
+        if keys is not None:
+            for l in ("en", "es"):
+                lst = keys.get(l) if isinstance(keys, dict) else None
+                if not isinstance(lst, list) or not lst or not all(isinstance(k, str) and k.strip() for k in lst):
+                    bad('must_use "%s": keys.%s must be a non-empty list of words' % (p["en"], l))
 
     script = scene.get("offline_script") or {}
     nodes = script.get("nodes")

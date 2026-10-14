@@ -23,15 +23,60 @@
   "must_use": [
     {
       "en": "I'm calling to report an absence.",
-      "es": "Llamo para reportar una ausencia."
+      "es": "Llamo para reportar una ausencia.",
+      "keys": {
+        "en": [
+          "absence",
+          "absent",
+          "sick",
+          "not coming",
+          "won't be",
+          "staying home"
+        ],
+        "es": [
+          "ausencia",
+          "falta",
+          "enfermo",
+          "enferma",
+          "no va",
+          "no puede ir"
+        ]
+      }
     },
     {
       "en": "My son, Mateo Ruiz, is in second grade.",
-      "es": "Mi hijo, Mateo Ruiz, está en segundo grado."
+      "es": "Mi hijo, Mateo Ruiz, está en segundo grado.",
+      "keys": {
+        "en": [
+          "grade",
+          "my son",
+          "my daughter",
+          "teacher"
+        ],
+        "es": [
+          "grado",
+          "mi hijo",
+          "mi hija",
+          "maestra",
+          "maestro"
+        ]
+      }
     },
     {
       "en": "Can he get his homework from today?",
-      "es": "¿Le pueden dar la tarea de hoy?"
+      "es": "¿Le pueden dar la tarea de hoy?",
+      "keys": {
+        "en": [
+          "homework",
+          "work from today",
+          "assignments"
+        ],
+        "es": [
+          "tarea",
+          "trabajo de hoy",
+          "tareas"
+        ]
+      }
     }
   ],
   "expect": {

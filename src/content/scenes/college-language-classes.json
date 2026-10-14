@@ -23,15 +23,60 @@
   "must_use": [
     {
       "en": "I'd like to sign up for English classes.",
-      "es": "Me gustaría inscribirme en clases de inglés."
+      "es": "Me gustaría inscribirme en clases de inglés.",
+      "keys": {
+        "en": [
+          "sign up",
+          "register",
+          "enroll",
+          "english classes",
+          "spanish classes",
+          "take classes"
+        ],
+        "es": [
+          "inscribirme",
+          "inscribir",
+          "registrarme",
+          "clases de inglés",
+          "clases de español",
+          "tomar clases"
+        ]
+      }
     },
     {
       "en": "When do the classes meet?",
-      "es": "¿Cuándo son las clases?"
+      "es": "¿Cuándo son las clases?",
+      "keys": {
+        "en": [
+          "when",
+          "what days",
+          "what time",
+          "schedule"
+        ],
+        "es": [
+          "cuándo son",
+          "qué días",
+          "a qué hora",
+          "horario"
+        ]
+      }
     },
     {
       "en": "Do I need to take a placement test?",
-      "es": "¿Necesito tomar un examen de nivel?"
+      "es": "¿Necesito tomar un examen de nivel?",
+      "keys": {
+        "en": [
+          "placement test",
+          "a test",
+          "exam"
+        ],
+        "es": [
+          "examen",
+          "prueba de nivel",
+          "examen de nivel",
+          "un test"
+        ]
+      }
     }
   ],
   "expect": {

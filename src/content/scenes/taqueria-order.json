@@ -24,15 +24,53 @@
   "must_use": [
     {
       "en": "Two chicken tacos, please.",
-      "es": "Dos tacos de pollo, por favor."
+      "es": "Dos tacos de pollo, por favor.",
+      "keys": {
+        "en": [
+          "tacos",
+          "chicken"
+        ],
+        "es": [
+          "tacos",
+          "pollo"
+        ]
+      }
     },
     {
       "en": "A horchata, please.",
-      "es": "Una horchata, por favor."
+      "es": "Una horchata, por favor.",
+      "keys": {
+        "en": [
+          "horchata",
+          "water",
+          "to drink",
+          "soda",
+          "drink"
+        ],
+        "es": [
+          "horchata",
+          "agua",
+          "de tomar",
+          "refresco",
+          "beber"
+        ]
+      }
     },
     {
       "en": "For here, please.",
-      "es": "Para aquí, por favor."
+      "es": "Para aquí, por favor.",
+      "keys": {
+        "en": [
+          "for here",
+          "to go",
+          "take out"
+        ],
+        "es": [
+          "para aquí",
+          "para llevar",
+          "para comer aquí"
+        ]
+      }
     }
   ],
   "expect": {

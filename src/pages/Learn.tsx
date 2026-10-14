@@ -4,13 +4,17 @@ import type { Scene } from '../content/scene.schema'
 import { LEVELS, simplerThan, type Level } from '../tutor/levels'
 import { ApiError, askTutor, flagReply, type HistoryItem } from '../tutor/client'
 import { OfflineScene } from '../tutor/OfflineScene'
-import { learning, native, other, setLearning, t } from '../i18n/lang'
+import { lang as uiLang, learning, native, other, setLearning, t } from '../i18n/lang'
 import { classify, detectTier, distanceAdvice, paceAdvice, startListener, type ClipStats, type Distance, type Listener, type Pace, type TalkError } from '../speech/input'
 import { hushVoice, say, unlockVoice } from '../speech/voice'
 import { get, set } from '../storage'
 import { go } from '../router'
 import { Icon } from '../ui/Icon'
 import { THEMES, themeOf } from '../content/themes'
+import { initialFlow, isComplete, learnerTurn, likelyQuestions, partnerTurn, summarize, usedPhrase, RECOVERY_LINES, type FlowState } from '../tutor/flow'
+import { detectSkills, withModelSkill } from '../skills/intents'
+import { phrasesIn, skillById, type SkillId } from '../skills/skills'
+import { markTried, recordUse } from '../skills/progress'
 
 interface Msg {
   role: 'user' | 'assistant'
@@ -19,6 +23,12 @@ interface Msg {
   alt?: string[]
   /** The Worker rewrote this reply down to the learner's level. */
   kept?: boolean
+  /** The reply in the learner's own language, shown only on request. */
+  gloss?: string
+  /** One line the learner could say next, shown only on request. */
+  suggest?: string
+  /** The communication skills this learner line used (src/skills/intents.ts). */
+  skills?: SkillId[]
 }
 
 const BREAK_AFTER_MS = 30 * 60 * 1000
@@ -43,21 +53,7 @@ function channelOf(s: Scene): 'counter' | 'phone' {
   return s.channel === 'phone' ? 'phone' : 'counter'
 }
 
-/** Lower-case, accent-free, single-spaced, so "¿Tiene...?" and "tiene" meet. */
-function fold(s: string): string {
-  return s
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .toLowerCase()
-    .replace(/\s+/g, ' ')
-    .trim()
-}
-
-/** Did the learner use this must-use phrase? Punctuation on either end of the phrase does not count. */
-export function usedPhrase(text: string, phrase: string): boolean {
-  const p = fold(phrase).replace(/^[¿¡"'(\s]+|[.!?¿¡,;:"')\s]+$/g, '')
-  return p.length > 0 && fold(text).includes(p)
-}
+export { usedPhrase }
 
 function reducedMotion(): boolean {
   return typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -69,6 +65,8 @@ export function Learn({ params }: { params: URLSearchParams }) {
   const placeName = params.get('place') ?? undefined
   const sceneId = params.get('scene')
   const scene = sceneById(sceneId)
+  // Opened from the Skills page: one skill to look for a moment to use here.
+  const focusSkill = skillById(params.get('skill'))
   const [level, setLevel] = useState<Level>('A2')
   const [msgs, setMsgs] = useState<Msg[]>([])
   const [input, setInput] = useState('')
@@ -77,6 +75,13 @@ export function Learn({ params }: { params: URLSearchParams }) {
   const [offline, setOffline] = useState<false | 'net' | 'busy'>(false)
   const [capped, setCapped] = useState(false)
   const [done, setDone] = useState(false)
+  // Where the errand stands: the state machine in src/tutor/flow.ts.
+  const [flow, setFlow] = useState<FlowState>(() => initialFlow(sceneById(params.get('scene'))?.must_use.length ?? 0))
+  const flowRef = useRef<FlowState>(flow)
+  // The state before each real line, so "Try that again" can step back one.
+  const flowStack = useRef<FlowState[]>([])
+  const [showGloss, setShowGloss] = useState(false)
+  const [showSuggest, setShowSuggest] = useState(false)
   const [crisis, setCrisis] = useState(false)
   const [breakDue, setBreakDue] = useState(false)
   const [listening, setListening] = useState(false)
@@ -106,9 +111,11 @@ export function Learn({ params }: { params: URLSearchParams }) {
   msgsRef.current = msgs
   levelRef.current = level
   voiceOnRef.current = voiceOn
+  flowRef.current = flow
   const tier = detectTier()
   const target = learning()
   const nat = native()
+  const ui = uiLang()
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -175,7 +182,9 @@ export function Learn({ params }: { params: URLSearchParams }) {
     })
   }
 
-  async function send(text: string, command?: 'simpler' | 'another_way') {
+  // `viaChip`: the line is one of the app's own (Repeat, What does that mean?),
+  // so the skill in it counts as tried, not as used in the learner's own words.
+  async function send(text: string, command?: 'simpler' | 'another_way', viaChip = false) {
     if (!scene || busyRef.current) return
     unlockVoice()
     // A mic message ("allow the microphone", "didn't catch that") is about the
@@ -183,10 +192,23 @@ export function Learn({ params }: { params: URLSearchParams }) {
     setTalkState((s) => (s === 'opening' || s === 'listening' || s === 'working' ? s : 'idle'))
     const prev = msgsRef.current
     const history: HistoryItem[] = prev.slice(-HISTORY_TURNS).map((m) => ({ role: m.role, content: m.text }))
-    const shown = command ? prev : [...prev, { role: 'user' as const, text }]
+    // The communication skills in this line (asked for a repeat, confirmed a
+    // date…), judged against what the partner just said. Shown under the bubble.
+    const prevPartner = [...prev].reverse().find((m) => m.role === 'assistant')?.text
+    const hits = command ? [] : detectSkills(text, { prevPartner })
+    const shown = command ? prev : [...prev, { role: 'user' as const, text, skills: hits.length ? hits : undefined }]
     msgsRef.current = shown
     setMsgs(shown)
     setInput('')
+    // The learner's line moves the errand along before the partner answers;
+    // the Worker is told where it stands so it asks for what is still missing.
+    const prevFlow = flowRef.current
+    const asked = command ? learnerTurn(prevFlow, '', target, scene.must_use, 'command') : learnerTurn(prevFlow, text, target, scene.must_use)
+    if (!command) flowStack.current.push(prevFlow)
+    flowRef.current = asked
+    setFlow(asked)
+    setShowGloss(false)
+    setShowSuggest(false)
     busyRef.current = true
     setBusy(true)
     const lvl = command === 'simpler' ? simplerThan(levelRef.current) : levelRef.current
@@ -199,13 +221,29 @@ export function Learn({ params }: { params: URLSearchParams }) {
         user: text,
         command,
         place_name: placeName,
+        phase: asked.phase,
+        done: asked.done,
       })
       if (!alive.current) return
       // The level only drops once a simpler reply actually arrived.
       if (command === 'simpler') setLevel(lvl)
-      const next: Msg[] = [...shown, { role: 'assistant', text: turn.reply, tip: turn.tip || undefined, alt: turn.alt, kept: turn.kept_at_level }]
+      const next: Msg[] = [
+        ...shown,
+        { role: 'assistant', text: turn.reply, tip: turn.tip || undefined, alt: turn.alt, kept: turn.kept_at_level, gloss: turn.gloss || undefined, suggest: turn.suggest || undefined },
+      ]
+      // The model may name a skill the patterns missed; the Worker has already
+      // checked it is one of the eight. The learner's own words count as used,
+      // the app's line behind a chip counts as tried.
+      const skills = withModelSkill(hits, turn.skill)
+      if (!command && skills.length > 0) {
+        next[next.length - 2] = { ...next[next.length - 2], skills }
+        for (const id of skills) viaChip ? markTried(id) : recordUse(id, scene.id)
+      }
       msgsRef.current = next
       setMsgs(next)
+      const after = partnerTurn(asked, turn)
+      flowRef.current = after
+      setFlow(after)
       // A turn that works clears a previous blip, so one bad moment does not
       // lock the rest of the session into the scripted scene.
       setOffline(false)
@@ -215,13 +253,18 @@ export function Learn({ params }: { params: URLSearchParams }) {
       // so the conversation and the mic share the screen.
       if (prev.length === 0 && typeof matchMedia === 'function' && matchMedia('(max-width: 899px)').matches) setBriefOpen(false)
       if (turn.safety_flag) setCrisis(true)
-      if (turn.goal_reached) finish()
+      // The success condition is decided in code (src/tutor/flow.ts), not by
+      // the model alone: what was covered, and whether the partner closed.
+      if (isComplete(after)) finish()
     } catch (e) {
       if (!alive.current) return
       // The line that got no answer goes back where it came from, so nothing
       // the learner wrote is lost to a bad moment on the network.
       msgsRef.current = prev
       setMsgs(prev)
+      flowRef.current = prevFlow
+      setFlow(prevFlow)
+      if (!command) flowStack.current.pop()
       if (!command) setInput(text)
       // Out of turns for today, the Worker falling over, and no connection are
       // three different things, and the learner deserves to be told which.
@@ -266,7 +309,7 @@ export function Learn({ params }: { params: URLSearchParams }) {
     }
     try {
       const l = startListener(tier, target, {
-        expected: scene?.must_use.map((p) => p[target]) ?? [],
+        expected: [...(scene?.must_use.map((p) => p[target]) ?? []), ...(focusSkill ? phrasesIn(focusSkill, target) : [])],
         onOpen: () => setTalkState('listening'),
         onLevel: (v) => {
           if (meter.current) meter.current.style.width = `${Math.round(v * 100)}%`
@@ -325,6 +368,26 @@ export function Learn({ params }: { params: URLSearchParams }) {
       .catch(() => alive.current && setFlagged((f) => ({ ...f, [text]: 'failed' })))
   }
 
+  // One exchange back: the learner's last line returns to the box and the
+  // reply to it is forgotten, so the line can be tried again. Nothing else
+  // resets: the level, the earlier turns and the flow before that line stay.
+  function retryLast() {
+    if (!scene || busyRef.current) return
+    const prev = msgsRef.current
+    const i = prev.map((m) => m.role).lastIndexOf('user')
+    if (i < 0) return
+    const kept = prev.slice(0, i)
+    msgsRef.current = kept
+    setMsgs(kept)
+    setInput(prev[i].text)
+    const back = flowStack.current.pop() ?? initialFlow(scene.must_use.length)
+    flowRef.current = back
+    setFlow(back)
+    setShowGloss(false)
+    setShowSuggest(false)
+    setDone(false)
+  }
+
   const talkStatus: Record<typeof talkState, string> = {
     idle: '',
     opening: t('talk_opening'),
@@ -342,7 +405,12 @@ export function Learn({ params }: { params: URLSearchParams }) {
 
   const lastAssistant = [...msgs].reverse().find((m) => m.role === 'assistant')
   const learnerLines = msgs.filter((m) => m.role === 'user')
-  const used = scene.must_use.map((p) => learnerLines.some((m) => usedPhrase(m.text, p[target])))
+  const skillsUsed = [...new Set(learnerLines.flatMap((m) => m.skills ?? []))]
+  // Covered lines: the learner said them, said them their own way (the
+  // scene's key words), or the partner reported the step. See src/tutor/flow.ts.
+  const used = flow.done
+  const hear = likelyQuestions(scene, target)
+  const summary = done ? summarize(flow, scene.must_use, level) : null
   const earned = !done && (used.every(Boolean) || learnerLines.length >= CARD_AFTER_TURNS)
   const noVoiceNote = noVoice && <p class="note">{t(target === 'es' ? 'no_voice_es' : 'no_voice_en')}</p>
 
@@ -351,6 +419,59 @@ export function Learn({ params }: { params: URLSearchParams }) {
   const doneBlock = (
     <div class="done">
       <p class="big">{t('goal_reached')}</p>
+      {summary && (
+        <div class="summary">
+          <h2>{t('summary_title')}</h2>
+          {summary.communicated.length > 0 && (
+            <p>
+              <b>{t('summary_said')}:</b>{' '}
+              {summary.communicated.map((p, i) => (
+                <span lang={target}>{(i ? ' · ' : '') + p[target]}</span>
+              ))}
+            </p>
+          )}
+          {summary.missed.length > 0 && (
+            <p>
+              <b>{t('summary_missed')}:</b>{' '}
+              {summary.missed.map((p, i) => (
+                <span lang={target}>{(i ? ' · ' : '') + p[target]}</span>
+              ))}
+            </p>
+          )}
+          <p>
+            <b>{t('summary_strength')}:</b> {t(`strength_${summary.strength}` as 'strength_all_phrases')}
+          </p>
+          <p>
+            <b>{t('summary_next')}:</b>{' '}
+            {summary.improvement.key === 'missing' ? (
+              <>
+                {t('improve_missing')} <span lang={target}>{summary.improvement.phrase[target]}</span>
+              </>
+            ) : summary.improvement.key === 'tip' ? (
+              <>
+                {t('improve_tip')} <span lang={nat}>{summary.improvement.text}</span>
+              </>
+            ) : (
+              t(`improve_${summary.improvement.key}` as 'improve_fuller')
+            )}
+          </p>
+          {skillsUsed.length > 0 && (
+            <p>
+              <b>{t('summary_skills')}:</b> {skillsUsed.map((id) => skillById(id)?.name[ui] ?? id).join(' · ')}
+            </p>
+          )}
+          {focusSkill && !skillsUsed.includes(focusSkill.id) && (
+            <p>
+              {t('summary_skill_unused')} <a href={`#/skills?skill=${focusSkill.id}`}>{t('summary_skills_link')}</a>
+            </p>
+          )}
+          {learnerLines.length > 0 && (
+            <button type="button" class="ghost small" onClick={retryLast}>
+              {t('summary_retry')}
+            </button>
+          )}
+        </div>
+      )}
       <a class="primary" href="#/card">
         {t('see_card')}
       </a>
@@ -374,6 +495,7 @@ export function Learn({ params }: { params: URLSearchParams }) {
         <details class="brief" open={briefOpen} onToggle={(e) => setBriefOpen((e.currentTarget as HTMLDetailsElement).open)}>
           <summary>
             <span>{t('brief_label')}</span>
+            <span class="phase">{t(`phase_${flow.phase}` as 'phase_start')}</span>
             <span class="progress">
               {used.filter(Boolean).length}/{scene.must_use.length} <Icon name="check" size={14} />
             </span>
@@ -406,6 +528,40 @@ export function Learn({ params }: { params: URLSearchParams }) {
             </li>
           ))}
         </ol>
+        {scene.example_details && <p class="note">{t('card_examples')}</p>}
+        {focusSkill && (
+          <div class="nudge">
+            <span class="label">
+              {t('nudge_try')}: {focusSkill.name[ui]}
+            </span>
+            <p class="line">
+              <span lang={target}>{focusSkill.phrases[0][target]}</span>
+              <button
+                type="button"
+                class={'ghost small listen' + (speaking === focusSkill.phrases[0][target] ? ' speaking' : '')}
+                onClick={() => listen(focusSkill.phrases[0][target])}
+                aria-label={`${speaking === focusSkill.phrases[0][target] ? t('stop_voice') : t('listen')}: ${focusSkill.phrases[0][target]}`}
+              >
+                <Icon name={speaking === focusSkill.phrases[0][target] ? 'stop' : 'speaker'} size={18} />
+              </button>
+            </p>
+            <p class="gloss" lang={nat}>
+              {focusSkill.phrases[0][nat]}
+            </p>
+          </div>
+        )}
+        {hear.length > 0 && (
+          <>
+            <p class="levels-label">
+              <b>{t('hear_label')}:</b>
+            </p>
+            <ul class="hear" lang={target}>
+              {hear.map((q) => (
+                <li>{q}</li>
+              ))}
+            </ul>
+          </>
+        )}
         {/* Level names follow the interface language like every other control:
             the person choosing "beginner" reads it in the language they chose
             for the app, never in the one they are learning. */}
@@ -465,6 +621,11 @@ export function Learn({ params }: { params: URLSearchParams }) {
                   </button>
                 )}
                 {m.kept && <p class="kept">{t('kept_at_level')}</p>}
+                {m.role === 'user' && m.skills && m.skills.length > 0 && (
+                  <p class="skill-tag">
+                    <Icon name="check" size={12} /> {t('skill_used_tag')}: {m.skills.map((id) => skillById(id)?.name[ui] ?? id).join(' · ')}
+                  </p>
+                )}
                 {m.tip && (
                   <p class="tip">
                     <b>{t('tip_label')}:</b> <span lang={nat}>{m.tip}</span>
@@ -573,6 +734,42 @@ export function Learn({ params }: { params: URLSearchParams }) {
               )}
               {lastAssistant && (
                 <>
+                  {/* The ways out when lost: a repeat, a meaning, the last reply in your
+                      own language, a line you could say next, or the last line again. */}
+                  <div class="chips" role="group" aria-label={t('chips_label')}>
+                    <button type="button" class="ghost small" disabled={busy} onClick={() => send(RECOVERY_LINES[target].repeat, undefined, true)}>
+                      {t('chip_repeat')}
+                    </button>
+                    <button type="button" class="ghost small" disabled={busy} onClick={() => send(RECOVERY_LINES[target].meaning, undefined, true)}>
+                      {t('chip_meaning')}
+                    </button>
+                    {lastAssistant.gloss && (
+                      <button type="button" class="ghost small" aria-pressed={showGloss} onClick={() => setShowGloss((v) => !v)}>
+                        {t('chip_translate')}
+                      </button>
+                    )}
+                    {lastAssistant.suggest && (
+                      <button type="button" class="ghost small" aria-pressed={showSuggest} onClick={() => setShowSuggest((v) => !v)}>
+                        {t('chip_suggest')}
+                      </button>
+                    )}
+                    <button type="button" class="ghost small" disabled={busy} onClick={retryLast}>
+                      {t('chip_retry')}
+                    </button>
+                  </div>
+                  {showGloss && lastAssistant.gloss && (
+                    <p class="gloss-box" lang={nat}>
+                      <b>{t('gloss_label')}:</b> {lastAssistant.gloss}
+                    </p>
+                  )}
+                  {showSuggest && lastAssistant.suggest && (
+                    <p class="suggest-box">
+                      <b>{t('suggest_label')}:</b> <span lang={target}>{lastAssistant.suggest}</span>{' '}
+                      <button type="button" class="link" onClick={() => setInput(lastAssistant.suggest ?? '')}>
+                        {t('use_suggestion')}
+                      </button>
+                    </p>
+                  )}
                   {/* One row: the two ways to get a different reply, and the voice switch at the far end. */}
                   <div class="row after-reply">
                     <button type="button" class="ghost" disabled={busy || level === 'A1'} onClick={() => send('', 'simpler')}>
@@ -710,6 +907,16 @@ function ScenePicker({ onPick }: { onPick: (s: Scene) => void }) {
           </a>
         </li>
       </ol>
+      {/* The skills that work in every scene, one tap away before picking one. */}
+      <a class="skills-entry" href="#/skills">
+        <span class="band">
+          <Icon name="skills" size={20} />
+        </span>
+        <span class="body">
+          <span class="title">{t('skills_entry')}</span>
+          <span class="sub">{t('skills_entry_sub')}</span>
+        </span>
+      </a>
       {last && <ul class="scenes">{card(last, true)}</ul>}
       {groups.map((g) => (
         <div class="scene-group">

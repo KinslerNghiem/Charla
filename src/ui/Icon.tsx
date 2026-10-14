@@ -28,6 +28,7 @@ const PLACE: Record<PlaceType, string[]> = {
 
 const MISC = {
   rehearse: ['M4 5h16v10H9l-5 4z'],
+  skills: ['M4 5h16v10H9l-5 4z', 'M9 10l2 2 4-4'],
   card: ['M3 5h18v14H3z', 'M3 9h18', 'M7 13h6'],
   places: ['M12 21s6-5.5 6-11a6 6 0 0 0-12 0c0 5.5 6 11 6 11z', c(12, 10, 2)],
   table: ['M4 8h12v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z', 'M16 10h2a2 2 0 0 1 0 4h-2M5 21h12'],

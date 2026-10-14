@@ -78,3 +78,24 @@ export function errName(err: unknown): string {
 
 /** What /api/help returns when it cannot answer; Table mode shows its "unavailable" string. */
 export const NO_HELP: Help = { phrase: '', literal: '', tip: '' }
+
+// How long one model call may take. A turn is at most two calls (the reply
+// and one rewrite), so the app waits a little over twice this before it shows
+// the scripted scene. Past it, a reply is late enough to be worse than none.
+export const MODEL_TIMEOUT_MS = 15_000
+
+export class TimeoutError extends Error {
+  constructor(ms: number) {
+    super(`timed out after ${ms} ms`)
+    this.name = 'TimeoutError'
+  }
+}
+
+/** The promise, or a TimeoutError after `ms`. The timer is cleared either way. */
+export function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined
+  const guard = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => reject(new TimeoutError(ms)), ms)
+  })
+  return Promise.race([p, guard]).finally(() => clearTimeout(timer))
+}

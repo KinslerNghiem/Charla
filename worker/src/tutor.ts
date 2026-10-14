@@ -4,11 +4,13 @@ import { TurnSchema, HelpSchema, type Turn, type TurnResponse, type Help } from 
 import { checkReply, splitSentences, levelReminder, type Level } from '../../src/tutor/levels'
 import { looksLike } from '../../src/tutor/langcheck'
 import { sceneById } from '../../src/content/scenes'
-import { buildSystem, commandText, placeLine } from './prompt'
+import { buildSystem, commandText, flowHint, placeLine } from './prompt'
+import { PHASES, type Phase } from '../../src/tutor/flow'
+import { isSkillId } from '../../src/skills/skills'
 import { CANNED, blocked, meta } from './safety'
 import { DEFAULT_FALLBACK_MODEL, fallbackAddendum, fallbackJson, type ChatMsg } from './fallback'
 import { cleanTip, styleProblems } from './style'
-import { errName, log, NO_HELP, type Env } from './env'
+import { errName, log, MODEL_TIMEOUT_MS, NO_HELP, type Env } from './env'
 
 type Lang = 'en' | 'es'
 
@@ -25,6 +27,9 @@ export interface TurnInput {
   user: string
   command?: 'simpler' | 'another_way'
   place_name?: string
+  /** The app's view of the errand (src/tutor/flow.ts). Shapes the flow note only. */
+  phase?: string
+  done?: boolean[]
 }
 
 const HISTORY_TURNS = 10
@@ -39,7 +44,22 @@ const MAX_TOKENS_TURN = 4000
 const MAX_TOKENS_HELP = 1000
 
 function canned(learning: Lang, safety: boolean): TurnResponse {
-  return { reply: CANNED.redirect[learning], tip: '', alt: [], on_topic: false, goal_reached: false, safety_flag: safety, kept_at_level: false }
+  return { reply: CANNED.redirect[learning], tip: '', alt: [], on_topic: false, goal_reached: false, safety_flag: safety, step: 0, gloss: '', suggest: '', skill: '', kept_at_level: false }
+}
+
+// The three fields the model fills about the learner's turn, bounded before
+// the app sees them: the step index inside the scene, and the gloss and the
+// suggestion each in the language it is supposed to be in. Exported for tests.
+export function cleanExtras(turn: Turn, learning: Lang, objectives: number): Pick<Turn, 'step' | 'gloss' | 'suggest' | 'skill'> {
+  const nativeLang: Lang = learning === 'en' ? 'es' : 'en'
+  const step = Number.isInteger(turn.step) && turn.step >= 0 && turn.step <= objectives ? turn.step : 0
+  let gloss = String(turn.gloss ?? '').trim().slice(0, 300)
+  if (gloss && !looksLike(nativeLang, gloss)) gloss = ''
+  let suggest = String(turn.suggest ?? '').trim().slice(0, 200)
+  if (suggest && (!looksLike(learning, suggest) || suggest.toLowerCase() === turn.reply.trim().toLowerCase())) suggest = ''
+  // The skill is an allow-list: one of the eight ids or nothing.
+  const skill = isSkillId(turn.skill) ? turn.skill : ''
+  return { step, gloss, suggest, skill }
 }
 
 // Mid-conversation {role:'system'} messages are supported on Opus 5, Opus 4.8
@@ -95,8 +115,14 @@ export async function runTurn(env: Env, input: TurnInput): Promise<TurnResponse 
   // means the free Workers AI model; neither means the scripted scene (503).
   if (!env.ANTHROPIC_API_KEY && !env.AI) return null
 
+  // The flow state is bounded here and used for one thing: the note that
+  // tells the model which lines are still to cover.
+  const phase: Phase = PHASES.includes(input.phase as Phase) ? (input.phase as Phase) : 'start'
+  const done = scene.must_use.map((_, i) => Array.isArray(input.done) && input.done[i] === true)
+  const objectives = scene.must_use.length
+
   const system = buildSystem(scene, level, learning)
-  const reminder = levelReminder(level, learning)
+  const reminder = levelReminder(level, learning) + '\n' + flowHint(phase, done, scene.must_use.map((p) => p[learning]), level)
   const model = env.MODEL || 'claude-opus-5'
   const sysInMessages = supportsSystemInMessages(model)
 
@@ -117,7 +143,7 @@ export async function runTurn(env: Env, input: TurnInput): Promise<TurnResponse 
     return runTurnFallback(env.AI!, env.FALLBACK_MODEL || DEFAULT_FALLBACK_MODEL, sys, reminder, recent, first, userText, level, learning, mustUse)
   }
 
-  const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY })
+  const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY, timeout: MODEL_TIMEOUT_MS, maxRetries: 1 })
   const messages: Anthropic.MessageParam[] = [
     ...recent,
     { role: 'user', content: sysInMessages ? first : `${first}\n\n${reminder}` },
@@ -193,7 +219,7 @@ export async function runTurn(env: Env, input: TurnInput): Promise<TurnResponse 
   // Still the wrong language after a retry: the redirect line, not a partner
   // who has switched languages on the learner.
   if (!looksLike(learning, turn.reply)) return canned(learning, false)
-  return { ...turn, tip: cleanTip(turn.tip, learning), kept_at_level: retried }
+  return { ...turn, ...cleanExtras(turn, learning, objectives), tip: cleanTip(turn.tip, learning), kept_at_level: retried }
 }
 
 // Narration in the simple present, which the free model falls into under the
@@ -277,10 +303,11 @@ async function runTurnFallback(
       const res2 = await fallbackJson(ai, model, again, TurnSchema, MAX_TOKENS_TURN)
       if (res2.error) return null
       if (res2.parsed) {
-        // Only the reply is re-requested. The tip and the alternatives were
-        // about the learner's turn and are still right; taking them from the
-        // retry let the correction message leak into "alt".
-        turn = { ...turn, reply: res2.parsed.reply, goal_reached: res2.parsed.goal_reached, safety_flag: turn.safety_flag || res2.parsed.safety_flag }
+        // Only the reply is re-requested. The tip, the alternatives and the
+        // step were about the learner's turn and are still right; taking them
+        // from the retry let the correction message leak into "alt". The gloss
+        // and the suggestion follow the new reply.
+        turn = { ...turn, reply: res2.parsed.reply, goal_reached: res2.parsed.goal_reached, safety_flag: turn.safety_flag || res2.parsed.safety_flag, gloss: res2.parsed.gloss, suggest: res2.parsed.suggest }
         res = res2
       }
     }
@@ -300,7 +327,7 @@ async function runTurnFallback(
   // turn one also carries the place line.
   const said = userText.trim().toLowerCase()
   const alt = (turn.alt ?? []).filter((a) => a.trim().toLowerCase() !== said && a.trim().toLowerCase() !== turn!.reply.trim().toLowerCase())
-  return { ...turn, tip: cleanTip(turn.tip, learning), alt: alt.slice(0, 2), kept_at_level: retried }
+  return { ...turn, ...cleanExtras(turn, learning, mustUse.length), tip: cleanTip(turn.tip, learning), alt: alt.slice(0, 2), kept_at_level: retried }
 }
 
 function helpSystem(from: Lang, to: Lang): string {
@@ -326,7 +353,7 @@ export async function runHelp(env: Env, text: string, from: Lang, to: Lang): Pro
     log({ route: 'help', in: res.usage.in, out: res.usage.out, fallback: true })
     return res.parsed ?? NO_HELP
   }
-  const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY })
+  const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY, timeout: MODEL_TIMEOUT_MS, maxRetries: 1 })
   try {
     const res = await client.messages.parse({
       model: env.MODEL || 'claude-opus-5',

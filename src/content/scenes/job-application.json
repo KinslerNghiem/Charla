@@ -23,15 +23,58 @@
   "must_use": [
     {
       "en": "Are you hiring right now?",
-      "es": "¿Están contratando ahora?"
+      "es": "¿Están contratando ahora?",
+      "keys": {
+        "en": [
+          "hiring",
+          "job opening",
+          "any openings",
+          "looking for"
+        ],
+        "es": [
+          "contratando",
+          "contratan",
+          "vacante",
+          "trabajo",
+          "empleo"
+        ]
+      }
     },
     {
       "en": "I can work evenings and weekends.",
-      "es": "Puedo trabajar por las tardes y los fines de semana."
+      "es": "Puedo trabajar por las tardes y los fines de semana.",
+      "keys": {
+        "en": [
+          "evenings",
+          "weekends",
+          "i can work",
+          "available"
+        ],
+        "es": [
+          "tardes",
+          "noches",
+          "fines de semana",
+          "fin de semana",
+          "puedo trabajar",
+          "disponible"
+        ]
+      }
     },
     {
       "en": "How do I apply?",
-      "es": "¿Cómo hago la solicitud?"
+      "es": "¿Cómo hago la solicitud?",
+      "keys": {
+        "en": [
+          "apply",
+          "application"
+        ],
+        "es": [
+          "solicitud",
+          "solicitar",
+          "aplicar",
+          "aplico"
+        ]
+      }
     }
   ],
   "expect": {
