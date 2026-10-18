@@ -65,8 +65,14 @@ Three functions use the same patterns:
   so the drill and the flow agree on what "asked for help" means.
 
 The model also returns one `skill` with each turn. The Worker keeps it only
-when it is one of the eight ids; the app adds it to the rule-based result when
-the rules missed it. The rules decide alone when the model is down.
+when it is one of the eight ids, and the app counts it only when the rules
+found nothing and the line has the right shape: a follow-up or a confirmation
+has to be a question (or start with "so" / "entonces") after a partner line,
+and any other skill needs a line of three words or more. On the free model
+the vote was right about half the time in the bench ("follow_up" for an
+opening greeting, "confirm" for a plain answer), which is why it supplements
+the rules and never overrides them. The rules decide alone when the model is
+down.
 
 ## The Skills page
 

@@ -118,12 +118,28 @@ describe('across languages', () => {
 })
 
 describe('the model\'s vote', () => {
-  it('adds one real skill the rules missed and ignores anything else', () => {
-    expect(withModelSkill([], 'confirm')).toEqual(['confirm'])
-    expect(withModelSkill(['repeat'], 'repeat')).toEqual(['repeat'])
-    expect(withModelSkill(['repeat'], 'banana')).toEqual(['repeat'])
-    expect(withModelSkill([], '')).toEqual([])
-    expect(withModelSkill([], 42)).toEqual([])
+  it('counts only when the rules found nothing, names a real skill, and fits the line', () => {
+    // A real skill the patterns missed, on a line with enough words to judge.
+    expect(withModelSkill([], 'problem', 'The sink has been dripping since Monday.', EN)).toEqual(['problem'])
+    // The rules already spoke: the vote changes nothing, agree or not.
+    expect(withModelSkill(['repeat'], 'repeat', 'Could you repeat that?', EN)).toEqual(['repeat'])
+    expect(withModelSkill(['repeat'], 'confirm', 'Could you repeat that?', EN)).toEqual(['repeat'])
+    // Not a skill id at all.
+    expect(withModelSkill([], 'banana', 'Hello there, good morning.', EN)).toEqual([])
+    expect(withModelSkill([], '', 'Hello there, good morning.', EN)).toEqual([])
+    expect(withModelSkill([], 42, 'Hello there, good morning.', EN)).toEqual([])
+  })
+
+  it('rejects the votes the free model actually gets wrong', () => {
+    // "follow_up" for an opening line, before the partner has spoken.
+    expect(withModelSkill([], 'follow_up', 'Hello, I need pick up medicine for my mother.')).toEqual([])
+    // "follow_up" for a plain answer, and "confirm" for one, with no question in it.
+    expect(withModelSkill([], 'follow_up', 'Her last name is Garcia. She born 3 May 1960.', EN)).toEqual([])
+    expect(withModelSkill([], 'confirm', 'June 12th, 1988. Here is my insurance card.', EN)).toEqual([])
+    // "next_step" for a bare thank-you.
+    expect(withModelSkill([], 'next_step', 'Gracias.', ES)).toEqual([])
+    // A genuine confirming question the echo rules missed is accepted.
+    expect(withModelSkill([], 'confirm', 'With the doctor, not the nurse?', EN)).toEqual(['confirm'])
   })
 })
 

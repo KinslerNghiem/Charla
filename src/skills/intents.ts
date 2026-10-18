@@ -148,9 +148,23 @@ export function asksForHelp(text: string): boolean {
   return detectSkills(text).some((s) => CLARIFYING.has(s))
 }
 
-/** The rule-based hits plus the model's one vote, if it names a real skill the rules missed. Anything else from the model is ignored. */
-export function withModelSkill(hits: SkillId[], model: unknown): SkillId[] {
-  return isSkillId(model) && !hits.includes(model) ? [...hits, model] : hits
+/**
+ * The rule-based hits, plus the model's one vote when it can be trusted. The
+ * vote is a supplement, never the judge: it counts only when the rules found
+ * nothing, it has to name one of the eight skills, and it has to fit the shape
+ * of the line. On the free model the vote is right about half the time
+ * ("follow_up" for a first greeting, "confirm" for a plain answer), so a
+ * follow-up or a confirmation still needs a question (or "so…") after a
+ * partner line, and any other skill needs more than two words to vote on.
+ */
+export function withModelSkill(hits: SkillId[], model: unknown, text = '', ctx?: TurnContext): SkillId[] {
+  if (hits.length > 0 || !isSkillId(model)) return hits
+  if (model === 'follow_up' || model === 'confirm') {
+    if (!ctx?.prevPartner || !(isQuestion(text) || OPENER.test(fold(text)))) return hits
+  } else if (words(text) < 3) {
+    return hits
+  }
+  return [model]
 }
 
 export type Verdict = 'hit' | 'other_lang' | 'miss'

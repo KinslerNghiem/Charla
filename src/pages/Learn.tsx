@@ -234,7 +234,7 @@ export function Learn({ params }: { params: URLSearchParams }) {
       // The model may name a skill the patterns missed; the Worker has already
       // checked it is one of the eight. The learner's own words count as used,
       // the app's line behind a chip counts as tried.
-      const skills = withModelSkill(hits, turn.skill)
+      const skills = withModelSkill(hits, turn.skill, text, { prevPartner })
       if (!command && skills.length > 0) {
         next[next.length - 2] = { ...next[next.length - 2], skills }
         for (const id of skills) viaChip ? markTried(id) : recordUse(id, scene.id)
