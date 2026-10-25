@@ -47,7 +47,9 @@ export function lastPartnerLine(history: HistoryItem[]): string | null {
 }
 
 // A quoted span inside a tip: the line the tip tells the learner to say.
-const QUOTED = /["“«]([^"”»]{8,}?)["”»]/g
+// Double quotes, guillemets, and single quotes that open after a space or a
+// colon (so the apostrophe in "I'm" never opens one).
+const QUOTED = /["“«]([^"”»]{8,}?)["”»]|(?<![\p{L}\p{N}])['‘]([^'’]{8,}?)['’](?![\p{L}])/gu
 
 /**
  * A tip is written in the learner's own language and quotes the line to say
@@ -61,7 +63,7 @@ export function tipQuotesWrongLanguage(tip: string, learning: Lang): boolean {
   let sawTarget = false
   let sawNativeOnly = false
   for (const m of tip.matchAll(QUOTED)) {
-    const q = m[1]
+    const q = m[1] ?? m[2]
     if (q.trim().split(/\s+/).length < 4) continue
     const t = looksLike(learning, q)
     const n = looksLike(native, q)

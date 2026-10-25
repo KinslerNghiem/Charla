@@ -67,6 +67,7 @@ describe('the partner prompt', () => {
     for (const level of ['A1', 'A2', 'B1'] as const) {
       expect(buildSystem(pharmacy, level, 'en')).toMatch(/on EVERY turn and never empty/)
       expect(buildSystem(pharmacy, level, 'en')).toMatch(/a word the pharmacist may use next/)
+      expect(buildSystem(pharmacy, level, 'en')).toMatch(/Any line you quote inside "tip" for the learner to say is in English, never translated into Spanish/)
     }
     expect(buildSystem(pharmacy, 'A2', 'es')).toContain('Say "para mi mamá", not "por mi mamá".')
   })

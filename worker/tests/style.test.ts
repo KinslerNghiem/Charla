@@ -53,6 +53,14 @@ describe('tipQuotesWrongLanguage', () => {
     expect(cleanTip('Di: "¿Podría repetirlo más despacio, por favor?"', 'en')).toBe('')
   })
 
+  it('reads single and curly quotes too, without tripping on apostrophes (seen live: a Spanish line in single quotes)', () => {
+    expect(cleanTip("Di: 'Su apellido es García y su fecha de nacimiento es el 3 de mayo de 1960.'", 'en')).toBe('')
+    expect(cleanTip('Say: ‘I am here to pick up a prescription for my mother.’', 'es')).toBe('')
+    expect(cleanTip("Di: 'I'm here to pick up a prescription for my mother.'", 'en')).toBe("Di: 'I'm here to pick up a prescription for my mother.'")
+    expect(cleanTip('Say: ‘Vengo a recoger una receta para mi mamá.’', 'es')).toBe('Say: ‘Vengo a recoger una receta para mi mamá.’')
+    expect(cleanTip("Don't say \"for pick up\"; it's \"to pick up\".", 'en')).toBe("Don't say \"for pick up\"; it's \"to pick up\".")
+  })
+
   it('keeps a tip that quotes the target language, explains without quoting, or quotes both', () => {
     expect(tipQuotesWrongLanguage('Di: "Could you repeat that more slowly, please?"', 'en')).toBe(false)
     expect(tipQuotesWrongLanguage('Say "necesito algo para el dolor de cabeza": the pain comes after.', 'es')).toBe(false)
