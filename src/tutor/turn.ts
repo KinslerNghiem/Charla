@@ -22,6 +22,11 @@ export const TurnSchema = z.object({
   // The app's own rule-based classifier (src/skills/intents.ts) decides first;
   // the Worker keeps this only when it names one of the eight skill ids.
   skill: z.string().describe("The communication skill the learner's latest turn used, if clearly any: repeat, slow_down, clarify, confirm, follow_up, problem, unknown_word or next_step. \"\" if none."),
+  // Whether the learner's line could be understood as an attempt at the
+  // conversation at all. False means the partner asked them to say it again;
+  // the Worker then zeroes step, skill, goal_reached and alt, and the app
+  // treats the turn as one that did not move the errand.
+  understood: z.boolean().describe('False when the learner\'s line cannot be understood as an attempt at this conversation (random words, numbers in place of words, nonsense). Then "reply" only says, in character, that you did not catch that and asks them to say it again, "step" is 0 and "alt" is empty. True on every other turn, including off-topic ones.'),
 })
 
 export type Turn = z.infer<typeof TurnSchema>

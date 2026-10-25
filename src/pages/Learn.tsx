@@ -231,17 +231,21 @@ export function Learn({ params }: { params: URLSearchParams }) {
         ...shown,
         { role: 'assistant', text: turn.reply, tip: turn.tip || undefined, alt: turn.alt, kept: turn.kept_at_level, gloss: turn.gloss || undefined, suggest: turn.suggest || undefined },
       ]
+      // Not understood: the partner asked them to say it again. The line stays
+      // on screen with that reply under it, but nothing about it is credited.
+      const heard = turn.understood !== false
       // The model may name a skill the patterns missed; the Worker has already
       // checked it is one of the eight. The learner's own words count as used,
       // the app's line behind a chip counts as tried.
-      const skills = withModelSkill(hits, turn.skill, text, { prevPartner })
-      if (!command && skills.length > 0) {
-        next[next.length - 2] = { ...next[next.length - 2], skills }
+      const skills = heard ? withModelSkill(hits, turn.skill, text, { prevPartner }) : []
+      if (!command) {
+        if (skills.length > 0 || !heard) next[next.length - 2] = { ...next[next.length - 2], skills: skills.length > 0 ? skills : undefined }
         for (const id of skills) viaChip ? markTried(id) : recordUse(id, scene.id)
       }
       msgsRef.current = next
       setMsgs(next)
-      const after = partnerTurn(asked, turn)
+      // A line that was not understood did not happen, as far as the errand goes.
+      const after = heard ? partnerTurn(asked, turn) : prevFlow
       flowRef.current = after
       setFlow(after)
       // A turn that works clears a previous blip, so one bad moment does not

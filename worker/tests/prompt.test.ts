@@ -49,6 +49,14 @@ describe('the partner prompt', () => {
     expect(p).toMatch(/only when the mistake blocked meaning, keeps repeating, or the learner asks why/)
   })
 
+  it('tells the partner to ask again, and not to guess, when a line cannot be understood', () => {
+    const p = buildSystem(pharmacy, 'A2', 'en')
+    expect(p).toMatch(/WHEN YOU CANNOT UNDERSTAND/)
+    expect(p).toMatch(/Set "understood" false/)
+    expect(p).toMatch(/no guess and no progress/)
+    expect(p).toMatch(/A sentence full of mistakes that you can still make sense of IS understood/)
+  })
+
   it('requires a corrected sentence in "alt" for any error, and a tip with it below B1', () => {
     for (const level of ['A1', 'A2', 'B1'] as const) {
       const p = buildSystem(pharmacy, level, 'en')

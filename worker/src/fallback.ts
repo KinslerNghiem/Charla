@@ -47,11 +47,11 @@ export function fallbackAddendum(target: string, partnerRole: string): string {
     '5. Correct by recasting, never by praising or lecturing. The learner says "I need pick up medicine for my mother"; you say "Of course, you\'re picking up for your mother. What is her name?" and move on. No "great job", no "perfect", no "your English is good". Do not start two replies with the same word.',
     '',
     'EXAMPLE (pharmacy scene, level A2). Learner: "Hello, I need pick up medicine for my mother."',
-    'Good JSON: {"reply":"Of course. What is her name?","tip":"","alt":["I need to pick up medicine for my mother."],"on_topic":true,"goal_reached":false,"safety_flag":false,"step":1,"gloss":"Claro. ¿Cómo se llama ella?","suggest":"Her last name is Garcia.","skill":""}',
+    'Good JSON: {"reply":"Of course. What is her name?","tip":"","alt":["I need to pick up medicine for my mother."],"on_topic":true,"goal_reached":false,"safety_flag":false,"step":1,"gloss":"Claro. ¿Cómo se llama ella?","suggest":"Her last name is Garcia.","skill":"","understood":true}',
     'EXAMPLE (school office, level A1). Learner: "Hello. I pick up my son. Mateo. Dentist."',
-    `Good JSON: {"reply":"Okay. Can I see your ID?","tip":"Di: 'I'm here to pick up my son.'","alt":["I'm here to pick up my son, Mateo."],"on_topic":true,"goal_reached":false,"safety_flag":false,"step":1,"gloss":"Bien. ¿Me permite su identificación?","suggest":"Here is my ID.","skill":""}`,
+    `Good JSON: {"reply":"Okay. Can I see your ID?","tip":"Di: 'I'm here to pick up my son.'","alt":["I'm here to pick up my son, Mateo."],"on_topic":true,"goal_reached":false,"safety_flag":false,"step":1,"gloss":"Bien. ¿Me permite su identificación?","suggest":"Here is my ID.","skill":"","understood":true}`,
     'EXAMPLE (taquería scene, level A1, the learner is practicing Spanish). Learner: "Hola, quiero dos taco de pollo."',
-    'Good JSON: {"reply":"Claro. ¿Para aquí o para llevar?","tip":"","alt":["Dos tacos de pollo, por favor."],"on_topic":true,"goal_reached":false,"safety_flag":false,"step":1,"gloss":"Sure. For here or to go?","suggest":"Para aquí, por favor.","skill":""}',
+    'Good JSON: {"reply":"Claro. ¿Para aquí o para llevar?","tip":"","alt":["Dos tacos de pollo, por favor."],"on_topic":true,"goal_reached":false,"safety_flag":false,"step":1,"gloss":"Sure. For here or to go?","suggest":"Para aquí, por favor.","skill":"","understood":true}',
     'When the target is Spanish, that is the Spanish to use: Latin American, usted to the customer, "Claro", "Aquí tiene", "¿Algo más?"; never "vale", "vosotros" or "ordenador".',
   ].join('\n')
 }

@@ -3,6 +3,7 @@ import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod'
 import { TurnSchema, HelpSchema, type Turn, type TurnResponse, type Help } from '../../src/tutor/turn'
 import { checkReply, splitSentences, levelReminder, type Level } from '../../src/tutor/levels'
 import { looksLike } from '../../src/tutor/langcheck'
+import { looksGarbled } from '../../src/tutor/garbled'
 import { sceneById } from '../../src/content/scenes'
 import { buildSystem, commandText, flowHint, placeLine } from './prompt'
 import { PHASES, matchesObjective, usedPhrase, type Phase } from '../../src/tutor/flow'
@@ -45,7 +46,13 @@ const MAX_TOKENS_TURN = 4000
 const MAX_TOKENS_HELP = 1000
 
 function canned(learning: Lang, safety: boolean): TurnResponse {
-  return { reply: CANNED.redirect[learning], tip: '', alt: [], on_topic: false, goal_reached: false, safety_flag: safety, step: 0, gloss: '', suggest: '', skill: '', kept_at_level: false }
+  return { reply: CANNED.redirect[learning], tip: '', alt: [], on_topic: false, goal_reached: false, safety_flag: safety, step: 0, gloss: '', suggest: '', skill: '', understood: true, kept_at_level: false }
+}
+
+// A line nobody could answer: the partner asks again, in character, and the
+// model is not called. Nothing moves: no step, no skill, no correction.
+function unclear(learning: Lang): TurnResponse {
+  return { reply: CANNED.unclear[learning], tip: '', alt: [], on_topic: true, goal_reached: false, safety_flag: false, step: 0, gloss: '', suggest: '', skill: '', understood: false, kept_at_level: false }
 }
 
 // The three fields the model fills about the learner's turn, bounded before
@@ -123,6 +130,8 @@ export async function runTurn(env: Env, input: TurnInput): Promise<TurnResponse 
   if (blocked(userText)) return canned(learning, true)
   // "Ignore your rules": answered with the redirect line, never sent upstream.
   if (!input.command && meta(userText)) return canned(learning, false)
+  // Numbers for words, the same word three times, no vowels: ask again, no model call.
+  if (!input.command && looksGarbled(userText)) return unclear(learning)
   // Two providers, one prompt. A key means Claude; no key but an AI binding
   // means the free Workers AI model; neither means the scripted scene (503).
   if (!env.ANTHROPIC_API_KEY && !env.AI) return null
@@ -136,7 +145,11 @@ export async function runTurn(env: Env, input: TurnInput): Promise<TurnResponse 
   // lines in other words gets that line as "another way to say it" when the
   // model offered no correction of its own.
   const finish = (out: TurnResponse | null): TurnResponse | null => {
-    if (!out || input.command || !out.on_topic) return out
+    if (!out) return out
+    // The model could not understand the line: its reply asks again, and the
+    // rest is enforced here. Nothing it may have guessed about the turn counts.
+    if (out.understood === false) return { ...out, step: 0, skill: '', goal_reached: false, alt: [], tip: '' }
+    if (input.command || !out.on_topic) return out
     return { ...out, alt: fillAlt(out.alt ?? [], userText, scene.must_use, learning, done, out.step) }
   }
 

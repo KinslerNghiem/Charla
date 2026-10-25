@@ -9,7 +9,7 @@ import type { Turn } from '../../src/tutor/turn'
 // and what the learner gets back. Deterministic. What the real model says to
 // these prompts is the bench's job (scripts/convo-bench.mjs) and a human's.
 
-const ok = (reply: string, extra: Partial<Turn> = {}): Turn => ({ reply, tip: '', alt: [], on_topic: true, goal_reached: false, safety_flag: false, step: 0, gloss: '', suggest: '', skill: '', ...extra })
+const ok = (reply: string, extra: Partial<Turn> = {}): Turn => ({ reply, tip: '', alt: [], on_topic: true, goal_reached: false, safety_flag: false, step: 0, gloss: '', suggest: '', skill: '', understood: true, ...extra })
 
 type Sent = { messages: { role: string; content: string }[] }
 
@@ -206,6 +206,35 @@ describe('a turn on the free-model path', () => {
     // A line that covers nothing: nothing to offer.
     const other = model(ok('Hello. How can I help?'))
     expect((await runTurn(other.env, { ...base, user: 'Hello, good morning.' }))?.alt).toEqual([])
+  })
+
+  it('answers a line nobody could understand without calling the model, and moves nothing', async () => {
+    const m = model(ok('never used'))
+    const out = await runTurn(m.env, { ...base, user: 'Hello, Medicine 4 Upkick My 4 Mother 4.' })
+    expect(m.run).not.toHaveBeenCalled()
+    expect(out?.reply).toBe(CANNED.unclear.en)
+    expect(out?.understood).toBe(false)
+    expect(out?.step).toBe(0)
+    expect(out?.alt).toEqual([])
+    expect(out?.on_topic).toBe(true)
+    const m2 = model(ok('never used'))
+    expect((await runTurn(m2.env, { ...base, user: 'Money, money, money, cats, but, farts, barbie-corns.' }))?.reply).toBe(CANNED.unclear.en)
+    expect(m2.run).not.toHaveBeenCalled()
+    const es = model(ok('never used'))
+    expect((await runTurn(es.env, { ...base, learning: 'es', user: 'Medicina 4 recoger mi 4 madre 4.' }))?.reply).toBe(CANNED.unclear.es)
+  })
+
+  it('enforces the model\'s "not understood": the reply that asks again, and no step, skill, close or correction', async () => {
+    const m = model(ok("Sorry, I didn't catch that. Could you say it again?", { understood: false, step: 1, skill: 'unknown_word', goal_reached: true, alt: ['I need to pick up medicine.'], tip: 'Di: "to pick up".' }))
+    const out = await runTurn(m.env, { ...base, user: 'Purple cats sing tuesday under soup please.' })
+    expect(m.run).toHaveBeenCalledTimes(1)
+    expect(out?.reply).toBe("Sorry, I didn't catch that. Could you say it again?")
+    expect(out?.understood).toBe(false)
+    expect(out?.step).toBe(0)
+    expect(out?.skill).toBe('')
+    expect(out?.goal_reached).toBe(false)
+    expect(out?.alt).toEqual([])
+    expect(out?.tip).toBe('')
   })
 
   it('keeps a skill only when it is one of the eight, and asks the model for it', async () => {

@@ -8,7 +8,7 @@ import { TurnSchema } from '../../src/tutor/turn'
 // failures: parsed:null (the model answered badly) or error:true (it did not
 // answer). The caller treats those two differently, so they must stay distinct.
 
-const good = { reply: 'Of course. What is her name?', tip: '', alt: [], on_topic: true, goal_reached: false, safety_flag: false, step: 1, gloss: '', suggest: '', skill: '' }
+const good = { reply: 'Of course. What is her name?', tip: '', alt: [], on_topic: true, goal_reached: false, safety_flag: false, step: 1, gloss: '', suggest: '', skill: '', understood: true }
 const msgs: ChatMsg[] = [{ role: 'system', content: 's' }, { role: 'user', content: 'u' }]
 
 function ai(result: unknown, reject = false) {

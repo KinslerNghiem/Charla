@@ -51,4 +51,9 @@ export const CANNED = {
     en: "Let's get back to the scene. What do you need today?",
     es: 'Volvamos a la escena. ¿Qué necesita hoy?',
   },
+  // A line nobody could answer (src/tutor/garbled.ts): the partner asks again, in character.
+  unclear: {
+    en: "Sorry, I didn't catch that. Could you say it again?",
+    es: 'Perdón, no le entendí. ¿Me lo puede decir otra vez?',
+  },
 }

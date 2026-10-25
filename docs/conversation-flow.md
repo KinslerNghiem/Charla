@@ -75,6 +75,19 @@ returns `step`, `gloss` (its reply in the learner's own language) and
 drops a gloss that is not in the learner's language, and drops a suggestion
 that is not in the target language or is the partner's own line.
 
+## A line nobody could answer
+
+Two checks keep the partner from carrying on as if it had understood
+nonsense. On the Worker, before any model call, `src/tutor/garbled.ts` catches
+the shapes a real line never has (the same word three times running, numbers
+standing in for words, a long "word" with no vowel, symbols outnumbering
+letters) and answers with a fixed in-character line: "Sorry, I didn't catch
+that. Could you say it again?" For nonsense made of real words the model sets
+`understood` false, and the Worker enforces it: step 0, no skill, no close, no
+correction. In the app such a turn moves nothing: the errand's state goes back
+to before the line, no skill is credited, and the line stays on screen with
+the partner's request under it.
+
 ## What the learner can do when lost
 
 Under the composer, after any reply: Repeat, What does that mean?, Translate

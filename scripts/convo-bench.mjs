@@ -174,6 +174,7 @@ for (const c of CONVERSATIONS) {
     if (r.gloss) lines.push(`- gloss: ${r.gloss}`)
     if (r.suggest) lines.push(`- suggest: ${r.suggest}`)
     if (r.skill) lines.push(`- skill: ${r.skill}`)
+    if (r.understood === false) lines.push('- not understood: the partner asked again')
     if (flowMod && scene) lines.push(`- flow: ${flow.phase}, covered ${flow.done.map((d, i) => (d ? i + 1 : null)).filter(Boolean).join(',') || 'none'}`)
     if (!r.on_topic) lines.push('- off topic')
     if (r.goal_reached) lines.push('- goal reached')
