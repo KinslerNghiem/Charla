@@ -80,7 +80,9 @@ export function Table({ params }: { params: URLSearchParams }) {
     setBusy(true)
     try {
       const from = phase.lang === 'en' ? 'es' : 'en'
-      setHelp(await askHelp(helpText.trim(), from, phase.lang))
+      const h = await askHelp(helpText.trim(), from, phase.lang)
+      // An answer with nothing in it is the Worker saying the model failed; say so rather than show an empty box.
+      setHelp(h.phrase || h.literal || h.tip ? h : { phrase: '', literal: '', tip: t('table_help_unavailable') })
     } catch {
       setHelp({ phrase: '', literal: '', tip: t('table_help_unavailable') })
     } finally {

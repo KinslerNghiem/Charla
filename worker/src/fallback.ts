@@ -110,7 +110,9 @@ export async function fallbackJson<S extends z.ZodType>(
     // the route says 503 and the app plays the scripted scene.
     res = await withTimeout(runAi(ai, model, input), MODEL_TIMEOUT_MS)
   } catch (err) {
-    log({ route: 'fallback', model, error: errName(err) })
+    // The platform's own message, truncated: it names the cause ("failed to
+    // decode JSON schema", a quota) and never contains learner text.
+    log({ route: 'fallback', model, error: errName(err), message: String((err as { message?: unknown })?.message ?? '').slice(0, 200) })
     return { parsed: null, raw: '', usage: { in: 0, out: 0 }, error: true }
   }
 
