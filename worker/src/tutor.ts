@@ -16,6 +16,10 @@ import { errName, log, MODEL_TIMEOUT_MS, NO_HELP, type Env } from './env'
 
 type Lang = 'en' | 'es'
 
+// Prefixes for a tip the Worker writes itself, in the learner's own language.
+const SAY: Record<Lang, string> = { es: 'Di', en: 'Say' }
+const NEXT: Record<Lang, string> = { es: 'Ahora di', en: 'Now say' }
+
 export interface HistoryItem {
   role: 'user' | 'assistant'
   content: string
@@ -130,8 +134,6 @@ export async function runTurn(env: Env, input: TurnInput): Promise<TurnResponse 
   if (blocked(userText)) return canned(learning, true)
   // "Ignore your rules": answered with the redirect line, never sent upstream.
   if (!input.command && meta(userText)) return canned(learning, false)
-  // Numbers for words, the same word three times, no vowels: ask again, no model call.
-  if (!input.command && looksGarbled(userText)) return unclear(learning)
   // Two providers, one prompt. A key means Claude; no key but an AI binding
   // means the free Workers AI model; neither means the scripted scene (503).
   if (!env.ANTHROPIC_API_KEY && !env.AI) return null
@@ -144,14 +146,31 @@ export async function runTurn(env: Env, input: TurnInput): Promise<TurnResponse 
   // Both model paths end here: a real line that covered one of the scene's
   // lines in other words gets that line as "another way to say it" when the
   // model offered no correction of its own.
+  // A tip on every turn, in the learner's own language. The model is asked for
+  // one; when it sends none, the correction becomes the tip (Di: "…"), and
+  // when there was nothing to correct, the next line still to say does
+  // (Ahora di: "…"). Empty only once every line is covered.
+  const nativeLang: Lang = learning === 'en' ? 'es' : 'en'
+  const fillTip = (tip: string, alt: string[], step: number, understood: boolean): string => {
+    if (tip) return tip
+    if (understood && alt.length > 0 && alt[0].trim().toLowerCase() !== userText.toLowerCase()) return `${SAY[nativeLang]}: "${alt[0]}"`
+    const next = scene.must_use.findIndex((p, k) => !done[k] && !(understood && (matchesObjective(userText, p, learning) || step === k + 1)))
+    return next >= 0 ? `${NEXT[nativeLang]}: "${scene.must_use[next][learning]}"` : ''
+  }
   const finish = (out: TurnResponse | null): TurnResponse | null => {
     if (!out) return out
     // The model could not understand the line: its reply asks again, and the
     // rest is enforced here. Nothing it may have guessed about the turn counts.
-    if (out.understood === false) return { ...out, step: 0, skill: '', goal_reached: false, alt: [], tip: '' }
+    if (out.understood === false) return { ...out, step: 0, skill: '', goal_reached: false, alt: [], tip: fillTip('', [], 0, false) }
     if (input.command || !out.on_topic) return out
-    return { ...out, alt: fillAlt(out.alt ?? [], userText, scene.must_use, learning, done, out.step) }
+    // The free model sometimes echoes the learner's own wording as "alt"; a
+    // line they already said is not another way to say it.
+    const given = (out.alt ?? []).filter((a) => !usedPhrase(userText, a))
+    const alt = fillAlt(given, userText, scene.must_use, learning, done, out.step)
+    return { ...out, alt, tip: fillTip(out.tip, alt, out.step, true) }
   }
+  // Numbers for words, the same word three times, no vowels: ask again, no model call.
+  if (!input.command && looksGarbled(userText)) return finish(unclear(learning))
 
   const system = buildSystem(scene, level, learning)
   const reminder = levelReminder(level, learning) + '\n' + flowHint(phase, done, scene.must_use.map((p) => p[learning]), level)

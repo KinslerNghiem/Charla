@@ -245,7 +245,9 @@ export function Learn({ params }: { params: URLSearchParams }) {
       msgsRef.current = next
       setMsgs(next)
       // A line that was not understood did not happen, as far as the errand goes.
-      const after = heard ? partnerTurn(asked, turn) : prevFlow
+      // The summary's "one thing to watch" is a correction, so only a tip that
+      // came with a corrected sentence is remembered; a "now say" tip is not.
+      const after = heard ? partnerTurn(asked, { ...turn, tip: turn.alt.length > 0 ? turn.tip : '' }) : prevFlow
       flowRef.current = after
       setFlow(after)
       // A turn that works clears a previous blip, so one bad moment does not

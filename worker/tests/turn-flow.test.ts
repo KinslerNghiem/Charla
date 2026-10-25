@@ -140,7 +140,8 @@ describe('a turn on the free-model path', () => {
   it('drops a tip that quotes the learner\'s own language, and keeps one that quotes the line to say', async () => {
     const wrong = model(ok('Sure. Your insurance card, please?', { tip: 'Di: "¿Podría repetirlo más despacio, por favor?"', alt: ['Could you repeat that more slowly, please?'] }))
     const out1 = await runTurn(wrong.env, { ...base, level: 'B1', user: 'Sorry, no entendí, could you repeat that?' })
-    expect(out1?.tip).toBe('')
+    // The wrong-language tip is dropped, and the correction takes its place.
+    expect(out1?.tip).toBe('Di: "Could you repeat that more slowly, please?"')
     expect(out1?.alt).toEqual(['Could you repeat that more slowly, please?'])
     const right = model(ok('Sure. Your insurance card, please?', { tip: 'Di: "Could you repeat that more slowly, please?"' }))
     const out2 = await runTurn(right.env, { ...base, level: 'B1', user: 'Sorry, no entendí, could you repeat that?' })
@@ -234,7 +235,35 @@ describe('a turn on the free-model path', () => {
     expect(out?.skill).toBe('')
     expect(out?.goal_reached).toBe(false)
     expect(out?.alt).toEqual([])
-    expect(out?.tip).toBe('')
+    // Even then a tip: the first line still to say.
+    expect(out?.tip).toBe('Ahora di: "I\'m here to pick up a prescription for my mother."')
+  })
+
+  it('writes a tip itself when the model sends none: the correction, or the next line to say', async () => {
+    // The model corrected but gave no tip: the correction is the tip.
+    const corrected = model(ok('Sure. What is her name?', { alt: ['I need to pick up medicine for my mother.'] }))
+    expect((await runTurn(corrected.env, { ...base, user: 'Hello, I need for pick up medicine for my mother.' }))?.tip).toBe('Di: "I need to pick up medicine for my mother."')
+    // Nothing to correct (the line itself): the next line still to say.
+    const fine = model(ok('Sure. What is her name?'))
+    expect((await runTurn(fine.env, { ...base, user: "I'm here to pick up a prescription for my mother." }))?.tip).toBe('Ahora di: "Her last name is Garcia and her date of birth is May 3rd, 1960."')
+    // The model's own tip always stands.
+    const own = model(ok('Sure. What is her name?', { tip: 'Di: "to pick up".' }))
+    expect((await runTurn(own.env, { ...base, user: 'Hello, I need for pick up medicine for my mother.' }))?.tip).toBe('Di: "to pick up".')
+    // The other direction gets English prefixes.
+    const es = model(ok('Claro. ¿Cómo se llama ella?'))
+    expect((await runTurn(es.env, { ...base, learning: 'es', user: 'Vengo a recoger una receta para mi mamá.' }))?.tip).toMatch(/^Now say: "/)
+    // Everything covered: nothing left to point at.
+    const all = model(ok('Here you go. Have a good day.'))
+    expect((await runTurn(all.env, { ...base, done: [true, true, true], user: 'Thank you very much.' }))?.tip).toBe('')
+    // A line nobody could answer still gets the next line as a tip.
+    const garbled = model(ok('never used'))
+    expect((await runTurn(garbled.env, { ...base, user: 'Hello, Medicine 4 Upkick My 4 Mother 4.' }))?.tip).toBe('Ahora di: "I\'m here to pick up a prescription for my mother."')
+  })
+
+  it('drops an "alt" that only echoes what the learner already said, and offers the scene line instead', async () => {
+    const m = model(ok('Sure. What is her name?', { alt: ['I need for pick up medicine for my mother.'] }))
+    const out = await runTurn(m.env, { ...base, user: 'Hello, I need for pick up medicine for my mother.' })
+    expect(out?.alt).toEqual(["I'm here to pick up a prescription for my mother."])
   })
 
   it('keeps a skill only when it is one of the eight, and asks the model for it', async () => {

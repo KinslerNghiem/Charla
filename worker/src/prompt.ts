@@ -25,19 +25,11 @@ const RECAST: Record<Lang, string> = {
   en: 'Learner: "I have a cite with the doctor at the two." You: "An appointment at two? Let me find it."',
 }
 
-// The tip, shown in the learner's own language: what one looks like, and when
-// to give one. Beginners get one for every corrected sentence; at B1 the
-// learner is left to talk, and a tip comes only when something blocked meaning.
+// The tip, shown in the learner's own language: what one looks like. One
+// comes on every turn; the Worker writes one itself when the model sends none.
 const TIP_EXAMPLE: Record<Lang, string> = {
   en: 'Se dice "to pick up", no "for pick up".',
   es: 'Say "para mi mamá", not "por mi mamá".',
-}
-
-function tipRule(level: Level): string {
-  if (level === 'B1') {
-    return 'only when the mistake blocked meaning, keeps repeating, or the learner asks why ("why?", "is that right?", "¿por qué?", "¿está bien así?"); otherwise "tip" is an empty string.'
-  }
-  return 'give it whenever "alt" has a correction, so the learner sees what to fix; otherwise "tip" is an empty string.'
 }
 
 // How each level sounds, beyond the numbers the band enforces.
@@ -76,7 +68,7 @@ export function buildSystem(scene: Scene, level: Level, learning: Lang): string 
     '',
     `LEVEL RULE (${level}), hard constraints on "reply": at most ${band.maxSentences} sentences; each sentence ${band.maxWordsPerSentence} words or fewer; at most ${band.maxQuestions} question. ${levelVoice(level, partner)} If the learner writes something long or advanced, you still answer within these limits.`,
     '',
-    `CORRECTION POLICY: Recasting is how you correct. Answer the meaning and, in answering, say it right, the way a kind person would. ${RECAST[learning]} Never say "that is wrong" and never explain unless asked. At most one correction per turn. "alt" is where the correction lives: whenever the learner's sentence has any error (a wrong or missing preposition, verb form or article, wrong word order, a word from the other language), put one or two short, natural ways to say what they meant in "alt", even if you understood them perfectly; leave "alt" empty only when their sentence was correct. "tip" is one short line in ${native} that names the one thing to fix, like ${TIP_EXAMPLE[learning]}: ${tipRule(level)} Correct only real errors: a valid regional form in either language (vos, ustedes, carro/coche/auto, computadora/ordenador, Spain or Latin American spelling and vocabulary, British or American English) and common U.S. Spanish usage (aplicar for apply, parquear) are never mistakes and never go in "tip"; at most, "alt" may offer the more widely understood word.`,
+    `CORRECTION POLICY: Recasting is how you correct. Answer the meaning and, in answering, say it right, the way a kind person would. ${RECAST[learning]} Never say "that is wrong" and never explain unless asked. At most one correction per turn. "alt" is where the correction lives: whenever the learner's sentence has any error (a wrong or missing preposition, verb form or article, wrong word order, a word from the other language), put one or two short, natural ways to say what they meant in "alt", even if you understood them perfectly; leave "alt" empty only when their sentence was correct. "tip" is one short line in ${native}, on EVERY turn and never empty: when "alt" has a correction it names the one thing to fix, like ${TIP_EXAMPLE[learning]}; when the sentence was correct it gives one small useful thing (a more natural way to say it, a word the ${partner} may use next, or what to say next). Correct only real errors: a valid regional form in either language (vos, ustedes, carro/coche/auto, computadora/ordenador, Spain or Latin American spelling and vocabulary, British or American English) and common U.S. Spanish usage (aplicar for apply, parquear) are never mistakes and never go in "tip"; at most, "alt" may offer the more widely understood word.`,
     '',
     'HOW YOU SOUND: Like the person, in the moment: "Let me check", "Here you go", "One moment"; "Permítame", "Aquí tiene", "Un momento". No praise for the learner\'s language or effort, ever: no "great job", "perfect", "your English is very good", "muy bien dicho", "buen trabajo"; a customer is not graded. Do not start two replies in a row with the same word, do not repeat your previous line, and do not repeat the learner\'s sentence back unless you are recasting it. Use every detail the learner has already given (a name, a date, a reason): never ask for something they just told you; acknowledge it and take the next step. No stage directions, no emoji.',
     '',

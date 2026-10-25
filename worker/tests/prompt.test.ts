@@ -46,7 +46,7 @@ describe('the partner prompt', () => {
     expect(p).toMatch(/No praise for the learner/)
     expect(p).toMatch(/never ask for something they just told you/)
     expect(p).toMatch(/never mistakes/)
-    expect(p).toMatch(/only when the mistake blocked meaning, keeps repeating, or the learner asks why/)
+    expect(p).toMatch(/on EVERY turn and never empty/)
   })
 
   it('tells the partner to ask again, and not to guess, when a line cannot be understood', () => {
@@ -57,16 +57,17 @@ describe('the partner prompt', () => {
     expect(p).toMatch(/A sentence full of mistakes that you can still make sense of IS understood/)
   })
 
-  it('requires a corrected sentence in "alt" for any error, and a tip with it below B1', () => {
+  it('requires a corrected sentence in "alt" for any error, and a tip on every turn', () => {
     for (const level of ['A1', 'A2', 'B1'] as const) {
       const p = buildSystem(pharmacy, level, 'en')
       expect(p).toMatch(/whenever the learner's sentence has any error .* put one or two short, natural ways to say what they meant in "alt", even if you understood them perfectly/)
       expect(p).toMatch(/leave "alt" empty only when their sentence was correct/)
       expect(p).toContain('Se dice "to pick up", no "for pick up".')
     }
-    expect(buildSystem(pharmacy, 'A1', 'en')).toMatch(/give it whenever "alt" has a correction/)
-    expect(buildSystem(pharmacy, 'A2', 'en')).toMatch(/give it whenever "alt" has a correction/)
-    expect(buildSystem(pharmacy, 'B1', 'en')).not.toMatch(/give it whenever "alt" has a correction/)
+    for (const level of ['A1', 'A2', 'B1'] as const) {
+      expect(buildSystem(pharmacy, level, 'en')).toMatch(/on EVERY turn and never empty/)
+      expect(buildSystem(pharmacy, level, 'en')).toMatch(/a word the pharmacist may use next/)
+    }
     expect(buildSystem(pharmacy, 'A2', 'es')).toContain('Say "para mi mamá", not "por mi mamá".')
   })
 

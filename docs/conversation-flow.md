@@ -75,6 +75,16 @@ returns `step`, `gloss` (its reply in the learner's own language) and
 drops a gloss that is not in the learner's language, and drops a suggestion
 that is not in the target language or is the partner's own line.
 
+## A tip on every turn
+
+The prompt asks for a tip on every turn, in the learner's own language: the
+one thing to fix when the sentence had an error, otherwise one small useful
+thing. When the model sends none, the Worker writes one: the corrected
+sentence (Di: "…" / Say: "…"), or, when there was nothing to correct, the
+next line still to say (Ahora di: "…" / Now say: "…"). An "alt" that only
+echoes what the learner already said is dropped first. Only a tip that came
+with a correction is remembered for the summary's "one thing to watch".
+
 ## A line nobody could answer
 
 Two checks keep the partner from carrying on as if it had understood
