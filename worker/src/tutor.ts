@@ -5,7 +5,8 @@ import { checkReply, splitSentences, levelReminder, type Level } from '../../src
 import { looksLike } from '../../src/tutor/langcheck'
 import { sceneById } from '../../src/content/scenes'
 import { buildSystem, commandText, flowHint, placeLine } from './prompt'
-import { PHASES, type Phase } from '../../src/tutor/flow'
+import { PHASES, matchesObjective, usedPhrase, type Phase } from '../../src/tutor/flow'
+import type { Phrase } from '../../src/content/scene.schema'
 import { isSkillId } from '../../src/skills/skills'
 import { CANNED, blocked, meta } from './safety'
 import { DEFAULT_FALLBACK_MODEL, fallbackAddendum, fallbackJson, type ChatMsg } from './fallback'
@@ -60,6 +61,17 @@ export function cleanExtras(turn: Turn, learning: Lang, objectives: number): Pic
   // The skill is an allow-list: one of the eight ids or nothing.
   const skill = isSkillId(turn.skill) ? turn.skill : ''
   return { step, gloss, suggest, skill }
+}
+
+// The correction the free model skips. A learner who covered one of the
+// scene's lines in their own words ("Hello, I need for pick up medicine for my
+// mother") and got no "alt" back is shown the scene's own line as another way
+// to say it. Deterministic, from the scene card, and honest: the app's label
+// is "Another way to say it", not "wrong". Exported for its tests.
+export function fillAlt(alt: string[], userText: string, lines: Phrase[], learning: Lang, done: boolean[], step: number): string[] {
+  if (alt.length > 0) return alt
+  const i = lines.findIndex((p, k) => !done[k] && !usedPhrase(userText, p[learning]) && (matchesObjective(userText, p, learning) || step === k + 1))
+  return i >= 0 ? [lines[i][learning]] : alt
 }
 
 // Mid-conversation {role:'system'} messages are supported on Opus 5, Opus 4.8
@@ -120,6 +132,13 @@ export async function runTurn(env: Env, input: TurnInput): Promise<TurnResponse 
   const phase: Phase = PHASES.includes(input.phase as Phase) ? (input.phase as Phase) : 'start'
   const done = scene.must_use.map((_, i) => Array.isArray(input.done) && input.done[i] === true)
   const objectives = scene.must_use.length
+  // Both model paths end here: a real line that covered one of the scene's
+  // lines in other words gets that line as "another way to say it" when the
+  // model offered no correction of its own.
+  const finish = (out: TurnResponse | null): TurnResponse | null => {
+    if (!out || input.command || !out.on_topic) return out
+    return { ...out, alt: fillAlt(out.alt ?? [], userText, scene.must_use, learning, done, out.step) }
+  }
 
   const system = buildSystem(scene, level, learning)
   const reminder = levelReminder(level, learning) + '\n' + flowHint(phase, done, scene.must_use.map((p) => p[learning]), level)
@@ -140,7 +159,7 @@ export async function runTurn(env: Env, input: TurnInput): Promise<TurnResponse 
   if (!env.ANTHROPIC_API_KEY) {
     const sys = system + fallbackAddendum(learning === 'en' ? 'English' : 'Spanish', scene.roles.partner.en)
     const mustUse = scene.must_use.map((p) => p[learning])
-    return runTurnFallback(env.AI!, env.FALLBACK_MODEL || DEFAULT_FALLBACK_MODEL, sys, reminder, recent, first, userText, level, learning, mustUse)
+    return finish(await runTurnFallback(env.AI!, env.FALLBACK_MODEL || DEFAULT_FALLBACK_MODEL, sys, reminder, recent, first, userText, level, learning, mustUse))
   }
 
   const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY, timeout: MODEL_TIMEOUT_MS, maxRetries: 1 })
@@ -219,7 +238,7 @@ export async function runTurn(env: Env, input: TurnInput): Promise<TurnResponse 
   // Still the wrong language after a retry: the redirect line, not a partner
   // who has switched languages on the learner.
   if (!looksLike(learning, turn.reply)) return canned(learning, false)
-  return { ...turn, ...cleanExtras(turn, learning, objectives), tip: cleanTip(turn.tip, learning), kept_at_level: retried }
+  return finish({ ...turn, ...cleanExtras(turn, learning, objectives), tip: cleanTip(turn.tip, learning), kept_at_level: retried })
 }
 
 // Narration in the simple present, which the free model falls into under the

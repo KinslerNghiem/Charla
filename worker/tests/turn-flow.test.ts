@@ -190,6 +190,24 @@ describe('a turn on the free-model path', () => {
     expect((await runTurn(echo.env, base))?.suggest).toBe('')
   })
 
+  it("offers the scene's line as another way when the learner covered it in their own words and the model offered nothing", async () => {
+    const m = model(ok('Sure. What is her last name?'))
+    const out = await runTurn(m.env, { ...base, user: 'Hello, I need for pick up medicine for my mother.' })
+    expect(out?.alt).toEqual(["I'm here to pick up a prescription for my mother."])
+    // The line itself: nothing to add.
+    const said = model(ok('Sure. What is her last name?'))
+    expect((await runTurn(said.env, { ...base, user: "I'm here to pick up a prescription for my mother." }))?.alt).toEqual([])
+    // The model did correct: its correction stands.
+    const given = model(ok('Sure. What is her last name?', { alt: ['I need to pick up medicine for my mother.'] }))
+    expect((await runTurn(given.env, { ...base, user: 'Hello, I need for pick up medicine for my mother.' }))?.alt).toEqual(['I need to pick up medicine for my mother.'])
+    // Covered on an earlier turn: not offered again.
+    const again = model(ok('Thank you.'))
+    expect((await runTurn(again.env, { ...base, done: [true, false, false], user: 'I need for pick up medicine for my mother, please.' }))?.alt).toEqual([])
+    // A line that covers nothing: nothing to offer.
+    const other = model(ok('Hello. How can I help?'))
+    expect((await runTurn(other.env, { ...base, user: 'Hello, good morning.' }))?.alt).toEqual([])
+  })
+
   it('keeps a skill only when it is one of the eight, and asks the model for it', async () => {
     const m = model(ok('Sure. What is her name?', { skill: 'banana' }))
     expect((await runTurn(m.env, base))?.skill).toBe('')

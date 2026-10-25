@@ -49,6 +49,19 @@ describe('the partner prompt', () => {
     expect(p).toMatch(/only when the mistake blocked meaning, keeps repeating, or the learner asks why/)
   })
 
+  it('requires a corrected sentence in "alt" for any error, and a tip with it below B1', () => {
+    for (const level of ['A1', 'A2', 'B1'] as const) {
+      const p = buildSystem(pharmacy, level, 'en')
+      expect(p).toMatch(/whenever the learner's sentence has any error .* put one or two short, natural ways to say what they meant in "alt", even if you understood them perfectly/)
+      expect(p).toMatch(/leave "alt" empty only when their sentence was correct/)
+      expect(p).toContain('Se dice "to pick up", no "for pick up".')
+    }
+    expect(buildSystem(pharmacy, 'A1', 'en')).toMatch(/give it whenever "alt" has a correction/)
+    expect(buildSystem(pharmacy, 'A2', 'en')).toMatch(/give it whenever "alt" has a correction/)
+    expect(buildSystem(pharmacy, 'B1', 'en')).not.toMatch(/give it whenever "alt" has a correction/)
+    expect(buildSystem(pharmacy, 'A2', 'es')).toContain('Say "para mi mamá", not "por mi mamá".')
+  })
+
   it('handles a stuck learner and code-switching without changing language', () => {
     const p = buildSystem(pharmacy, 'A1', 'es')
     expect(p).toMatch(/If they write in English because they cannot find the words, still answer in Spanish/)
